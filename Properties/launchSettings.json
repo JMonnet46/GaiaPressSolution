@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "GaiaPressSolution": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
