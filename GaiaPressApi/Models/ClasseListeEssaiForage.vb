@@ -2,7 +2,7 @@
 
     Public Class ListeEssaiForage
         Inherits DbContext
-        Public Property S_ListeExpansion As New List(Of Essai_Expansion)
+        Public Property S_ListeEssaiForgage As New List(Of Essai_Forage)
         Public FichierListeExpansion As String
         'Public MyListeExpansion As FrmExpansion
         Public EventsSuspendus As Boolean
@@ -12,18 +12,18 @@
 
 
         ' ================================================================================
-        ' Gestion de Liste_Expansion
+        ' Gestion de Liste_EssaiForage
         ' ================================================================================
         ' Add un Sol
 
-        Public Sub AddExpansion(EssaiForage As Essai_Expansion)
-            Me.S_ListeExpansion.Add(EssaiForage)
+        Public Sub AddEssai(EssaiForage As Essai_Forage)
+            Me.S_ListeEssaiForgage.Add(Essai_Forage)
             ' Lier le forage au chantier (si nécessaire)
             'EssaiForage.SetRefEssaiForage(EssaiForage.GetRefEssai)
         End Sub
 
-        Public Function GetEssaiForage(refEssai As String) As Essai_Expansion
-            For Each E As Essai_Expansion In Me.S_ListeExpansion
+        Public Function GetEssaiForage(refEssai As String) As Essai_Forage
+            For Each E As Essai_Forage In Me.S_ListeEssaiForgage
                 If E.GetRefEssai = refEssai Then
                     Return E
                 End If
@@ -33,7 +33,7 @@
 
         ' Delete un Essai par référence
         Public Sub DeleteEssaiForage(refEssai As String)
-            Dim EssaiADelete As Essai_Expansion = GetEssaiForage(refEssai)
+            Dim EssaiADelete As Essai_Forage = GetEssaiForage(refEssai)
             If EssaiADelete IsNot Nothing Then
                 Me.S_ListeExpansion.Remove(EssaiADelete)
             End If
@@ -41,8 +41,8 @@
 
 
         ' Mettre à jour un Essai
-        Public Sub MettreAJourEssaiForage(refEssai As String, nouvelEssai As Essai_Expansion)
-            Dim EssaiForage As Essai_Expansion = GetEssaiForage(refEssai)
+        Public Sub MettreAJourEssaiForage(refEssai As String, nouvelEssai As Essai_Forage)
+            Dim EssaiForage As Essai_Forage = GetEssaiForage(refEssai)
             If EssaiForage IsNot Nothing Then
                 EssaiForage = nouvelEssai
                 'Sol.E_dateEssai = nouvelleDate
@@ -93,7 +93,7 @@
         'End Sub
 
 
-        Public Sub CloseListeExpansion()
+        Public Sub CloseListeEssaisForage()
 
             ' fermeture de la Liste des Sondes (fermeture de sa fenêtre)
             'Call MyListeSondes.CloseChantier()
@@ -102,7 +102,7 @@
             'Call ActivationMenus(False)
 
             ' Effacement de la référence vers le chantier
-            MyListeEssaisExpansion = Nothing
+            MyListeEssaisForage = Nothing
 
             ' Nettoyage de l'arborescence
             'TreeViewArbo.Nodes.Clear()
@@ -197,7 +197,7 @@
         '    Next i
         'End Sub
         Public Sub Show()
-            MyListeSondes.Show()
+            MyListeEssaisForage.Show()
         End Sub
 
         'Public Sub MaskListeExpansion()
@@ -378,20 +378,20 @@
 
         'End Function
 
-        'Public Function IsRefUnique(ByVal ref As String) As Boolean
-        '    ' Vérification de l'unicité d'une référence
-        '    Dim i As Integer
-        '    Dim unique As Boolean
+        Public Function IsRefUnique(ByVal ref As String) As Boolean
+            ' Vérification de l'unicité d'une référence
+            Dim i As Integer
+            Dim unique As Boolean
 
-        '    unique = True
+            unique = True
 
-        '    Do While (i < SolCount) And unique
-        '        unique = (Expansion(i).GetRefSol <> ref)
-        '        i = i + 1
-        '    Loop
+            Do While (i < SolCount) And unique
+                unique = (Essai_Forage(i).E_RefEssai <> ref)
+                i = i + 1
+            Loop
 
-        '    IsRefUnique = unique
-        'End Function
+            IsRefUnique = unique
+        End Function
 
         'Public Function GetSolCount()
         '    GetSolCount = SolCount

@@ -1,0 +1,20 @@
+﻿@* Components/Essai/EssaiForm.razor *@
+<h3>Nouvel Essai</h3>
+
+<EditForm Model="@MyEssai" OnValidSubmit="@HandleValidSubmit">
+    <div class="form-group">
+        <label>Nom :</label>
+        <InputText @bind-Value="MyEssai.Nom" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Valider</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Essai_Forage MyEssai { get; set; } = new Essai_Forage();
+
+    private void HandleValidSubmit()
+    {
+        // Logique après validation
+    }
+}

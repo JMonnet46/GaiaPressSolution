@@ -1,0 +1,18 @@
+﻿@page "/essai"
+@* Pages/EssaiPage.razor *@
+
+<h1>Page d'Essai</h1>
+
+<CourbeFluage
+    XValues="@XValues"
+    YValues="@YValues"
+    Title="Fluage (cm³)"
+    Minimum="0.1"
+    Maximum="10"
+    BorderDash="new double[] { 0 }"
+    BorderWidth="1" />
+
+@code {
+    private List<double> XValues = new List<double> { 0, 1, 2, 3, 4, 5 };
+    private List<double> YValues = new List<double> { 0, 1.2, 1.8, 2.5, 3.1, 3.5 };
+}
