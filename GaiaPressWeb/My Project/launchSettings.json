@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "GaiaPressWeb": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:60097;http://localhost:60098"
+    }
+  }
+}
