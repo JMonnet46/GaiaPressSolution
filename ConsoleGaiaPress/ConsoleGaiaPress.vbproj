@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>ConsoleGaiaPressVB</RootNamespace>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<!-- ✅ Désactive l'inclusion automatique des fichiers -->
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+                <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Référence au projet GaiaPress.core.V17 -->
+		<ProjectReference Include="..\GaiaPress.core.V17\GaiaPress.core.V17.vbproj" />
+	</ItemGroup>
+
+	<!-- ✅ Inclusion explicite des fichiers nécessaires -->
+	<ItemGroup>
+		<!-- Fichiers principaux -->
+		<Compile Include="ConsoleGaiaPress.vb" />
+		<Compile Include="IHaveBeenModified.vb" />
+		<!-- Ajoutez ici les autres fichiers nécessaires -->
+	</ItemGroup>
+
+	<!-- Suppression des fichiers non nécessaires -->
+	<ItemGroup>
+		<Compile Remove="obj\**" />
+		<Compile Remove="bin\**" />
+		<EmbeddedResource Remove="wwwroot\**" />
+		<None Remove="wwwroot\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="LogoGaiatech.png" />
+	  <None Remove="Menu_Principal.html" />
+	  <None Remove="Nouveau_Forage.html" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Azure.Identity" Version="1.18.0" />
+	  <PackageReference Include="itext" Version="8.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.12" />
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+	  <PackageReference Include="NuGet.Common" Version="6.3.3" />
+	  <PackageReference Include="SixLabors.ImageSharp" Version="4.0.0" />
+	  <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.13" />
+	  <PackageReference Include="System.Formats.Asn1" Version="9.0.0" />
+	</ItemGroup>
+</Project>

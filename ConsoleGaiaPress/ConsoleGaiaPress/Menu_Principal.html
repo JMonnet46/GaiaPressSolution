@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GaiaPressV17 - Menu Principal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles de base */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* En-tête */
+        .header {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+            .logo img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            flex-grow: 1;
+        }
+
+        /* Conteneur principal */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Cartes pour chaque option */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .card i {
+                font-size: 40px;
+                color: #4CAF50;
+                margin-bottom: 10px;
+            }
+
+            .card h3 {
+                margin: 10px 0;
+                font-size: 16px;
+                color: #333;
+            }
+
+        /* Style pour les menus déroulants */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            display: none;
+            z-index: 1000;
+            margin-top: 5px;
+        }
+
+        .dropdown-option {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .dropdown-option:hover {
+                background-color: #f0f0f0;
+            }
+
+            .dropdown-option i {
+                font-size: 16px;
+                color: #4CAF50;
+                margin-right: 10px;
+            }
+
+        .language-option img.flag {
+            width: 20px;
+            height: 15px;
+        }
+
+        /* Pied de page */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f5f7fa;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête avec logo et titre -->
+    <div class="header">
+        <div class="logo">
+            <img src="../../../GaiaPress.core.V17/GaiaPressForm/Image/LogoGaiaTech.png" alt="GaiaTech Logo">
+        </div>
+        <h1 id="mainTitle">GaiaPressV17</h1>
+    </div>
+
+    <!-- Conteneur des cartes -->
+    <div class="container">
+        <!-- Carte pour la gestion des fichiers avec menu déroulant -->
+        <div class="card" id="fileCard">
+            <i class="fas fa-file-alt"></i>
+            <h3 id="fileTitle">Gestion des Fichiers</h3>
+            <div class="dropdown" id="fileDropdown">
+                <div class="dropdown-option" onclick="fileAction('new')">
+                    <i class="fas fa-file"></i>
+                    <span id="fileNewText">Nouveau Forage</span>
+                </div>
+                <div class="dropdown-option" onclick="fileAction('open')">
+                    <i class="fas fa-folder-open"></i>
+                    <span id="fileOpenText">Ouvrir Forage</span>
+                </div>
+                <div class="dropdown-option" onclick="fileAction('close')">
+                    <i class="fas fa-times"></i>
+                    <span id="fileCloseText">Fermer Forage</span>
+                </div>
+                <div class="dropdown-option" onclick="fileAction('save')">
+                    <i class="fas fa-save"></i>
+                    <span id="fileSaveText">Enregistrer Forage</span>
+                </div>
+                <div class="dropdown-option" onclick="fileAction('saveAs')">
+                    <i class="fas fa-save"></i>
+                    <span id="fileSaveAsText">Enregistrer sous Forage</span>
+                </div>
+                <div class="dropdown-option" onclick="fileAction('quit')">
+                    <i class="fas fa-door-open"></i>
+                    <span id="fileQuitText">Quitter</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Autres cartes -->
+        <div class="card" onclick="window.location.href='gestion_essais.html'">
+            <i class="fas fa-flask"></i>
+            <h3 id="testsTitle">Gestion des Essais</h3>
+        </div>
+        <div class="card" onclick="window.location.href='gestion_sondes.html'">
+            <i class="fas fa-probe"></i>
+            <h3 id="probesTitle">Gestion des Sondes</h3>
+        </div>
+        <div class="card" onclick="window.location.href='gestion_sols.html'">
+            <i class="fas fa-layer-group"></i>
+            <h3 id="soilsTitle">Gestion des Sols</h3>
+        </div>
+
+        <!-- Carte pour la gestion des langues avec menu déroulant -->
+        <div class="card" id="languageCard">
+            <i class="fas fa-language"></i>
+            <h3 id="languagesTitle">Gestion des Langues</h3>
+            <div class="dropdown" id="languageDropdown">
+                <div class="dropdown-option language-option" onclick="changeLanguage(0)">
+                    <img src="../../../GaiaPress.core.V17/GaiaPressForm/GaiaPressForm/Image/us_flag.png" alt="US Flag" class="flag">
+                    <span>Anglais</span>
+                </div>
+                <div class="dropdown-option language-option" onclick="changeLanguage(1)">
+                    <img src="../../../GaiaPress.core.V17/GaiaPressForm/GaiaPressForm/Image/fr_flag.png" alt="FR Flag" class="flag">
+                    <span>Français</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" onclick="window.location.href='a_propos.html'">
+            <i class="fas fa-info-circle"></i>
+            <h3 id="aboutTitle">À propos</h3>
+        </div>
+    </div>
+
+    <!-- Pied de page -->
+    <div class="footer">
+        <p id="footerText">GaiaPressV17 - Programme d'interprétation de l'essai pressiométrique en Cohésion et/ou Frottement</p>
+    </div>
+
+    <!-- Script pour gérer les menus déroulants -->
+    <script>
+        // Variable globale pour stocker la langue actuelle (0 = Anglais, 1 = Français)
+        let currentLang = 1; // Par défaut, français
+
+        // Afficher/Masquer le menu déroulant des fichiers
+        document.getElementById('fileCard').addEventListener('click', function (event) {
+            event.stopPropagation(); // Empêche la redirection
+            const dropdown = document.getElementById('fileDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Afficher/Masquer le menu déroulant des langues
+        document.getElementById('languageCard').addEventListener('click', function (event) {
+            event.stopPropagation(); // Empêche la redirection
+            const dropdown = document.getElementById('languageDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fermer les menus déroulants si on clique ailleurs
+        document.addEventListener('click', function () {
+            document.getElementById('fileDropdown').style.display = 'none';
+            document.getElementById('languageDropdown').style.display = 'none';
+        });
+
+        // Fonction pour gérer les actions des fichiers
+        function fileAction(action) {
+            switch (action) {
+                case 'new':
+                    window.location.href = `../../../GaiaPress.core.V17/GaiaPressForm/Forms/Nouveau_Forage.html?lang=${currentLang}`;
+                    break;
+                case 'open':
+                    console.log(currentLang === 0 ? "Open Borehole" : "Ouvrir Forage");
+                    break;
+                case 'close':
+                    console.log(currentLang === 0 ? "Close Borehole" : "Fermer Forage");
+                    break;
+                case 'save':
+                    console.log(currentLang === 0 ? "Save Borehole" : "Enregistrer Forage");
+                    break;
+                case 'saveAs':
+                    console.log(currentLang === 0 ? "Save Borehole As" : "Enregistrer sous Forage");
+                    break;
+                case 'quit':
+                    console.log(currentLang === 0 ? "Quit" : "Quitter");
+                    break;
+            }
+            // Fermer le menu déroulant
+            document.getElementById('fileDropdown').style.display = 'none';
+        }
+
+        // Fonction pour changer la langue
+        function changeLanguage(lang) {
+            currentLang = lang; // Met à jour la langue actuelle
+            console.log(`Langue changée en : ${lang === 0 ? 'Anglais' : 'Français'}`);
+
+            // Mettre à jour l'interface
+            updateLanguageUI(lang);
+
+            // Fermer le menu déroulant
+            document.getElementById('languageDropdown').style.display = 'none';
+        }
+
+        // Fonction pour mettre à jour l'interface en fonction de la langue
+        function updateLanguageUI(lang) {
+            const languageTexts = {
+                0: { // Anglais
+                    title: "GaiaPressV17",
+                    files: "File Management",
+                    fileNew: "New Borehole",
+                    fileOpen: "Open Borehole",
+                    fileClose: "Close Borehole",
+                    fileSave: "Save Borehole",
+                    fileSaveAs: "Save Borehole As",
+                    fileQuit: "Quit",
+                    tests: "Test Management",
+                    probes: "Probe Management",
+                    soils: "Soil Management",
+                    languages: "Language Management",
+                    about: "About",
+                    footer: "GaiaPressV17 - Pressiometric Test Interpretation Program"
+                },
+                1: { // Français
+                    title: "GaiaPressV17",
+                    files: "Gestion des Fichiers",
+                    fileNew: "Nouveau Forage",
+                    fileOpen: "Ouvrir Forage",
+                    fileClose: "Fermer Forage",
+                    fileSave: "Enregistrer Forage",
+                    fileSaveAs: "Enregistrer sous Forage",
+                    fileQuit: "Quitter",
+                    tests: "Gestion des Essais",
+                    probes: "Gestion des Sondes",
+                    soils: "Gestion des Sols",
+                    languages: "Gestion des Langues",
+                    about: "À propos",
+                    footer: "GaiaPressV17 - Programme d'interprétation de l'essai pressiométrique"
+                }
+            };
+
+            // Mettre à jour les textes de l'interface
+            document.getElementById('mainTitle').textContent = languageTexts[lang].title;
+            document.getElementById('fileTitle').textContent = languageTexts[lang].files;
+            document.getElementById('fileNewText').textContent = languageTexts[lang].fileNew;
+            document.getElementById('fileOpenText').textContent = languageTexts[lang].fileOpen;
+            document.getElementById('fileCloseText').textContent = languageTexts[lang].fileClose;
+            document.getElementById('fileSaveText').textContent = languageTexts[lang].fileSave;
+            document.getElementById('fileSaveAsText').textContent = languageTexts[lang].fileSaveAs;
+            document.getElementById('fileQuitText').textContent = languageTexts[lang].fileQuit;
+            document.getElementById('testsTitle').textContent = languageTexts[lang].tests;
+            document.getElementById('probesTitle').textContent = languageTexts[lang].probes;
+            document.getElementById('soilsTitle').textContent = languageTexts[lang].soils;
+            document.getElementById('languagesTitle').textContent = languageTexts[lang].languages;
+            document.getElementById('aboutTitle').textContent = languageTexts[lang].about;
+            document.getElementById('footerText').textContent = languageTexts[lang].footer;
+        }
+    </script>
+</body>
+</html>
