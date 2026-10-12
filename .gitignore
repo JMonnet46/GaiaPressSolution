@@ -1,4 +1,4 @@
-﻿# Fichiers generes par Visual Studio
+# Fichiers generes par Visual Studio
 .vs/
 bin/
 obj/
@@ -13,3 +13,6 @@ packages/
 
 # Tokens et secrets
 Token*.txt
+
+# Fichiers divers
+Documents/
