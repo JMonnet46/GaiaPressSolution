@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">GaiaPressV17 - Nouveau Forage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles Debase */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* En-tête */
+        .header {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                margin: 0;
+                font-size: 20px;
+            }
+
+        /* Conteneur principal */
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Onglets */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            background-color: #f0f0f0;
+            transition: all 0.3s;
+        }
+
+            .tab.active {
+                background-color: white;
+                border-color: #ccc;
+                border-bottom-color: white;
+            }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 5px 5px 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .tab-content.active {
+                display: block;
+            }
+
+        /* Groupes de champs */
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+            .field-group h2 {
+                margin: 0 0 15px;
+                font-size: 18px;
+                color: #4CAF50;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 10px;
+            }
+
+        .field {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+            .field label {
+                width: 150px;
+                font-weight: bold;
+            }
+
+            .field input, .field select {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+        /* Boutons */
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+            .button.primary {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+                .button.primary:hover {
+                    background-color: #45a049;
+                }
+
+            .button.secondary {
+                background-color: #f0f0f0;
+                color: #333;
+            }
+
+                .button.secondary:hover {
+                    background-color: #e0e0e0;
+                }
+
+        /* Pied de page */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f5f7fa;
+            color: #666;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête -->
+    <div class="header">
+        <i class="fas fa-file-alt"></i>
+        <h1 id="mainTitle">Nouveau Forage</h1>
+    </div>
+
+    <!-- Conteneur principal -->
+    <div class="container">
+        <!-- Onglets -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('forage')"><span id="tabForage">Forage</span></div>
+            <div class="tab" onclick="switchTab('essais')"><span id="tabEssais">Essais</span></div>
+            <div class="tab" onclick="switchTab('rapport')"><span id="tabRapport">Rapport</span></div>
+        </div>
+
+        <!-- Contenu de l'onglet Forage -->
+        <div id="forage" class="tab-content active">
+            <!-- Identification -->
+            <div class="field-group">
+                <h2 id="titleIdentification">Identification</h2>
+                <div class="field">
+                    <label id="labelRefForage" for="refForage">Référence du Forage :</label>
+                    <input type="text" id="refForage" placeholder="Ex: FOR-001">
+                </div>
+                <div class="field">
+                    <label id="labelNomForage" for="nomForage">Nom du Forage :</label>
+                    <input type="text" id="nomForage" placeholder="Ex: Forage de Paris">
+                </div>
+                <div class="field">
+                    <label id="labelNumeroForage" for="numeroForage">Numéro du Forage :</label>
+                    <input type="text" id="numeroForage" placeholder="Ex: 1">
+                </div>
+            </div>
+
+            <!-- Réalisation -->
+            <div class="field-group">
+                <h2 id="titleRealisation">Réalisation</h2>
+                <div class="field">
+                    <label id="labelDateForage" for="dateForage">Date du Forage :</label>
+                    <input type="date" id="dateForage">
+                </div>
+                <div class="field">
+                    <label id="labelMaterielForage" for="materielForage">Matériel de Forage :</label>
+                    <input type="text" id="materielForage" placeholder="Ex: Camion de forage X">
+                </div>
+                <div class="field">
+                    <label id="labelOutilForage" for="outilForage">Outil de Forage :</label>
+                    <input type="text" id="outilForage" placeholder="Ex: Trépan de 100mm">
+                </div>
+            </div>
+
+            <!-- Paramètres -->
+            <div class="field-group">
+                <h2 id="titleParametres">Paramètres</h2>
+                <div class="field">
+                    <label id="labelAbscisseX" for="abscisseX">Abscisse X (m) :</label>
+                    <input type="number" id="abscisseX" placeholder="Ex: 100">
+                </div>
+                <div class="field">
+                    <label id="labelOrdoneeY" for="ordonneeY">Ordonnée Y (m) :</label>
+                    <input type="number" id="ordonneeY" placeholder="Ex: 200">
+                </div>
+                <div class="field">
+                    <label id="labelAltitudeZ" for="altitudeZ">Altitude Z (m) :</label>
+                    <input type="number" id="altitudeZ" placeholder="Ex: 50">
+                </div>
+                <div class="field">
+                    <label id="labelCoteInitiale" for="coteInitiale">Cote Initiale (m) :</label>
+                    <input type="number" id="coteInitiale" placeholder="Ex: 0">
+                </div>
+                <div class="field">
+                    <label id="labelCoteFinale" for="coteFinale">Cote Finale (m) :</label>
+                    <input type="number" id="coteFinale" placeholder="Ex: 10">
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button onclick="modifyMyForage()">Modify</button>
+                <button onclick="validateMyForage()">OK</button>
+                <button onclick="cancelMyForage()">Cancel</button>
+                <button onclick="closeWindow()">Fermer</button> <!-- ✅ Bouton Fermer -->
+            </div>
+        </div>
+
+        <!-- Contenu de l'onglet Essais (vide pour l'instant) -->
+        <div id="essais" class="tab-content">
+            <p id="essaisContent">Contenu de l'onglet Essais à venir...</p>
+        </div>
+
+        <!-- Contenu de l'onglet Rapport (vide pour l'instant) -->
+        <div id="rapport" class="tab-content">
+            <p id="rapportContent">Contenu de l'onglet Rapport à venir...</p>
+        </div>
+    </div>
+
+    <!-- Boutons Imprimer et Fermer -->
+    <div class="button-group" style="margin-top: 20px;">
+        <button class="button secondary" onclick="printForage()">
+            <i class="fas fa-print"></i> <span id="buttonPrint">Imprimer</span>
+        </button>
+        <button class="button secondary" onclick="closeForage()">
+            <i class="fas fa-times"></i> <span id="buttonClose">Fermer</span>
+        </button>
+    </div>
+
+    <!-- Pied de page -->
+    <div class="footer">
+        <p id="footerText">GaiaPressV17 - Programme d'interprétation de l'essai pressiométrique</p>
+    </div>
+
+    <!-- Script pour gérer les onglets, les actions et la langue -->
+    <script>
+        // Récupérer le paramètre "Lang" de l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 1; // Par défaut, français (1)
+
+        // Dictionnaire des textes en fonction de la langue
+        const languageTexts = {
+            0: { // Anglais
+                pageTitle: "GaiaPressV17 - New Borehole",
+                mainTitle: "New Borehole",
+                tabForage: "Borehole",
+                tabEssais: "Tests",
+                tabRapport: "Report",
+                titleIdentification: "Identification",
+                labelRefForage: "Borehole Reference:",
+                labelNomForage: "Borehole Name:",
+                labelNumeroForage: "Borehole Number:",
+                titleRealisation: "Realization",
+                labelDateForage: "Borehole Date:",
+                labelMaterielForage: "Drilling Equipment:",
+                labelOutilForage: "Drilling Tool:",
+                titleParametres: "Parameters",
+                labelAbscisseX: "X Coordinate (m):",
+                labelOrdoneeY: "Y Coordinate (m):",
+                labelAltitudeZ: "Z Altitude (m):",
+                labelCoteInitiale: "Initial Elevation (m):",
+                labelCoteFinale: "Final Elevation (m):",
+                buttonModify: "Modify",
+                buttonOK: "OK",
+                buttonCancel: "Cancel",
+                buttonPrint: "Print",
+                buttonClose: "Close",
+                essaisContent: "Test content coming soon...",
+                rapportContent: "Report content coming soon...",
+                footerText: "GaiaPressV17 - Pressiometric Test Interpretation Program"
+            },
+            1: { // Français
+                pageTitle: "GaiaPressV17 - Nouveau Forage",
+                mainTitle: "Nouveau Forage",
+                tabForage: "Forage",
+                tabEssais: "Essais",
+                tabRapport: "Rapport",
+                titleIdentification: "Identification",
+                labelRefForage: "Référence du Forage :",
+                labelNomForage: "Nom du Forage :",
+                labelNumeroForage: "Numéro du Forage :",
+                titleRealisation: "Réalisation",
+                labelDateForage: "Date du Forage :",
+                labelMaterielForage: "Matériel de Forage :",
+                labelOutilForage: "Outil de Forage :",
+                titleParametres: "Paramètres",
+                labelAbscisseX: "Abscisse X (m) :",
+                labelOrdoneeY: "Ordonnée Y (m) :",
+                labelAltitudeZ: "Altitude Z (m) :",
+                labelCoteInitiale: "Cote Initiale (m) :",
+                labelCoteFinale: "Cote Finale (m) :",
+                buttonModify: "Modifier",
+                buttonOK: "OK",
+                buttonCancel: "Annuler",
+                buttonPrint: "Imprimer",
+                buttonClose: "Fermer",
+                essaisContent: "Contenu de l'onglet Essais à venir...",
+                rapportContent: "Contenu de l'onglet Rapport à venir...",
+                footerText: "GaiaPressV17 - Programme d'interprétation de l'essai pressiométrique"
+            }
+        };
+
+        // Mettre à jour les textes de l'interface en fonction de la langue
+        function updateLanguageUI() {
+            const texts = languageTexts[lang];
+
+            // Mettre à jour le titre de la page
+            document.title = texts.pageTitle;
+            document.getElementById('pageTitle').textContent = texts.pageTitle;
+
+            // Mettre à jour les textes de l'en-tête
+            document.getElementById('mainTitle').textContent = texts.mainTitle;
+
+            // Mettre à jour les textes des onglets
+            document.getElementById('tabForage').textContent = texts.tabForage;
+            document.getElementById('tabEssais').textContent = texts.tabEssais;
+            document.getElementById('tabRapport').textContent = texts.tabRapport;
+
+            // Mettre à jour les textes des sections
+            document.getElementById('titleIdentification').textContent = texts.titleIdentification;
+            document.getElementById('titleRealisation').textContent = texts.titleRealisation;
+            document.getElementById('titleParametres').textContent = texts.titleParametres;
+
+            // Mettre à jour les libellés des champs
+            document.getElementById('labelRefForage').textContent = texts.labelRefForage;
+            document.getElementById('labelNomForage').textContent = texts.labelNomForage;
+            document.getElementById('labelNumeroForage').textContent = texts.labelNumeroForage;
+            document.getElementById('labelDateForage').textContent = texts.labelDateForage;
+            document.getElementById('labelMaterielForage').textContent = texts.labelMaterielForage;
+            document.getElementById('labelOutilForage').textContent = texts.labelOutilForage;
+            document.getElementById('labelAbscisseX').textContent = texts.labelAbscisseX;
+            document.getElementById('labelOrdoneeY').textContent = texts.labelOrdoneeY;
+            document.getElementById('labelAltitudeZ').textContent = texts.labelAltitudeZ;
+            document.getElementById('labelCoteInitiale').textContent = texts.labelCoteInitiale;
+            document.getElementById('labelCoteFinale').textContent = texts.labelCoteFinale;
+
+            // Mettre à jour les textes des boutons
+            document.getElementById('buttonModify').textContent = texts.buttonModify;
+            document.getElementById('buttonOK').textContent = texts.buttonOK;
+            document.getElementById('buttonCancel').textContent = texts.buttonCancel;
+            document.getElementById('buttonPrint').textContent = texts.buttonPrint;
+            document.getElementById('buttonClose').textContent = texts.buttonClose;
+
+            // Mettre à jour les textes des onglets vides
+            document.getElementById('essaisContent').textContent = texts.essaisContent;
+            document.getElementById('rapportContent').textContent = texts.rapportContent;
+
+            // Mettre à jour le pied de page
+            document.getElementById('footerText').textContent = texts.footerText;
+        }
+
+        // Appeler la fonction pour mettre à jour l'interface au chargement de la page
+        window.onload = updateLanguageUI;
+
+        // Fonction pour changer d'onglet
+        function switchTab(tabName) {
+            // Masquer tous les contenus d'onglets
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Désactiver tous les onglets
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Afficher le contenu de l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+
+            // Activer l'onglet sélectionné
+            event.target.classList.add('active');
+        }
+
+        // Fonction pour enregistrer le forage
+        function saveForage() {
+            const forageData = {
+                refForage: document.getElementById('refForage').value,
+                nomForage: document.getElementById('nomForage').value,
+                numeroForage: document.getElementById('numeroForage').value,
+                dateForage: document.getElementById('dateForage').value,
+                materielForage: document.getElementById('materielForage').value,
+                outilForage: document.getElementById('outilForage').value,
+                abscisseX: document.getElementById('abscisseX').value,
+                ordonneeY: document.getElementById('ordonneeY').value,
+                altitudeZ: document.getElementById('altitudeZ').value,
+                coteInitiale: document.getElementById('coteInitiale').value,
+                coteFinale: document.getElementById('coteFinale').value
+            };
+
+            console.log(lang === 0 ? "Borehole saved:" : "Forage enregistré :", forageData);
+            alert(lang === 0 ? "Borehole saved successfully!" : "Forage enregistré avec succès !");
+        }
+
+        // Fonction pour modifier le forage
+        function modifyForage() {
+            console.log(lang === 0 ? "Modify Borehole" : "Modifier le forage");
+            alert(lang === 0 ? "Modify mode activated." : "Mode modification activé.");
+        }
+
+        // Fonction pour annuler
+        function cancelForage() {
+            console.log(lang === 0 ? "Cancel" : "Annuler");
+            if (confirm(lang === 0 ? "Are you sure you want to cancel?" : "Voulez-vous vraiment annuler ?")) {
+                window.close();
+            }
+        }
+
+        // Fonction pour imprimer
+        function printForage() {
+            console.log(lang === 0 ? "Print" : "Imprimer");
+            window.print();
+        }
+
+        // Fonction pour fermer
+        function closeForage() {
+            console.log(lang === 0 ? "Close" : "Fermer");
+            window.close();
+        }
+    </script>
+</body>
+</html>

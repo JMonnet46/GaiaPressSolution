@@ -1,8 +1,4 @@
 ﻿// GaiaPressBlazorWebApp/Charting/ForageChartGenerator.cs
-using System;
-using System.Collections.Generic;
-using GaiaPress.Core.V17.Models; // Assurez-vous d'avoir cette référence
-
 namespace GaiaPressBlazorWebApp.Charting
 {
     /// <summary>

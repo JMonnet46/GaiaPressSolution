@@ -5,28 +5,59 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<!-- Supprimez ces lignes si vous ne les utilisez pas -->
+		<RootNamespace>GaiaPressBlazorWebAPP</RootNamespace>
+		<UserSecretsId>gaiapress-blazor-webapp</UserSecretsId>
 		<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
 		<DockerfileContext>.</DockerfileContext>
 	</PropertyGroup>
 
+	<!-- Exclure les dossiers qui ne font pas partie de ce projet -->
 	<ItemGroup>
-	  <Compile Remove="GaiaPressWeb\**" />
-	  <Content Remove="GaiaPressWeb\**" />
-	  <EmbeddedResource Remove="GaiaPressWeb\**" />
-	  <None Remove="GaiaPressWeb\**" />
+		<Compile Remove="GaiaPressCoreV17\**" />
+		<Content Remove="GaiaPressCoreV17\**" />
+		<EmbeddedResource Remove="GaiaPressCoreV17\**" />
+		<None Remove="GaiaPressCoreV17\**" />
+
+		<Compile Remove="GaiaPressWeb\**" />
+		<Content Remove="GaiaPressWeb\**" />
+		<EmbeddedResource Remove="GaiaPressWeb\**" />
+		<None Remove="GaiaPressWeb\**" />
+
+		<Compile Remove="git\**" />
+		<Content Remove="git\**" />
+		<EmbeddedResource Remove="git\**" />
+		<None Remove="git\**" />
+
+		<Compile Remove="My Project\**" />
+		<Content Remove="My Project\**" />
+		<EmbeddedResource Remove="My Project\**" />
+		<None Remove="My Project\**" />
+
+		<Compile Remove="packages\**" />
+		<Content Remove="packages\**" />
+		<EmbeddedResource Remove="packages\**" />
+		<None Remove="packages\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="GaiaPressWeb.vbproj.user" />
+		<None Remove=".dockerignore" />
+		<None Remove="Dockerfile" />
+		<None Remove="Nouveau Document texte.txt" />
+		<None Remove="Token2.txt" />
+		<None Remove="Token3.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- Seuls les packages spécifiques à votre projet -->
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
-		<!-- Si vous utilisez Razor (pour les vues) -->
-		<!-- <PackageReference Include="Microsoft.AspNetCore.Razor" Version="8.0.0" /> -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+	</ItemGroup>
+
+	<!-- Référence vers le projet VB -->
+	<ItemGroup>
+		<ProjectReference Include="GaiaPressCoreV17\GaiaPressCoreV17.vbproj" />
 	</ItemGroup>
 
 </Project>

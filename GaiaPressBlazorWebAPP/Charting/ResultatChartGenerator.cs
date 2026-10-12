@@ -1,9 +1,8 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-
-nusing System;
+﻿using GaiaPressCoreV17.Models;
+using System;
 using System.Collections.Generic;
-using GaiaPress.Core.V17.Models;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace GaiaPressBlazorWebApp.Charting
 {
@@ -12,22 +11,21 @@ namespace GaiaPressBlazorWebApp.Charting
     /// Remplace les anciennes fonctions utilisant DataVisualization.
     /// </summary>
     public class ResultatChartGenerator
-    {
-        // Exemple : Générer des données pour un graphique Pression/Volume
+    {        // Exemple : Générer des données pour un graphique Pression/Volume
         public Dictionary<string, List<double>> GeneratePressureVolumeChart(Essai_Forage essai)
         {
             var data = new Dictionary<string, List<double>>();
 
             data.Add("Pression (bar)", new List<double> {
-                essai.E_presP0,
-                essai.E_presFluage,
-                essai.E_presLimite
+                essai.presP0,
+                essai.presFluage,
+                essai.presLimite
             });
 
             data.Add("Volume (m³)", new List<double> {
-                essai.E_VolSonde,
-                essai.E_VolSonde * 1.2,
-                essai.E_VolSonde * 1.5
+                essai.VolSonde,
+                essai.VolSonde * 1.2,
+                essai.VolSonde * 1.5
             });
 
             return data;
@@ -38,12 +36,12 @@ namespace GaiaPressBlazorWebApp.Charting
         {
             var xValues = new double[] { 0, 1, 2, 3, 4, 5 };
             var yValues = new double[] {
-                essai.E_presP0,
-                essai.E_presP0 * 0.95,
-                essai.E_presP0 * 0.90,
-                essai.E_presP0 * 0.85,
-                essai.E_presP0 * 0.80,
-                essai.E_presP0 * 0.75
+                essai.presP0,
+                essai.presP0 * 0.95,
+                essai.presP0 * 0.90,
+                essai.presP0 * 0.85,
+                essai.presP0 * 0.80,
+                essai.presP0 * 0.75
             };
 
             return (xValues, yValues);

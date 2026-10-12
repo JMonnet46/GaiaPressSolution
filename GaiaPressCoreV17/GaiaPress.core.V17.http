@@ -1,0 +1,6 @@
+@GaiaPressCoreV17_HostAddress = http://localhost:5052
+
+GET {{GaiaPressCoreV17_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

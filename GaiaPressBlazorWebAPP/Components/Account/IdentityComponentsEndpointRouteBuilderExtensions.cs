@@ -1,5 +1,3 @@
-using GaiaPressBlazorWebAPP.Components.Account.Pages;
-using GaiaPressBlazorWebAPP.Components.Account.Pages.Manage;
 using GaiaPressBlazorWebAPP.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;

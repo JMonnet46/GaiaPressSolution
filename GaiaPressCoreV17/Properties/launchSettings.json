@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "ConsoleGaiaPress": {
+      "commandName": "Project"
+    }
+    // ✅ Supprimez cette section
+    // "Container (Dockerfile)": {
+    //   "commandName": "Docker"
+    // }
+  }
+}      "applicationUrl": "http://localhost:7362",
+      "sslPort": 44306
+    }
+  }
+}

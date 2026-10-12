@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    console.log("WebForage.html chargé avec currentLang =", currentLang);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">New Forage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /*margin: 20px;*/
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .parameters-title {
+            color: green;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <!-- Dans le <head> ou avant la fermeture de </body> -->
+    <script src="/js/labels.js"></script>
+    <script>
+        // Utilisez le même dictionnaire `labels` pour mettre à jour les libellés
+        function updateLabels() {
+            const langLabels = labels[currentLang];
+            for (const [id, text] of Object.entries(langLabels)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+            document.title = langLabels.mainTitleWebForage;
+        }
+        updateLabels();
+    </script>
+
+</head>
+<body>
+    <!-- Variable globale pour la langue (0 = Anglais, 1 = Français) -->
+    <script>
+        let currentLang = 1; // Par défaut : Français (1)
+    </script>
+
+    <h1 id="mainTitle">Nouveau Forage</h1>
+
+    <div class="form-group">
+        <label for="boreholeDate" id="labelBoreholeDate">Borehole Date:</label>
+        <input type="date" id="boreholeDate" value="2026-08-06">
+    </div>
+
+    <div class="form-group">
+        <label for="drillingEquipment" id="labelDrillingEquipment">Drilling Equipment:</label>
+        <input type="text" id="drillingEquipment" value="Machine de forage">
+    </div>
+
+    <div class="form-group">
+        <label for="drillingTool" id="labelDrillingTool">Drilling Tool:</label>
+        <input type="text" id="drillingTool" value="Tarière">
+    </div>
+
+    <h2 class="parameters-title" id="parametersTitle">Paramètres</h2>
+
+    <div class="form-group">
+        <label for="xCoordinate" id="labelXCoordinate">Abscisse X (m) :</label>
+        <input type="number" id="xCoordinate" value="100">
+    </div>
+
+    <div class="form-group">
+        <label for="yCoordinate" id="labelYCoordinate">Ordonnée Y (m) :</label>
+        <input type="number" id="yCoordinate" value="200">
+    </div>
+
+    <div class="form-group">
+        <label for="zAltitude" id="labelZAltitude">Altitude Z (m) :</label>
+        <input type="number" id="zAltitude" value="50">
+    </div>
+
+    <div class="form-group">
+        <label for="initialElevation" id="labelInitialElevation">Cote Initiale (m) :</label>
+        <input type="number" id="initialElevation" value="0">
+    </div>
+
+    <div class="form-group">
+        <label for="finalElevation" id="labelFinalElevation">Cote Finale (m) :</label>
+        <input type="number" id="finalElevation" value="10">
+    </div>
+
+    <div class="buttons">
+        <button onclick="modifyForage()" id="btnModify">
+            <span id="btnModifyText">Modify</span>
+        </button>
+        <button onclick="validateForage()" id="btnOk">
+            <span id="btnOkText">OK</span>
+        </button>
+        <button onclick="cancelForage()" id="btnCancel">
+            <span id="btnCancelText">Cancel</span>
+        </button>
+        <button onclick="closeWindow()" id="btnClose">
+            <span id="btnCloseText">Fermer</span>
+        </button>
+    </div>
+
+    <!-- Boutons Imprimer et Fermer en bas à droite -->
+    <div style="margin-top: 20px; text-align: right;">
+        <button type="button" onclick="printPage()" id="btnPrint">
+            <span id="btnPrintText">Imprimer</span>
+        </button>
+        <button type="button" onclick="closeWindow()" id="btnCloseBottom">
+            <span id="btnCloseBottomText">Fermer</span>
+        </button>
+    </div>
+
+    <script>
+        // ✅ Dictionnaire des libellés pour les deux langues
+        const labels = {
+            0: { // Anglais
+                pageTitle: "New Forage",
+                mainTitle: "New Forage",
+                labelBoreholeDate: "Borehole Date:",
+                labelDrillingEquipment: "Drilling Equipment:",
+                labelDrillingTool: "Drilling Tool:",
+                parametersTitle: "Parameters",
+                labelXCoordinate: "X Coordinate (m):",
+                labelYCoordinate: "Y Coordinate (m):",
+                labelZAltitude: "Z Altitude (m):",
+                labelInitialElevation: "Initial Elevation (m):",
+                labelFinalElevation: "Final Elevation (m):",
+                btnModifyText: "Modify",
+                btnOkText: "OK",
+                btnCancelText: "Cancel",
+                btnCloseText: "Close",
+                btnPrintText: "Print"
+            },
+            1: { // Français
+                pageTitle: "Nouveau Forage",
+                mainTitle: "Nouveau Forage",
+                labelBoreholeDate: "Date du forage :",
+                labelDrillingEquipment: "Matériel de Forage :",
+                labelDrillingTool: "Outil de Forage :",
+                parametersTitle: "Paramètres",
+                labelXCoordinate: "Abscisse X (m) :",
+                labelYCoordinate: "Ordonnée Y (m) :",
+                labelZAltitude: "Altitude Z (m) :",
+                labelInitialElevation: "Cote Initiale (m) :",
+                labelFinalElevation: "Cote Finale (m) :",
+                btnModifyText: "Modifier",
+                btnOkText: "OK",
+                btnCancelText: "Annuler",
+                btnCloseText: "Fermer",
+                btnPrintText: "Imprimer"
+            }
+        };
+
+        // ✅ Fonction pour mettre à jour les libellés
+        function updateLabels() {
+            const langLabels = labels[currentLang];
+            for (const [id, text] of Object.entries(langLabels)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+            document.title = langLabels.pageTitle;
+        }
+
+        // ✅ Initialiser les libellés
+        updateLabels();
+
+        // ✅ Fonction pour changer de langue
+        function setLanguage(lang) {
+            currentLang = lang;
+            updateLabels();
+        }
+
+        // ✅ Actions des boutons
+        function modifyForage() {
+            console.log(currentLang === 1 ? "Modifier le forage" : "Modify forage");
+        }
+
+        function validateForage() {
+            console.log(currentLang === 1 ? "Valider le forage" : "Validate forage");
+            alert(currentLang === 1 ? "Forage validé avec succès !" : "Forage validated successfully!");
+        }
+
+        function cancelForage() {
+            console.log(currentLang === 1 ? "Annuler les modifications" : "Cancel modifications");
+        }
+
+        function closeWindow() {
+            try {
+                window.close();
+            } catch (e) {
+                alert(currentLang === 1 ? "Veuillez fermer cette fenêtre manuellement." : "Please close this window manually.");
+            }
+        }
+
+        function printPage() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">GaiaPress - Gestion des Chantier</title>
+    <!-- Bootstrap pour un design moderne -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jsTree pour l'arborescence -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <!-- DataTables pour les tableaux -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <style>
+        /* Styles personnalisés */
+        #tvArborescence {
+            border: 1px solid #ddd;
+            padding: 10px;
+            min-height: 200px;
+            background-color: #f9f9f9;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn-action {
+            margin-right: 10px;
+        }
+    </style>
+    <!-- Dans le <head> ou avant la fermeture de </body> -->
+    <script src="/js/labels.js"></script>
+    <script>
+        // Utilisez le même dictionnaire `labels` pour mettre à jour les libellés
+        function updateLabels() {
+            const langLabels = labels[currentLang];
+            for (const [id, text] of Object.entries(langLabels)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+            document.title = langLabels.mainTitleWebForage;
+        }
+        updateLabels();
+    </script>
+</head>
+<body>
+    <!-- Variable globale pour la langue (0 = Anglais, 1 = Français) -->
+    <script>
+        // ✅ currentLang = 0 (Anglais) ou 1 (Français)
+        let currentLang = 1; // Par défaut : Français (1)
+    </script>
+
+    <div class="container-fluid">
+        <h1 class="text-center my-4" id="mainTitle">GaiaPress - Gestion des Chantier</h1>
+
+        <!-- Onglets avec rôles ARIA valides -->
+        <ul class="nav nav-tabs" id="chantierTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="iTabChantier" data-bs-toggle="tab" data-bs-target="#iTabChantierContent" type="button" role="tab" aria-selected="true" aria-controls="iTabChantierContent">
+                    <span id="tabChantierText">Chantier</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="iTabForages" data-bs-toggle="tab" data-bs-target="#iTabForagesContent" type="button" role="tab" aria-selected="false" aria-controls="iTabForagesContent">
+                    <span id="tabForagesText">Forages</span>
+                </button>
+            </li>
+        </ul>
+
+        <!-- Contenu des onglets avec rôle tabpanel -->
+        <div class="tab-content" id="chantierTabContent">
+            <!-- Onglet Chantier -->
+            <div class="tab-pane fade show active" id="iTabChantierContent" role="tabpanel" aria-labelledby="iTabChantier">
+                <div class="form-container">
+                    <h2 id="chantierTitle">Propriétés du chantier</h2>
+                    <form id="chantierForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="txtRefChantier" class="form-label" id="labelRefChantier">Référence du chantier :</label>
+                                <input type="text" class="form-control" id="txtRefChantier" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txtNomChantier" class="form-label" id="labelNomChantier">Nom du chantier :</label>
+                                <input type="text" class="form-control" id="txtNomChantier" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="txtRefClient" class="form-label" id="labelRefClient">Référence du client :</label>
+                                <input type="text" class="form-control" id="txtRefClient" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txtEntreprise" class="form-label" id="labelEntreprise">Entreprise :</label>
+                                <input type="text" class="form-control" id="txtEntreprise" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="txtTelephone" class="form-label" id="labelTelephone">Téléphone :</label>
+                                <input type="text" class="form-control" id="txtTelephone" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txtAdresse" class="form-label" id="labelAdresse">Adresse :</label>
+                                <input type="text" class="form-control" id="txtAdresse" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtDescription" class="form-label" id="labelDescription">Description :</label>
+                            <textarea class="form-control" id="txtDescription" rows="3" readonly></textarea>
+                        </div>
+                    </form>
+
+                    <!-- Arborescence -->
+                    <div class="mb-4">
+                        <h3 id="arborescenceTitle">Arborescence</h3>
+                        <div id="tvArborescence"></div>
+                    </div>
+
+                    <!-- Boutons -->
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-primary btn-action" id="btnModifier" onclick="modifyChantier()">
+                                <span id="btnModifierText">Modifier</span>
+                            </button>
+                            <button type="button" class="btn btn-success btn-action" id="btnOk" onclick="validateChantier()">
+                                <span id="btnOkText">OK</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-action" id="btnAnnuler" onclick="cancelChantier()">
+                                <span id="btnAnnulerText">Annuler</span>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-info btn-action" id="btnImprimer" onclick="printPage()">
+                                <span id="btnImprimerText">Imprimer</span>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-action" id="btnFermer" onclick="closeWindow()">
+                                <span id="btnFermerText">Fermer</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onglet Forages -->
+            <div class="tab-pane fade" id="iTabForagesContent" role="tabpanel" aria-labelledby="iTabForages">
+                <div class="form-container">
+                    <h2 id="foragesTitle">Liste des forages</h2>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary btn-action" id="btnAddForage" onclick="addForage()">
+                            <span id="btnAddForageText">Ajouter</span>
+                        </button>
+                        <button type="button" class="btn btn-warning btn-action" id="btnOuvrirForage" onclick="openForage()">
+                            <span id="btnOuvrirForageText">Ouvrir</span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-action" id="btnDeleteForage" onclick="deleteForage()">
+                            <span id="btnDeleteForageText">Supprimer</span>
+                        </button>
+                    </div>
+                    <table id="dataGridForages" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th id="thReference">Référence</th>
+                                <th id="thNom">Nom</th>
+                                <th id="thDate">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmModalBody">
+                    <!-- Message dynamique -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modalNo">
+                        <span id="modalNoText">Non</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmModalYes">
+                        <span id="modalYesText">Oui</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bibliothèques JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <!-- ✅ Script pour gérer la langue (0 = Anglais, 1 = Français) et les actions -->
+    <script>
+        // ✅ Fonction pour mettre à jour les libellés en fonction de currentLang (0 = Anglais, 1 = Français)
+        function updateLabels() {
+            const labels = {
+                // ✅ 0 = Anglais
+                0: {
+                    pageTitle: "GaiaPress - Site Management",
+                    mainTitle: "GaiaPress - Site Management",
+                    tabChantierText: "Site",
+                    tabForagesText: "Boreholes",
+                    chantierTitle: "Site Properties",
+                    labelRefChantier: "Site Reference:",
+                    labelNomChantier: "Site Name:",
+                    labelRefClient: "Client Reference:",
+                    labelEntreprise: "Company:",
+                    labelTelephone: "Phone:",
+                    labelAdresse: "Address:",
+                    labelDescription: "Description:",
+                    arborescenceTitle: "Tree View",
+                    btnModifierText: "Modify",
+                    btnOkText: "OK",
+                    btnAnnulerText: "Cancel",
+                    btnImprimerText: "Print",
+                    btnFermerText: "Close",
+                    foragesTitle: "Borehole List",
+                    btnAddForageText: "Add",
+                    btnOuvrirForageText: "Open",
+                    btnDeleteForageText: "Delete",
+                    thReference: "Reference",
+                    thNom: "Name",
+                    thDate: "Date",
+                    modalTitle: "Confirmation",
+                    modalNoText: "No",
+                    modalYesText: "Yes"
+                },
+                // ✅ 1 = Français
+                1: {
+                    pageTitle: "GaiaPress - Gestion des Chantier",
+                    mainTitle: "GaiaPress - Gestion des Chantier",
+                    tabChantierText: "Chantier",
+                    tabForagesText: "Forages",
+                    chantierTitle: "Propriétés du chantier",
+                    labelRefChantier: "Référence du chantier :",
+                    labelNomChantier: "Nom du chantier :",
+                    labelRefClient: "Référence du client :",
+                    labelEntreprise: "Entreprise :",
+                    labelTelephone: "Téléphone :",
+                    labelAdresse: "Adresse :",
+                    labelDescription: "Description :",
+                    arborescenceTitle: "Arborescence",
+                    btnModifierText: "Modifier",
+                    btnOkText: "OK",
+                    btnAnnulerText: "Annuler",
+                    btnImprimerText: "Imprimer",
+                    btnFermerText: "Fermer",
+                    foragesTitle: "Liste des forages",
+                    btnAddForageText: "Ajouter",
+                    btnOuvrirForageText: "Ouvrir",
+                    btnDeleteForageText: "Supprimer",
+                    thReference: "Référence",
+                    thNom: "Nom",
+                    thDate: "Date",
+                    modalTitle: "Confirmation",
+                    modalNoText: "Non",
+                    modalYesText: "Oui"
+                }
+            };
+
+            // ✅ Mettre à jour tous les libellés
+            const langLabels = labels[currentLang];
+            for (const [id, text] of Object.entries(langLabels)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+
+            // ✅ Mettre à jour le titre de la page
+            document.title = langLabels.pageTitle;
+        }
+
+        // ✅ Définir la langue par défaut (1 = Français)
+        updateLabels();
+
+        // ✅ Fonction pour changer de langue (0 = Anglais, 1 = Français)
+        function setLanguage(lang) {
+            currentLang = lang;
+            updateLabels();
+        }
+
+        // ✅ Actions des boutons
+        function modifyChantier() {
+            console.log(currentLang === 1 ? "Modifier le chantier" : "Modify site");
+            // Logique pour modifier le chantier
+        }
+
+        function validateChantier() {
+            console.log(currentLang === 1 ? "Valider le chantier" : "Validate site");
+            // Logique pour valider le chantier
+            alert(currentLang === 1 ? "Chantier validé avec succès !" : "Site validated successfully!");
+        }
+
+        function cancelChantier() {
+            console.log(currentLang === 1 ? "Annuler les modifications" : "Cancel modifications");
+            // Logique pour annuler les modifications
+        }
+
+        function printPage() {
+            window.print(); // ✅ Imprimer la page
+        }
+
+        function closeWindow() {
+            try {
+                window.close(); // ✅ Ferme la fenêtre si possible
+            } catch (e) {
+                alert(currentLang === 1 ? "Veuillez fermer cette fenêtre manuellement." : "Please close this window manually.");
+            }
+        }
+
+        // ✅ Initialisation de jsTree et DataTables
+        $(document).ready(function () {
+            // Initialisation de DataTables
+            $('#dataGridForages').DataTable();
+
+            // Initialisation de jsTree avec des libellés traduits
+            const treeData = [
+                {
+                    text: currentLang === 1 ? "Chantier 1" : "Site 1",
+                    children: [
+                        { text: currentLang === 1 ? "Forage 1" : "Borehole 1" },
+                        { text: currentLang === 1 ? "Forage 2" : "Borehole 2" }
+                    ]
+                }
+            ];
+
+            $('#tvArborescence').jstree({
+                'core': {
+                    'data': treeData
+                }
+            });
+        });
+    </script>
+</body>
+</html>

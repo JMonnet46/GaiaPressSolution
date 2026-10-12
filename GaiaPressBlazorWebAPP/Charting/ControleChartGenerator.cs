@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using GaiaPress.Core.V17.Models;
-
-namespace GaiaPressBlazorWebApp.Charting
+﻿namespace GaiaPressBlazorWebApp.Charting
 {
     /// <summary>
     /// Génère des données de graphique pour les essais de forage.

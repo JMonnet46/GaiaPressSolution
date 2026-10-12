@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">New Forage</title>
+    <style>
+        /* Styles personnalisés */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .parameters-title {
+            color: green;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Variable globale pour la langue (0 = Anglais, 1 = Français) -->
+    <script>
+        let currentLang = 1; // Par défaut : Français (1)
+    </script>
+
+    <h1 id="mainTitle">Nouveau Forage</h1>
+
+    <div class="form-group">
+        <label for="boreholeDate" id="labelBoreholeDate">Date du forage :</label>
+        <input type="date" id="boreholeDate" value="2026-08-06">
+    </div>
+
+    <div class="form-group">
+        <label for="drillingEquipment" id="labelDrillingEquipment">Matériel de Forage :</label>
+        <input type="text" id="drillingEquipment" value="Machine de forage">
+    </div>
+
+    <div class="form-group">
+        <label for="drillingTool" id="labelDrillingTool">Outil de Forage :</label>
+        <input type="text" id="drillingTool" value="Tarière">
+    </div>
+
+    <h2 class="parameters-title" id="parametersTitle">Paramètres</h2>
+
+    <div class="form-group">
+        <label for="xCoordinate" id="labelXCoordinate">Abscisse X (m) :</label>
+        <input type="number" id="xCoordinate" value="100">
+    </div>
+
+    <div class="form-group">
+        <label for="yCoordinate" id="labelYCoordinate">Ordonnée Y (m) :</label>
+        <input type="number" id="yCoordinate" value="200">
+    </div>
+
+    <div class="form-group">
+        <label for="zAltitude" id="labelZAltitude">Altitude Z (m) :</label>
+        <input type="number" id="zAltitude" value="50">
+    </div>
+
+    <div class="form-group">
+        <label for="initialElevation" id="labelInitialElevation">Cote Initiale (m) :</label>
+        <input type="number" id="initialElevation" value="0">
+    </div>
+
+    <div class="form-group">
+        <label for="finalElevation" id="labelFinalElevation">Cote Finale (m) :</label>
+        <input type="number" id="finalElevation" value="10">
+    </div>
+
+    <div class="buttons">
+        <button onclick="modifyForage()" id="btnModify">
+            <span id="btnModifyText">Modifier</span>
+        </button>
+        <button onclick="validateForage()" id="btnOk">
+            <span id="btnOkText">OK</span>
+        </button>
+        <button onclick="cancelForage()" id="btnCancel">
+            <span id="btnCancelText">Annuler</span>
+        </button>
+        <button onclick="closeWindow()" id="btnClose">
+            <span id="btnCloseText">Fermer</span>
+        </button>
+    </div>
+
+    <div style="margin-top: 20px; text-align: right;">
+        <button type="button" onclick="printPage()" id="btnPrint">
+            <span id="btnPrintText">Imprimer</span>
+        </button>
+        <button type="button" onclick="closeWindow()" id="btnCloseBottom">
+            <span id="btnCloseBottomText">Fermer</span>
+        </button>
+    </div>
+
+    <!-- Charger le dictionnaire des libellés -->
+    <script src="/js/labels.js"></script>
+
+    <!-- Script pour gérer les actions et les libellés -->
+    <script>
+        // ✅ Fonction pour mettre à jour les libellés
+        function updateLabels() {
+            const langLabels = labels[currentLang];
+            for (const [id, text] of Object.entries(langLabels)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+            document.title = langLabels.pageTitle;
+        }
+
+        // ✅ Initialiser les libellés
+        updateLabels();
+
+        // ✅ Fonction pour changer de langue
+        function setLanguage(lang) {
+            currentLang = lang;
+            updateLabels();
+        }
+
+        // ✅ Actions des boutons
+        function modifyForage() {
+            console.log(currentLang === 1 ? "Modifier le forage" : "Modify forage");
+        }
+
+        function validateForage() {
+            console.log(currentLang === 1 ? "Valider le forage" : "Validate forage");
+            alert(currentLang === 1 ? "Forage validé avec succès !" : "Forage validated successfully!");
+        }
+
+        function cancelForage() {
+            console.log(currentLang === 1 ? "Annuler les modifications" : "Cancel modifications");
+        }
+
+        function closeWindow() {
+            try {
+                window.close();
+            } catch (e) {
+                alert(currentLang === 1 ? "Veuillez fermer cette fenêtre manuellement." : "Please close this window manually.");
+            }
+        }
+
+        function printPage() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

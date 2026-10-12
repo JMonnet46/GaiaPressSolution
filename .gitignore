@@ -1,4 +1,4 @@
-# Fichiers generes par Visual Studio
+# Visual Studio
 .vs/
 bin/
 obj/
@@ -16,3 +16,8 @@ Token*.txt
 
 # Fichiers divers
 Documents/
+*.log
+appsettings.json
+appsettings.Development.json
+
+.git_sauvegarde/

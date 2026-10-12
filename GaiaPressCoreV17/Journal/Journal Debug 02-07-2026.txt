@@ -1,0 +1,87 @@
+=====================
+02/07/2026 18:44:25
+Project: GaiaPressCoreV17.vbproj
+Recoverable
+Microsoft.VisualStudio.ProjectSystem.Query.QueryExecutionException: Impossible de Get un élément de projet de type 'None' avec la valeur 'ConsoleGaiaPress\obj\Container\launch.sem'.
+   à Microsoft.VisualStudio.ProjectSystem.Query.Execution.QuerySubscription`1.<RunQueryOnceAsync>d__11.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à Microsoft.VisualStudio.ProjectSystem.Query.Execution.QuerySubscription`1.<> _DisplayClass10_0.<<Start>b__0>d.MoveNext()
+---> Microsoft.VisualStudio.ProjectSystem.ProjectException: Impossible de Get un élément de projet de type 'None' avec la valeur 'ConsoleGaiaPress\obj\Container\launch.sem'.
+   à Microsoft.VisualStudio.ProjectSystem.ProjectErrorUtilities.ThrowProjectExceptionHelper(Exception innerException, String unformattedMessage, Object[] args)
+   à Microsoft.VisualStudio.ProjectSystem.ProjectErrorUtilities.ThrowProjectException(String message, Object arg0, Object arg1)
+   à Microsoft.VisualStudio.ProjectSystem.Properties.ItemProperties.<<GetEvaluatedProjectItemAsync>b__32_0>d.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.ProjectLockService.<ExecuteWithinLockAsync>d__134`1.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à Microsoft.VisualStudio.ProjectSystem.ProjectLockService.<ExecuteWithinLockAsync>d__134`1.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.ConfiguredProjectCache`1.<> _DisplayClass18_0.<<UpdateValue>b__0>d.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.ConfiguredProjectCache`1.<> _DisplayClass16_0.<<GetValueSlowAsync>g__LockDelegateAsync|0>d.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.ProjectLockService.<ExecuteWithinLockAsync>d__133.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à Microsoft.VisualStudio.ProjectSystem.ProjectLockService.<ExecuteWithinLockAsync>d__133.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.ConfiguredProjectCache`1.<GetValueSlowAsync>d__16.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à Microsoft.VisualStudio.ProjectSystem.Properties.ItemProperties.<GetProjectItemAsync>d__24.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.Properties.ItemProperties.<GetEvaluatedPropertyValueAsync>d__17.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.Properties.Package.PackageFilePropertyValueProviderBase.<> _DisplayClass7_0.<<GetExistingNoneItemAsync>b__0>d.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à Microsoft.VisualStudio.ProjectSystem.IProjectItemProviderExtensions.<GetItemAsync>d__0.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.Properties.Package.PackageFilePropertyValueProviderBase.<GetExistingNoneItemAsync>d__7.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.Properties.Package.PackageFilePropertyValueProviderBase.<GetItemIncludeValueAsync>d__9.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.Properties.InterceptedProjectProperties.<GetUnevaluatedPropertyValueAsync>d__5.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à System.Runtime.CompilerService.TaskAwaiter`1.GetResult()
+   à Microsoft.VisualStudio.ProjectSystem.PropertyPages.PageProperty.<GetUnevaluatedValueFromDataSourceAsync>d__41.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.VS.Query.UIPropertyValueDataProducer.<CreateUIPropertyValueValueAsync>d__1.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.VS.Query.UIPropertyValueDataProducer.<CreateUIPropertyValueValueAsync>d__0.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à Microsoft.VisualStudio.ProjectSystem.VS.Query.UIPropertyValueDataProducer.<CreateUIPropertyValueValuesAsync>d__2.MoveNext()
+--- Fin de la trace de la pile à partir de l'emplacement précédent au niveau duquel l'exception a été levée ---
+   à System.Runtime.ExceptionService.ExceptionDispatchInfo.Throw()
+   à System.Runtime.CompilerService.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   à Microsoft.VisualStudio.ProjectSystem.VS.Query.QueryDataFromProviderStateProducerBase`1.<SendRequestAsync>d__0.MoveNext()
+--- End of inner exception stack trace ---
+===================
