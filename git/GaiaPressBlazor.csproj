@@ -1,10 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebApp">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Exe</OutputType>
     <RootNamespace>GaiaPressBlazor</RootNamespace>
+    <UserSecretsId>86002c77-ff9b-4ac6-a0ac-8c6048cf4ce6</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
