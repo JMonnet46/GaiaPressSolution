@@ -1,5 +1,7 @@
 ﻿Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
+Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Namespace GaiaPressCoreV17.Models
 

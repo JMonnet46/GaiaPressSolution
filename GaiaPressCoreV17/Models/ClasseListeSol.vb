@@ -1,4 +1,6 @@
 ﻿Imports Microsoft.EntityFrameworkCore
+Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Namespace GaiaPressCoreV17.Models
 

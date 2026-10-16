@@ -21,3 +21,9 @@ appsettings.json
 appsettings.Development.json
 
 .git_sauvegarde/
+
+# Fichiers de sauvegarde temporaires
+*.bak
+*.backup
+*.tmp
+

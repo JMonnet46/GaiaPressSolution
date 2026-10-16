@@ -12,12 +12,12 @@ Namespace GaiaPressCoreV17.Services
     ''' <summary>
     ''' Service pour la gestion des essais d'Resistance.
     ''' </summary>
-    Public Class EssaisResistanceService
+    Public Class EssaisResistanceDbService
 
         Private ReadOnly _dbContext As GaiaPressDbContext
 
         ''' <summary>
-        ''' Initialise une nouvelle instance de EssaisResistanceService.
+        ''' Initialise une nouvelle instance de EssaisResistanceDbService.
         ''' </summary>
         ''' <param name="dbContext">Contexte Debase de données.</param>
         Public Sub New(dbContext As GaiaPressDbContext)
@@ -28,7 +28,7 @@ Namespace GaiaPressCoreV17.Services
         ''' Récupère tous les essais d'Resistance.
         ''' </summary>
         ''' <returns>Liste de tous les essais d'Resistance.</returns>
-        Public Async Function GetAllEssaisResistance() As Task(Of List(Of EssaiResistance))
+        Public Async Function GetAllEssaisResistanceDb() As Task(Of List(Of EssaiResistance))
             Return Await _dbContext.ListeEssaiResistancesDb.ToListAsync()
         End Function
 
@@ -102,7 +102,7 @@ Namespace GaiaPressCoreV17.Services
         ''' </summary>
         ''' <param name="refForage">Référence du forage.</param>
         ''' <returns>Liste des essais d'Resistance pour le forage spécifié.</returns>
-        Public Async Function GetEssaisResistanceByRefEssai(refEssai As String) As Task(Of List(Of EssaiResistance))
+        Public Async Function GetEssaisResistanceDbByRefEssai(refEssai As String) As Task(Of List(Of EssaiResistance))
             Return Await _dbContext.ListeEssaiResistancesDb.Where(Function(e) e.RefEssai = refEssai).ToListAsync()
         End Function
 
@@ -111,7 +111,7 @@ Namespace GaiaPressCoreV17.Services
         ''' </summary>
         ''' <param name="refChantier">Référence du chantier.</param>
         ''' <returns>Liste des essais d'Resistance pour le chantier spécifié.</returns>
-        Public Async Function GetEssaisResistanceByRefSonde(refSonde As String) As Task(Of List(Of EssaiResistance))
+        Public Async Function GetEssaisResistanceDbByRefSonde(refSonde As String) As Task(Of List(Of EssaiResistance))
             Return Await _dbContext.ListeEssaiResistancesDb.Where(Function(e) e.RefSonde = refSonde).ToListAsync()
         End Function
     End Class

@@ -1,6 +1,7 @@
 Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports Microsoft.EntityFrameworkCore
 
 Namespace GaiaPressCoreV17.Models
@@ -26,7 +27,7 @@ Namespace GaiaPressCoreV17.Models
 
         ' Collections (remplacez les tableaux par des List)
         Public Property ListForages As New List(Of Forage)
-        Public Property ListEssaisForages As New List(Of Essai_Forage)
+        Public Property ListEssaiForages As New List(Of Essai_Forage)
         Public Property ListMesuresForage As New List(Of MesureEssaiForage)
         Public Property ListSols As New List(Of Sol)
         Public Property ListSondes As New List(Of Probe)
@@ -113,7 +114,7 @@ Namespace GaiaPressCoreV17.Models
         ' ===============================================================================
 
         Public Sub AddEssaiForage(essai As Essai_Forage)
-            Me.ListEssaisForages.Add(essai)
+            Me.ListEssaiForages.Add(essai)
             ' Lier le forage au chantier (si nécessaire)
             essai.RefChantier = Me.refChantier
         End Sub
@@ -122,12 +123,12 @@ Namespace GaiaPressCoreV17.Models
         Public Sub DeleteessaiForage(refessai As String)
             Dim EssaiADelete As Essai_Forage = GetessaiForage(refessai)
             If EssaiADelete IsNot Nothing Then
-                Me.ListEssaisForages.Remove(EssaiADelete)
+                Me.ListEssaiForages.Remove(EssaiADelete)
             End If
         End Sub
 
         Public Function GetessaiForage(refEssai As String) As Essai_Forage
-            For Each E As Essai_Forage In Me.ListEssaisForages
+            For Each E As Essai_Forage In Me.ListEssaiForages
                 If E.refEssai = refEssai Then
                     Return E
                 End If
@@ -199,7 +200,7 @@ Namespace GaiaPressCoreV17.Models
         ' ===============================================================================
 
         Public Sub AddMesureEssaiForage(essai As Essai_Forage)
-            Me.ListEssaisForages.Add(essai)
+            Me.ListEssaiForages.Add(essai)
             ' Lier le forage au chantier (si nécessaire)
             essai.RefChantier = Me.refChantier
         End Sub
@@ -208,12 +209,12 @@ Namespace GaiaPressCoreV17.Models
         Public Sub DeleteMesureEssaiForage(refessai As String)
             Dim EssaiADelete As Essai_Forage = GetessaiForage(refessai)
             If EssaiADelete IsNot Nothing Then
-                Me.ListEssaisForages.Remove(EssaiADelete)
+                Me.ListEssaiForages.Remove(EssaiADelete)
             End If
         End Sub
 
         Public Function GetMesureEssaiForage(refEssai As String) As Essai_Forage
-            For Each E As Essai_Forage In Me.ListEssaisForages
+            For Each E As Essai_Forage In Me.ListEssaiForages
                 If E.refEssai = refEssai Then
                     Return E
                 End If
@@ -385,7 +386,7 @@ Namespace GaiaPressCoreV17.Models
         Public Sub New()
             ' Initialisation des collections avec List(Of T)
             ListForages = New List(Of Forage)
-            ListEssaisForages = New List(Of Essai_Forage)
+            ListEssaiForages = New List(Of Essai_Forage)
             ListMesuresForage = New List(Of MesureEssaiForage)
             ListSols = New List(Of Sol)
             ListSondes = New List(Of Probe)
@@ -471,7 +472,7 @@ Namespace GaiaPressCoreV17.Models
         '                ' rempli le dataset depuis la BD vers la Table "Chantier" de MonDataSet
 
         '                ' On remplit les ObjetTables avec les Tables de MonChantier
-        '                ObjetDataLesChantiers = MonChantier.Tables("Chantier")
+        '                ObjetDataLesChantiersDb = MonChantier.Tables("Chantier")
 
         '                ' Mise à jour du compteur d'enregistrements
 
@@ -528,45 +529,45 @@ Namespace GaiaPressCoreV17.Models
         '                End Select
 
         '                ' *********************************************************************
-        '                ' Lecture de la Table "LesEssaisForage"
+        '                ' Lecture de la Table "LesEssaiForage"
         '                ' *********************************************************************
         '                'ma requete
         '                If Not (AncienChantier) Then
         '                    'Requete = "SELECT  refChantier,  refForage, refEssai, refSonde, refEssaiResistancePropre, refEssaiExpansionPropre, refEssaiPerteDeCharge, refSol, Enregistreur, Operateur, VolSonde, PrecisVolSonde, nomEssai, dateEssai, heureEssai,difPresEauAir, hauteurCpv, " _
         '                    '   & "presP0, presFluage, presLimite, presLimiteNf, poidsVol, poidsVolDejauge, coefPoisson, modPressio, modPressioNf, modElastique, modElastiqueNf, cohesion, frottement, frottementintergranulaire, " _
-        '                    '   & "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaisForage"
+        '                    '   & "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaiForage"
 
         '                    Requete = "SELECT refChantier , refForage , refEssai , refSonde , refEssaiResistancePropre , refEssaiExpansionPropre , refEssaiPerteDeCharge , " &
         '                         "refSol , Enregistreur , Operateur , VolSonde , ClassPrecis , PrecisVolSonde , nomEssai , dateEssai ,heureEssai , difPresEauAir , " &
         '                         "hauteurCpv , presP0 , presFluage , presLimite , presLimiteNf , presLimiteTheo , " &
         '"PrecisVolume , PrecisPression , poidsVol , poidsVolDejauge , coefPoisson , modPressio , " &
         '"modPressioNf , modElastique , modElastiqueNf , cohesion , frottement , frottementintergranulaire , " &
-        '"U0 , profNappe , profSonde , coteZeroGeomeca FROM LesEssaisForage"
+        '"U0 , profNappe , profSonde , coteZeroGeomeca FROM LesEssaiForage"
         '                Else
         '                    Requete = "SELECT refChantier, refForage, refEssai, refSonde, refEssaiResistancePropre, refEssaiExpansionPropre, refEssaiPerteDeCharge, refSol, nomEssai, dateEssai, heureEssai, difPresEauAir, hauteurCpv, " &
         '                        "presP0, presFluage, presLimite, presLimiteNf, poidsVol, poidsVolDejauge, coefPoisson, modPressio, modPressioNf, modElastique, modElastiqueNf, cohesion, frottement, frottementintergranulaire, " &
-        '"U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaisForage"
+        '"U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaiForage"
         '                End If
         '            Else
         '                Requete = "SELECT refChantier, refForage, refEssai, refSonde, refEssaiResistancePropre, refEssaiExpansionPropre, refEssaiPerteDeCharge, refSol, nomEssai, dateEssai, heureEssai, difPresEauAir, hauteurCpv, " &
         '                    "presP0, presFluage, presLimite, presLimiteNf, poidsVol, poidsVolDejauge, coefPoisson, modPressio, modPressioNf, modElastique, modElastiqueNf, cohesion, frottement, frottementintergranulaire, " &
-        '                    "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaisForage"
+        '                    "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaiForage"
         '            End If
         '            Else
         '            Requete = "SELECT refChantier, refForage, refEssai, refSonde, refEssaiResistancePropre, refEssaiExpansionPropre, refEssaiPerteDeCharge, refSol, nomEssai, dateEssai, heureEssai, difPresEauAir, hauteurCpv, " &
         '                "presP0, presFluage, presLimite, presLimiteNf, poidsVol, poidsVolDejauge, coefPoisson, modPressio, modPressioNf, modElastique, modElastiqueNf, cohesion, frottement, frottementintergranulaire, " &
-        '                "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaisForage"
+        '                "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaiForage"
         '            End If
 
         '            'definition de la commande
 
         '            ' Définition de l'AdaptateurChantier
 
-        '            ' On crée la Table "LesEssaisForage"
-        '            'If Not MonChantier.Tables.Contains("LesEssaisForage") Then
-        '            '    ' Dim table As New DataTable("LesEssaisForage")
+        '            ' On crée la Table "LesEssaiForage"
+        '            'If Not MonChantier.Tables.Contains("LesEssaiForage") Then
+        '            '    ' Dim table As New DataTable("LesEssaiForage")
         '            '    ' MonChantier.Tables.Add(table)
-        '            '    Result = CreerTableLesEssaisForage(MonChantier, ConnChantier)
+        '            '    Result = CreerTableLesEssaiForage(MonChantier, ConnChantier)
         '            '    If Not (Result) Then Exit Sub
         '            'End If
 
@@ -574,51 +575,51 @@ Namespace GaiaPressCoreV17.Models
         '            ' ListForages.Count = MonChantier.Tables("LesForages").Rows.Count
 
         '            ' Nettoyage de MonChantier avant le chargement
-        '            MonChantier.Tables("LesEssaisForage")?.Clear()
+        '            MonChantier.Tables("LesEssaiForage")?.Clear()
 
-        '            ' rempli le dataset depuis la BD vers la Table "LesEssaisForage" de MonDataSet
+        '            ' rempli le dataset depuis la BD vers la Table "LesEssaiForage" de MonDataSet
 
-        '            ' rempli le dataset depuis la BD vers la Table "LesEssaisForage" de MonDataSet
+        '            ' rempli le dataset depuis la BD vers la Table "LesEssaiForage" de MonDataSet
 
-        '            ' AdaptateurChantier.FillSchema(MonChantier.Tables("LesEssaisForage"), SchemaType.Source)
+        '            ' AdaptateurChantier.FillSchema(MonChantier.Tables("LesEssaiForage"), SchemaType.Source)
 
-        '            ' rempli le dataset depuis la BD vers la Table "LesEssaisForage" de MonDataSet
-        '            ' AdaptateurChantier.Fill(MonChantier.Tables("LesEssaisForage"))
+        '            ' rempli le dataset depuis la BD vers la Table "LesEssaiForage" de MonDataSet
+        '            ' AdaptateurChantier.Fill(MonChantier.Tables("LesEssaiForage"))
 
-        '            ' AdaptateurChantier.FillSchema(MonChantier, SchemaType.Source, "LesEssaisForage")
-        '            'AdaptateurChantier.Fill(MonChantier, "LesEssaisForage")
-        '            ObjetDataEssai = MonChantier.Tables("LesEssaisForage")
+        '            ' AdaptateurChantier.FillSchema(MonChantier, SchemaType.Source, "LesEssaiForage")
+        '            'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
+        '            ObjetDataEssai = MonChantier.Tables("LesEssaiForage")
 
-        '            ' AdaptateurChantier.FillSchema(MonChantier, SchemaType.Source, "LesEssaisForage")
-        '            'AdaptateurChantier.Fill(MonChantier, "LesEssaisForage")
-        '            ObjetDataEssai = MonChantier.Tables("LesEssaisForage")
-
-        '            ' Mise à jour du compteur d'enregistrements
-        '            ' EssaiCount = MonChantier.Tables("LesEssaisForage").Rows.Count
-        '            ' EssaiInitCount = MonChantier.Tables("LesEssaisForage").Rows.Count
+        '            ' AdaptateurChantier.FillSchema(MonChantier, SchemaType.Source, "LesEssaiForage")
+        '            'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
+        '            ObjetDataEssai = MonChantier.Tables("LesEssaiForage")
 
         '            ' Mise à jour du compteur d'enregistrements
-        '            ' EssaiCount = MonChantier.Tables("LesEssaisForage").Rows.Count
-        '            ' EssaiInitCount = MonChantier.Tables("LesEssaisForage").Rows.Count
+        '            ' EssaiCount = MonChantier.Tables("LesEssaiForage").Rows.Count
+        '            ' EssaiInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
+
+        '            ' Mise à jour du compteur d'enregistrements
+        '            ' EssaiCount = MonChantier.Tables("LesEssaiForage").Rows.Count
+        '            ' EssaiInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '            'Vérificatio de la Table 
-        '            For i = 0 To  ListEssaisForages.Count - 1
-        '                'Debug.WriteLine("MonChantier.Tables(LesEssaisForage).Rows(" & i.ToString & "(RefForage)=" & MonChantier.Tables("LesEssaisForage").Rows(i).Item("refForage").ToString)
-        '                'Debug.WriteLine("MonChantier.Tables(LesEssaisForage).Rows(" & i.ToString & "(RefEssai)=" & MonChantier.Tables("LesEssaisForage").Rows(i).Item("refEssai").ToString)
+        '            For i = 0 To  ListEssaiForages.Count - 1
+        '                'Debug.WriteLine("MonChantier.Tables(LesEssaiForage).Rows(" & i.ToString & "(RefForage)=" & MonChantier.Tables("LesEssaiForage").Rows(i).Item("refForage").ToString)
+        '                'Debug.WriteLine("MonChantier.Tables(LesEssaiForage).Rows(" & i.ToString & "(RefEssai)=" & MonChantier.Tables("LesEssaiForage").Rows(i).Item("refEssai").ToString)
         '            Next i
 
         '            Select Case Lang
         '                Case 0
-        '                    MsgBox("Reading of the Table 'LesEssaisForage' suceeded")
+        '                    MsgBox("Reading of the Table 'LesEssaiForage' suceeded")
         '                Case 1
-        '                    MsgBox("Lecture de la Table 'LesEssaisForage' réussie")
+        '                    MsgBox("Lecture de la Table 'LesEssaiForage' réussie")
         '            End Select
 
         '            Select Case Lang
         '                Case 0
-        '                    MsgBox("Reading of the Table 'LesEssaisForage' suceeded")
+        '                    MsgBox("Reading of the Table 'LesEssaiForage' suceeded")
         '                Case 1
-        '                    MsgBox("Lecture de la Table 'LesEssaisForage' réussie")
+        '                    MsgBox("Lecture de la Table 'LesEssaiForage' réussie")
         '            End Select
 
 
@@ -720,15 +721,15 @@ Namespace GaiaPressCoreV17.Models
         '            '        forageIndex += 1
 
         '            '        ' **************************************************************************************
-        '            '        ' Rangement dans MyForage des objets de la Tables("LesEssaisForage") de MonChantier
+        '            '        ' Rangement dans MyForage des objets de la Tables("LesEssaiForage") de MonChantier
         '            '        ' **************************************************************************************
 
-        '            '        ' k est le numéro de l'EssaisForage
-        '            '        kMax = MonChantier.Tables("LesEssaisForage").Rows.Count
+        '            '        ' k est le numéro de l'EssaiForage
+        '            '        kMax = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '            '        Dim EssaiIndex As Integer = 1
 
-        '            '        For Each essaiRow As DataRow In MonChantier.Tables("LesEssaisForage").Rows
+        '            '        For Each essaiRow As DataRow In MonChantier.Tables("LesEssaiForage").Rows
 
         '            '            If essaiRow("refForage").ToString() = new_Forage. RefForage Then
         '            '                Dim new_Essai As New Essai_Forage(False)
@@ -738,7 +739,7 @@ Namespace GaiaPressCoreV17.Models
         '            '                new_Essai. RefChantier = essaiRow("refChantier").ToString
         '            '                new_Essai. RefForage = essaiRow("refForage").ToString
         '            '                new_Essai. RefEssai = essaiRow("refEssai").ToString
-        '            '                'Accu = "MonChantier.Tables(LesEssaisForage).Rows(" & k.ToString & ")=" & essaiRow("refEssai").ToString
+        '            '                'Accu = "MonChantier.Tables(LesEssaiForage).Rows(" & k.ToString & ")=" & essaiRow("refEssai").ToString
         '            '                'Debug.WriteLine(Accu)
         '            '                new_Essai. refSonde = essaiRow("refSonde").ToString
         '            '                'new_Essai.Sonde = essaiRow("nomSonde").ToString
@@ -819,8 +820,8 @@ Namespace GaiaPressCoreV17.Models
 
         '            '                'End If ' Fin de If essaiRow("refForage").ToString() = NewForage.RefForage Then
 
-        '            '                'ReDim Preserve MyChantier. ListEssaisForages(k)
-        '            '                'MyChantier. ListEssaisForages(k) = MyForage. ListEssais(l - 1)
+        '            '                'ReDim Preserve MyChantier. ListEssaiForages(k)
+        '            '                'MyChantier. ListEssaiForages(k) = MyForage. ListEssais(l - 1)
 
         '            '                ' **************************************************************************************
         '            '                ' Rangement dans MyEssaiForage des objets de la Tables("LesMesuresForage") de MonChantier
@@ -908,7 +909,7 @@ Namespace GaiaPressCoreV17.Models
 
         '            ' Extraction du nom de fichier 
 
-        '            '' Vérification de MYListeSonde.Tables("LesEssaisForage")
+        '            '' Vérification de MYListeSonde.Tables("LesEssaiForage")
         '            'refSondes.Clear()
         '            'For i = 0 To MyListeSonde.ListeSonde.Count - 1
         '            '    RowSonde = MyListeSonde.ListeSonde(i)
@@ -1030,7 +1031,7 @@ Namespace GaiaPressCoreV17.Models
 
         '' Affichage du Chantier
         'Dim element As Integer
-        ''  ReDim Preserve  MyListeForage( ListForages.Count)
+        ''  ReDim Preserve  MyListeForageDb( ListForages.Count)
         '  ListForages.Count = MyChantier.  ListForages.Count
         'If   ListForages.Count > 0 Then
         '    For element = 0 To (MyChantier.  ListForages.Count - 1)
@@ -1384,7 +1385,7 @@ Namespace GaiaPressCoreV17.Models
         '            ' definition de la commande
 
         '            iTable = 0
-        '            ObjetDataLesChantiers = MonChantier.Tables("Chantier")
+        '            ObjetDataLesChantiersDb = MonChantier.Tables("Chantier")
 
         '            ' Définition de l'AdaptateurChantier
 
@@ -1394,7 +1395,7 @@ Namespace GaiaPressCoreV17.Models
         '            MonChantier.Tables("Chantier").PrimaryKey = columns
 
         '            iTable = 0
-        '            ObjetDataLesChantiers = MonChantier.Tables("Chantier")
+        '            ObjetDataLesChantiersDb = MonChantier.Tables("Chantier")
 
         '            ' ChantierCount = MonChantier.Tables("Chantier").Rows.Count
         '            'If  ChantierInitCount <  ChantierCount Then
@@ -1493,27 +1494,27 @@ Namespace GaiaPressCoreV17.Models
         '            End If
 
         '            ' *********************************************************************
-        '            ' Enregistrement de la Table "LesEssaisForage"
+        '            ' Enregistrement de la Table "LesEssaiForage"
         '            ' *********************************************************************
         '            iTable = 2
-        '            ObjetDataEssai = MonChantier.Tables("LesEssaisForage")
+        '            ObjetDataEssai = MonChantier.Tables("LesEssaiForage")
 
-        '            ' Mise à jour de la Table "LesEssaisForage"
+        '            ' Mise à jour de la Table "LesEssaiForage"
         '            ''ma requete
 
         '            'Requete = "SELECT  refChantier,  refForage, refEssai, refSonde, refEssaiResistancePropre, refEssaiExpansionPropre, refEssaiPerteDeCharge, refSol, Enregistreur, Operateur, VolSonde, ClassPrecis, PrecisVolSonde, nomEssai, dateEssai, heureEssai, difPresEauAir, hauteurCpv, " _
         '            '   & "presP0, presFluage, presLimite, presLimiteNf, poidsVol, poidsVolDejauge, coefPoisson, modPressio, modPressioNf, modElastique, modElastiqueNf, cohesion, frottement, frottementintergranulaire, " _
-        '            '   & "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaisForage"
+        '            '   & "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaiForage"
         '            Requete = "SELECT refChantier, refForage, refEssai, refSonde, refEssaiResistancePropre, refEssaiExpansionPropre, refEssaiPerteDeCharge, refSol, Enregistreur, Operateur, VolSonde, ClassPrecis, PrecisVolSonde, nomEssai, dateEssai, heureEssai, difPresEauAir, hauteurCpv, " &
         '                    "presP0, presFluage, presLimite, presLimiteNf, poidsVol, poidsVolDejauge, coefPoisson, modPressio, modPressioNf, modElastique, modElastiqueNf, cohesion, frottement, frottementintergranulaire, " &
-        '                    "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaisForage"
+        '                    "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaiForage"
 
         '            iTable = 2
         '            ' Vérification de la Table
-        '            With MonChantier.Tables("LesEssaisForage")
+        '            With MonChantier.Tables("LesEssaiForage")
         '                For i = 0 To .Rows.Count - 1
 
-        '                    row = MonChantier.Tables("LesEssaisForage").Rows(i)
+        '                    row = MonChantier.Tables("LesEssaiForage").Rows(i)
         '                    'Debug.WriteLine("refEssai = " & row("refEssai").ToString)
         '                    'Debug.WriteLine("refChantier = " & row("refChantier").ToString)
         '                    'Debug.WriteLine("refForage = " & row("refForage").ToString)
@@ -1564,50 +1565,50 @@ Namespace GaiaPressCoreV17.Models
 
         '            ' Définition de l'AdaptateurChantier
 
-        '            ' Définition de la clef primaire de la Table "LesEssaisForage"
+        '            ' Définition de la clef primaire de la Table "LesEssaiForage"
         '            ReDim columns(11)
         '            columns(0) = New DataColumn
-        '            columns(0) = MonChantier.Tables("LesEssaisForage").Columns(2)
-        '            MonChantier.Tables("LesEssaisForage").PrimaryKey = columns
+        '            columns(0) = MonChantier.Tables("LesEssaiForage").Columns(2)
+        '            MonChantier.Tables("LesEssaiForage").PrimaryKey = columns
 
-        '            '' Remise à jour de la Table "LesEssaisForage"
+        '            '' Remise à jour de la Table "LesEssaiForage"
         '            'FrmForage.UpDateLesForages(MyChantier.refForage)
 
         '            'Pour modifier les valeurs changées dans le DataAdapter
 
         '            ' Adaptation du fichier Accès à la dimension de la Table
-        '            NbAcces = MonChantier.Tables("LesEssaisForage").Rows.Count
+        '            NbAcces = MonChantier.Tables("LesEssaiForage").Rows.Count
 
-        '            MsgBox("Update -LesEssaisForage- successful")
-        '            ' EssaiInitCount = MonChantier.Tables("LesEssaisForage").Rows.Count
+        '            MsgBox("Update -LesEssaiForage- successful")
+        '            ' EssaiInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
 
 
         '            ' Mise à jour de la Base de données Access 
         '            iTable = 1
-        '            ObjetDataLesForages = MonChantier.Tables("LesEssaisForage")
+        '            ObjetDataLesForages = MonChantier.Tables("LesEssaiForage")
 
-        '            If MonChantier.Tables("LesEssaisForage") IsNot Nothing Then
-        '                ' ListForages.Count = MonChantier.Tables("LesEssaisForage").Rows.Count
+        '            If MonChantier.Tables("LesEssaiForage") IsNot Nothing Then
+        '                ' ListForages.Count = MonChantier.Tables("LesEssaiForage").Rows.Count
         '                'If  ForageInitCount <  ListForages.Count Then
         '                '    ' On ajoute un enregistrement à la Table
         '                'End If
 
-        '                ' Définition de la clef primaire de la Table "LesEssaisForage"
+        '                ' Définition de la clef primaire de la Table "LesEssaiForage"
         '                columns(0) = New DataColumn
-        '                columns(0) = MonChantier.Tables("LesEssaisForage").Columns("refEssai")
-        '                MonChantier.Tables("LesEssaisForage").PrimaryKey = columns
+        '                columns(0) = MonChantier.Tables("LesEssaiForage").Columns("refEssai")
+        '                MonChantier.Tables("LesEssaiForage").PrimaryKey = columns
 
         '                '' On vide la Table et on la remplit à nouveau
-        '                'MonChantier.Tables("LesEssaisForage").Clear()
-        '                'AdaptateurChantier.Fill(MonChantier, "LesEssaisForage")
+        '                'MonChantier.Tables("LesEssaiForage").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
 
-        '                'AdaptateurChantier.Update(MonChantier, "LesEssaisForage")
-        '                'MsgBox("Update -LesEssaisForage- successful")
-        '                'ForageInitCount = MonChantier.Tables("LesEssaisForage").Rows.Count
+        '                'AdaptateurChantier.Update(MonChantier, "LesEssaiForage")
+        '                'MsgBox("Update -LesEssaiForage- successful")
+        '                'ForageInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '                '' On vide la Table et on la remplit à nouveau
-        '                'MonChantier.Tables("LesEssaisForage").Clear()
-        '                'AdaptateurChantier.Fill(MonChantier, "LesEssaisForage")
+        '                'MonChantier.Tables("LesEssaiForage").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
         '            End If
 
 
@@ -1773,7 +1774,7 @@ Namespace GaiaPressCoreV17.Models
     '    'Public  ListForages.Count As Integer
 
     '    Public Sub New()
-    '        MyListeForageSession = New List(Of Forage)() ' Initialisation
+    '        MyListeForageDbSession = New List(Of Forage)() ' Initialisation
     '    End Sub
 
     '    Protected Overrides ReadOnly Property SupportsSearchingCore() As Boolean

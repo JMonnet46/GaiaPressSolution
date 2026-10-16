@@ -1,6 +1,5 @@
 ﻿Imports System.IO
 Imports System.Threading
-Imports GaiaPressCoreV17.Services
 Imports iText.Kernel.Geom
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
@@ -616,7 +615,7 @@ errorFind:
 
                                 Index = 0
                                 ' Déclaration d'un nouvel essai sur MonForage
-                                If MonChantier.Tables("LesEssaisForage") Is Nothing Then
+                                If MonChantier.Tables("LesEssaiForage") Is Nothing Then
                                     Call MyForage.NouveauEssai(True)
                                 Else
                                     Call MyForage.NouveauEssai(False)

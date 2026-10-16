@@ -42,10 +42,88 @@ h1:focus {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
+}
+
+.menu-onglets {
+    position: relative;
+    z-index: 10;
+    overflow: visible;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 1.5rem 0;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+}
+
+    .menu-onglets a {
+        padding: 0.4rem 0.9rem;
+        border: 1px solid #d6d5d5;
+        border-bottom: none;
+        border-radius: 6px 6px 0 0;
+        background-color: #e9ecef;
+        color: #333;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+        .menu-onglets a:hover {
+            background-color: #ffffff;
+        }
+
+        .menu-onglets a.active {
+            background-color: #ffffff;
+            border-bottom: 2px solid #0b2a5b;
+            font-weight: 600;
+        }
+
+.file-menu {
+    position: relative;
+    z-index: 20;
+}
+
+.file-menu-btn {
+    background: none;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    font-weight: 500;
+    color: #0b2a5b;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.file-menu-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    pointer-events: auto;
+}
+
+.file-menu-dropdown button {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+    .file-menu-dropdown button:hover {
+        background: #eef2f8;
+    }
+
+.file-menu-dropdown hr {
+    margin: 0.25rem 0;
 }

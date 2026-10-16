@@ -1,5 +1,7 @@
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports System.Math
+
 
 Module ModMoyVar
 

@@ -2,6 +2,7 @@
 Imports GaiaPressCoreV17.Controllers
 Imports GaiaPressCoreV17.Data
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports System.IO
@@ -27,8 +28,6 @@ Namespace GaiaPressCoreV17.Controllers
             _context = context
             _dataService = New DataService(_context)  ' ✅ Passez _context à DataService
             _chantierService = New ChantierService(_dataService, _context)
-            _chantierLogic = New ChantierLogic()
-            _pdfService = New PdfService()            ' ✅ PDFService n'a PAS besoin de dbContext
         End Sub
 
         ' Récupérer la liste des chantiers

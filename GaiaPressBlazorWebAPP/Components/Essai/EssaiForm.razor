@@ -1,10 +1,10 @@
-﻿@* Components/Essai/EssaiForm.razor *@
+@* Components/Essai/EssaiForm.razor *@
 <h3>Nouvel Essai</h3>
 
 <EditForm Model="@MyEssai" OnValidSubmit="@HandleValidSubmit">
     <div class="form-group">
         <label>Nom :</label>
-        <InputText @bind-Value="MyEssai.Nom" class="form-control" />
+        <InputText @bind-Value="MyEssai.nomEssai" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Valider</button>
 </EditForm>

@@ -1,0 +1,54 @@
+﻿@inject LocalizationService Loc
+@using GaiaPressBlazorWebAPP.Services
+@implements IDisposable
+
+<div class="language-selector" role="group" aria-label="@Loc["LanguageSelection"]">
+    <span class="language-label">@Loc["Language"] :</span>
+
+    <div class="language-buttons">
+        @foreach (var lang in AvailableLanguages)
+        {
+            <button type="button"
+                    class="lang-btn @(Loc.CurrentLanguage == lang.Code ? "active" : "")"
+                    @onclick="() => ChangeLanguage(lang.Code)"
+                    title="@lang.NativeName"
+                    aria-pressed="@(Loc.CurrentLanguage == lang.Code)">
+                <span class="lang-flag">@lang.Flag</span>
+                <span class="lang-name">@lang.ShortName</span>
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    // Liste des langues disponibles (facilement extensible)
+    private readonly (string Code, string Name, string NativeName, string ShortName, string Flag)[] AvailableLanguages = new[]
+    {
+        ("en", "English", "English", "EN", "🇬🇧"),
+        ("fr", "Français", "Français", "FR", "🇫🇷")
+        // Ajoute d'autres langues ici si besoin :
+        // ("es", "Español", "Español", "ES", "🇪🇸"),
+        // ("de", "Deutsch", "Deutsch", "DE", "🇩🇪")
+    };
+
+    // ✅ UNE SEULE méthode OnInitialized
+    protected override void OnInitialized()
+    {
+        Loc.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void ChangeLanguage(string languageCode)
+    {
+        Loc.SetLanguage(languageCode);
+    }
+
+    private void OnLanguageChanged()
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Loc.LanguageChanged -= OnLanguageChanged;
+    }
+}

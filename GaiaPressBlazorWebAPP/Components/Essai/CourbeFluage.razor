@@ -1,82 +1,75 @@
-﻿@* Components/Essai/CourbeFluage.razor *@
+@* Components/Essai/CourbeFluage.razor *@
+@page "/courbe-fluage"
+
+@using GaiaPressCoreV17.Models
+@using ChartJs.Blazor
 @using ChartJs.Blazor.Common
-@using ChartJs.Blazor.LineChart
 @using ChartJs.Blazor.Common.Axes
+@using ChartJs.Blazor.Common.Axes.Ticks
+@using ChartJs.Blazor.Common.Enums
+@using ChartJs.Blazor.LineChart
 
 <h3>Courbe de fluage</h3>
 
-<Chart Config="@ChartConfig" />
+<Chart Config="@lineConfig" @ref="lineChart" />
 
 @code {
-    [Parameter]
-    public List<double> XValues { get; set; } = new List<double>();
+    [Parameter] public List<double> XValues { get; set; } = new();
+    [Parameter] public List<double> YValues { get; set; } = new();
+    [Parameter] public string Title { get; set; } = "Fluage (cm³)";
+    [Parameter] public double Minimum { get; set; } = 0;
+    [Parameter] public double Maximum { get; set; } = 10;
+    [Parameter] public int[] BorderDash { get; set; } = new int[] { 0 };
+    [Parameter] public int BorderWidth { get; set; } = 1;
 
-    [Parameter]
-    public List<double> YValues { get; set; } = new List<double>();
-
-    [Parameter]
-    public string Title { get; set; } = "Fluage (cm³)";
-
-    [Parameter]
-    public double Minimum { get; set; } = 0;
-
-    [Parameter]
-    public double Maximum { get; set; } = 10;
-
-    [Parameter]
-    public double[] BorderDash { get; set; } = new double[] { 0 }; // Équivalent à Solid
-
-    [Parameter]
-    public int BorderWidth { get; set; } = 1;
-
-    private LineConfig ChartConfig { get; set; }
+    private Chart lineChart;
+    private LineConfig lineConfig;
 
     protected override void OnInitialized()
     {
-        ChartConfig = new LineConfig
+        lineConfig = new LineConfig
         {
             Options = new LineOptions
             {
                 Responsive = true,
                 Scales = new Scales
                 {
-                    X = new LinearScale
+                    XAxes = new List<CartesianAxis>
                     {
-                        Title = new ChartTitle { Display = true, Text = "Temps (s)" },
-                        Min = Minimum,
-                        Max = Maximum
+                        new LinearCartesianAxis
+                        {
+                            ScaleLabel = new ScaleLabel { Display = true, LabelString = "Temps (s)" },
+                            Ticks = new LinearCartesianTicks { Min = Minimum, Max = Maximum }
+                        }
                     },
-                    Y = new LinearScale
+                    YAxes = new List<CartesianAxis>
                     {
-                        Title = new ChartTitle { Display = true, Text = Title },
-                        Min = Minimum,
-                        Max = Maximum
-                    }
-                },
-                Elements = new LineElements
-                {
-                    Line = new LineElement
-                    {
-                        BorderDash = BorderDash, // Équivalent à .LineDashStyle
-                        BorderWidth = BorderWidth,
-                        Tension = 0.1
+                        new LinearCartesianAxis
+                        {
+                            ScaleLabel = new ScaleLabel { Display = true, LabelString = Title },
+                            Ticks = new LinearCartesianTicks { Min = Minimum, Max = Maximum }
+                        }
                     }
                 }
             }
         };
 
-        // Ajouter les données au graphique
         var dataset = new LineDataset<double>(YValues)
         {
             Label = Title,
             Fill = false,
             BorderColor = "#3e95cd",
             BackgroundColor = "rgba(62, 149, 205, 0.1)",
+            BorderWidth = BorderWidth,
+            BorderDash = BorderDash,
             PointRadius = 3,
-            PointHoverRadius = 5
+            PointHoverRadius = 5,
+            LineTension = 0.1
         };
 
-        ChartConfig.Data.Labels = XValues.Select(x => x.ToString()).ToList();
-        ChartConfig.Data.Datasets = new List<LineDataset<double>> { dataset };
+        foreach (var x in XValues)
+            lineConfig.Data.Labels.Add(x.ToString());
+
+        lineConfig.Data.Datasets.Add(dataset);
     }
 }

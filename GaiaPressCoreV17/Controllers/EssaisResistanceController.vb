@@ -10,7 +10,7 @@ Namespace GaiaPressCoreV17.Controllers
 
     <ApiController>
     <Route("api/[controller]")>
-    Public Class EssaisResistanceController
+    Public Class EssaisResistanceDbController
         Inherits ControllerBase
 
         Public ReadOnly _dbContext As GaiaPressDbContext
@@ -23,7 +23,7 @@ Namespace GaiaPressCoreV17.Controllers
         ''' Récupère tous les essais de résistance.
         ''' </summary>
         <HttpGet>
-        Public Async Function GetAllEssaisResistance() As Task(Of IActionResult)
+        Public Async Function GetAllEssaisResistanceDb() As Task(Of IActionResult)
             Try
                 Dim essais = Await _dbContext.ListeEssaiResistancesDb.ToListAsync()
                 Return Ok(essais)

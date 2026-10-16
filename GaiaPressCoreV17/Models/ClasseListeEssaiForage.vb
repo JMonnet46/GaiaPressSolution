@@ -1,6 +1,8 @@
 ﻿Imports System.Collections.Generic
 Imports System.Linq
 Imports GaiaPressCoreV17.Models
+Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports Microsoft.Build.Evaluation
 Imports Microsoft.EntityFrameworkCore
 
@@ -13,7 +15,7 @@ Namespace GaiaPressCoreV17.Models
         Public Property ListeEssaiForageSession As List(Of Essai_Forage)
 
         ' ⚠️ Méthode pour charger les essais depuis la base de données
-        Public Function LoadEssaisForage(context As GaiaPressDbContext) As List(Of Essai_Forage)
+        Public Function LoadEssaiForage(context As GaiaPressDbContext) As List(Of Essai_Forage)
             ListeEssaiForageSession = context.ListeEssaiForageDb.ToList()
             Return ListeEssaiForageSession
         End Function
@@ -110,7 +112,7 @@ Namespace GaiaPressCoreV17.Models
         '            MySonde.Resistance = New List(Of EssaiResistance)()
 
         '            ' Parcourir la liste des essais de résistance
-        '            For Each essai In MyListeLesEssaisForage
+        '            For Each essai In MyListeLesEssaiForage
         '                If essai.GetType() Is GetType(EssaiResistance) AndAlso
         '                   essai.RefSonde = RefSonde Then
 
@@ -124,7 +126,7 @@ Namespace GaiaPressCoreV17.Models
         '            MySonde.Expansion = New List(Of EssaiExpansion)()
 
         '            ' Parcourir la liste des essais d'expansion
-        '            For Each essai In MyListeLesEssaisForage
+        '            For Each essai In MyListeLesEssaiForage
         '                If essai.GetType() Is GetType(EssaiExpansion) AndAlso
         '                   essai.RefSonde = RefSonde Then
 

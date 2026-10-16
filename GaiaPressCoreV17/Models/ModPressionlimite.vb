@@ -1,6 +1,8 @@
 'Imports Microsoft.Office.Interop
 Imports System.Math
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
+
 
 Module ModPressionlimite
     'ReadOnly XlApp As AppExcel.Application

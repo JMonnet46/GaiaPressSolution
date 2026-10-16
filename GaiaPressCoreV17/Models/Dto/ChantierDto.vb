@@ -30,7 +30,7 @@ Namespace GaiaPressCoreV17.Models.Dto
 
         '' Collections (remplacez les tableaux par des List)
         'Public Property  ListForages As New List(Of Forage)
-        'Public Property  ListEssaisForages As New List(Of Essai_Forage)
+        'Public Property  ListEssaiForages As New List(Of Essai_Forage)
         'Public Property  ListMesuresForage As New List(Of MesureEssaiForage)
         'Public Property  ListSols As New List(Of Sol)
         'Public Property  ListSondes As New List(Of Probe)

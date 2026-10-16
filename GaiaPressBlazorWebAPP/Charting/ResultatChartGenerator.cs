@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace GaiaPressBlazorWebApp.Charting
+namespace GaiaPressBlazorWebAPP.Charting
 {
     /// <summary>
     /// Génère des données de graphique pour les essais de forage.
@@ -539,4 +539,5 @@ namespace GaiaPressBlazorWebApp.Charting
 //        '            graphe.Visible = False
 //        '        End If
 //    End Sub
+
 

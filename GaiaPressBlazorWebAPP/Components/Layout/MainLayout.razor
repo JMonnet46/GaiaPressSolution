@@ -1,4 +1,10 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
+@inject LocalizationService Loc
+@using GaiaPressBlazorWebAPP.Components
+@using GaiaPressBlazorWebAPP.Components.Layout
+
+@* Menu principal en haut de l'écran *@
 
 <div class="page">
     <div class="sidebar">
@@ -7,7 +13,15 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">@Loc["About"]</a>
+        </div>
+
+        <div class="menu-onglets">
+            <FileMenu />
+            <NavLink href="/Borehole">@Loc["Borehole"]</NavLink>
+            <NavLink href="/Test">@Loc["Test"]</NavLink>
+            <NavLink href="/Probe">@Loc["Probe"]</NavLink>
+            <NavLink href="/Soil">@Loc["Soil"]</NavLink>
         </div>
 
         <article class="content px-4">
@@ -17,7 +31,19 @@
 </div>
 
 <div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
+    @Loc["UnhandledError"]
+    <a href="" class="reload">@Loc["Reload"]</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Loc.LanguageChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Loc.LanguageChanged -= StateHasChanged;
+    }
+}

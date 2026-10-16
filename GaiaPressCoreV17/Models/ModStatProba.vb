@@ -1,5 +1,7 @@
 ﻿'Imports Microsoft.Office.Interop
 'Imports Microsoft.Office.Interop.Excel
+Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Module ModStatProba
 

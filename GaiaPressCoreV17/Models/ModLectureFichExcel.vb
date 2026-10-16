@@ -1,4 +1,6 @@
-﻿
+﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
+
 'Imports cli_uno
 'Imports cli_uno.com.sun.star.lang
 'Imports cli_uno.com.sun.star.frame
@@ -368,14 +370,14 @@
 '        XlApp.Visible = False
 '        XlApp.Quit()
 
-'        ' Mise à jour de la Table "LesEssaisForage"
+'        ' Mise à jour de la Table "LesEssaiForage"
 '        '<<<<<<< HEAD
-'        '        FrmEssai.MiseAJourLesEssaisForage(MyEssaiForage.RefEssai)
+'        '        FrmEssai.MiseAJourLesEssaiForage(MyEssaiForage.RefEssai)
 
 '        '        ' Mise à jour de la Table "LesMesuresForages"
 '        '        FrmEssai.MiseAJourLesMesuresForages(MyEssaiForage.RefEssai)
 '        '=======
-'        MyFrmEssai.MiseAJourLesEssaisForage(MyEssaiForage.RefEssai)
+'        MyFrmEssai.MiseAJourLesEssaiForage(MyEssaiForage.RefEssai)
 
 '        ' Mise à jour de la Table "LesMesuresForage"
 '        MyFrmEssai.MiseAJourLesMesuresForage(MyEssaiForage.RefEssai)
@@ -526,14 +528,14 @@
 '        XlApp.Visible = False
 '        XlApp.Quit()
 
-'        ' Mise à jour de la Table "LesEssaisForage"
+'        ' Mise à jour de la Table "LesEssaiForage"
 '        '<<<<<<< HEAD
-'        '        FrmEssai.MiseAJourLesEssaisForage(MyEssaiForage.RefEssai)
+'        '        FrmEssai.MiseAJourLesEssaiForage(MyEssaiForage.RefEssai)
 
 '        '        ' Mise à jour de la Table "LesMesuresForages"
 '        '        FrmEssai.MiseAJourLesMesuresForages(MyEssaiForage.RefEssai)
 '        '=======
-'        MyFrmEssai.MiseAJourLesEssaisForage(MyEssaiForage.RefEssai)
+'        MyFrmEssai.MiseAJourLesEssaiForage(MyEssaiForage.RefEssai)
 
 '        ' Mise à jour de la Table "LesMesuresForage"
 '        MyFrmEssai.MiseAJourLesMesuresForage(MyEssaiForage.RefEssai)

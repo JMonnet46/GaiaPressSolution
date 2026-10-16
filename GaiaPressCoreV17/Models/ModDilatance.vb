@@ -1,4 +1,5 @@
 ﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Module ModDilatance
     Public Function Dilatance(ByVal Phi As Single, ByVal Phimu As Single, ByVal TypeDilatance As Integer) As Single

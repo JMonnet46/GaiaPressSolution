@@ -2,14 +2,14 @@
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17
 Imports System.Threading
-Imports GaiaPressCoreV17.Datas
+Imports GaiaPressCoreV17.Data
 
 Namespace GaiaPressCoreV17.Services
 
     ''' <summary>
     ''' Service pour la gestion des mesures d'essais de forage.
     ''' </summary>
-    Public Class MesuresEssaisForageervice
+    Public Class MesuresEssaiForageDbervice
 
         ' ✅ Utiliser une instance de LesChantier comme source de vérité
         'Public _chantier As LesChantier
@@ -36,7 +36,7 @@ Namespace GaiaPressCoreV17.Services
         ''' <summary>
         ''' Add une mesure d'essai de forage au chantier
         ''' </summary>
-        Public Sub AddMesuresEssaisForage(Mesure As MesureEssaiForage)
+        Public Sub AddMesuresEssaiForageDb(Mesure As MesureEssaiForage)
             ' ✅ Utiliser la liste du chantier ( ListMesuresForage)
             MyEssaiForage. Mesures.Add(Mesure)
             ' Lier la mesure au chantier (si nécessaire)

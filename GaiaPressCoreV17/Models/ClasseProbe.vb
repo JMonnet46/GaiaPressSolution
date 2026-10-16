@@ -3,6 +3,7 @@ Imports System.Data
 Imports System.Data.OleDb
 Imports System.Data.SqlClient
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports GaiaPressSolution.GaiaPressCoreV17.Services
 Imports Microsoft.VisualBasic
 
@@ -250,7 +251,7 @@ Namespace GaiaPressCoreV17.Models
                     GetEssai = New EssaiResistance
                     result = GetIndexEssai(ref, typeEssai)
                     If result > -1 Then
-                        With MaListeSonde.Tables("LesEssaisResistancePropre")
+                        With MaListeSonde.Tables("LesEssaisResistanceDbPropre")
                             GetEssai.refEssai = .Rows(result).Item("refEssai").ToString
                             GetEssai.refSonde = .Rows(result).Item("refSonde").ToString
                             GetEssai.ClassPrecis = Valeurs(.Rows(result).Item("ClassPrecis").ToString)
@@ -318,13 +319,13 @@ Namespace GaiaPressCoreV17.Models
             ' Index = 0 correspond au premier essai de rang 1
             Select Case typeEssai
                 Case EssaiCalib.Resistance
-                    With MaListeSonde.Tables("LesEssaisResistancePropre")
+                    With MaListeSonde.Tables("LesEssaisResistanceDbPropre")
                         If MySonde.Resistance Is Nothing Then
                             MySonde.Resistance = New System.Collections.Generic.List(Of EssaiResistance)()
                         Else
                             MySonde.Resistance.Clear()
                         End If
-                        For i = 0 To .Rows.Count - 1    ' On lit l'ensemble de la Tables "LesEssaisResistancePropre"
+                        For i = 0 To .Rows.Count - 1    ' On lit l'ensemble de la Tables "LesEssaisResistanceDbPropre"
                             If .Rows(i).Item("refSonde").ToString = RefSonde Then   ' On a trouvé un EssaiResistance lié à RefSonde
                                 MySonde.Resistance.Add(New EssaiResistance())
                                 EssaiCount = EssaiCount + 1
@@ -494,10 +495,10 @@ Namespace GaiaPressCoreV17.Models
             Select Case typeEssai
                 Case EssaiCalib.Resistance
                     GetEssaiParRef = New EssaiResistance
-                    Nb = MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Count
-                    If Not (MaListeSonde.Tables("LesEssaisResistancePropre") Is Nothing) Then
+                    Nb = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Count
+                    If Not (MaListeSonde.Tables("LesEssaisResistanceDbPropre") Is Nothing) Then
                         For index = 0 To Nb - 1
-                            If MaListeSonde.Tables("LesEssaisResistancePropre").Rows(index).Item("RefEssai").ToString = RefNom Then Exit For
+                            If MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(index).Item("RefEssai").ToString = RefNom Then Exit For
                         Next index
                         'GetEssaiParRef = Resistance(index)
                         If index = Nb Then
@@ -509,7 +510,7 @@ Namespace GaiaPressCoreV17.Models
                             End Select
                             Exit Function
                         End If
-                        With MaListeSonde.Tables("LesEssaisResistancePropre").Rows(index)
+                        With MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(index)
                             GetEssaiParRef.refessai = .Item("refEssai").ToString
                             GetEssaiParRef.refsonde = .Item("refSonde").ToString
                             GetEssaiParRef.ClassPrecis = Valeurs(.Item("ClassPrecis").ToString)
@@ -579,7 +580,7 @@ Namespace GaiaPressCoreV17.Models
         ' **********************************************************************************************
         Public Function GetIndexSondeEssai(ByVal ref As String, ByVal typeEssai As Integer) As Integer
             ' Recherche de l'essai ayant pour référence 'ref' avec arrêt dès que possible
-            ' dans la Table "LesEssaisExpansionPropre" ou "LesEssaisResistancePropre" de MaListeSonde
+            ' dans la Table "LesEssaisExpansionPropre" ou "LesEssaisResistanceDbPropre" de MaListeSonde
             Dim i As Integer
             Dim nb As Integer
 
@@ -596,7 +597,7 @@ Namespace GaiaPressCoreV17.Models
                         'If (MaListeSonde.Tables("LesEssaisExpansionPropre").Rows(i).Item("RefEssai").ToString = ref) Then Exit Do
                         If (MySonde.GetEssaiExpansionParIndex(i, typeEssai).GetRefEssai = ref) Then Exit Do
                     Case EssaiCalib.Resistance
-                        'If (MaListeSonde.Tables("LesEssaisResistancePropre").Rows(i).Item("RefEssai").ToString = ref) Then Exit Do
+                        'If (MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(i).Item("RefEssai").ToString = ref) Then Exit Do
                         If (MySonde.GetEssaiResistanceParIndex(i, typeEssai).GetRefEssai = ref) Then Exit Do
                 End Select
 
@@ -614,7 +615,7 @@ Namespace GaiaPressCoreV17.Models
         ' **********************************************************************************************
         Public Function GetIndexEssai(ByVal ref As String, ByVal typeEssai As Integer) As Integer
             ' Recherche de l'essai ayant pour référence 'ref' avec arrêt dès que possible
-            ' dans la Table "LesEssaisExpansionPropre" ou "LesEssaisResistancePropre" de MaListeSonde
+            ' dans la Table "LesEssaisExpansionPropre" ou "LesEssaisResistanceDbPropre" de MaListeSonde
             Dim i As Integer
             Dim nb As Integer
 
@@ -623,7 +624,7 @@ Namespace GaiaPressCoreV17.Models
                     nb = MaListeSonde.Tables("LesEssaisExpansionPropre").Rows.Count
                 'nb = MySonde.Expansion.Count
                 Case EssaiCalib.Resistance
-                    nb = MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Count
+                    nb = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Count
                     'nb = MySonde.Resistance.Count
             End Select
 
@@ -635,8 +636,8 @@ Namespace GaiaPressCoreV17.Models
                             'If (Me.Expansion(i).GetEssaiExpansionParIndex(i, typeEssai).GetRefEssai = ref) Then Exit Do
                         End If
                     Case EssaiCalib.Resistance
-                        If (MaListeSonde.Tables("LesEssaisResistancePropre").Rows(i).RowState <> DataRowState.Deleted) Then
-                            If (MaListeSonde.Tables("LesEssaisResistancePropre").Rows(i).Item("RefEssai").ToString = ref) Then Exit Do
+                        If (MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(i).RowState <> DataRowState.Deleted) Then
+                            If (MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(i).Item("RefEssai").ToString = ref) Then Exit Do
                             'If (Resistance(i).MGetEssaiResistanceParIndex(i, typeEssai).GetRefEssai = ref) Then Exit Do
                         End If
                 End Select
@@ -654,7 +655,7 @@ Namespace GaiaPressCoreV17.Models
         ' **********************************************************************************************
         Public Function GetMySondeIndexEssai(ByVal ref As String, ByVal typeEssai As Integer) As Integer
             ' Recherche de l'essai ayant pour référence 'ref' avec arrêt dès que possible
-            ' dans la Table "LesEssaisExpansionPropre" ou "LesEssaisResistancePropre" de MaListeSonde
+            ' dans la Table "LesEssaisExpansionPropre" ou "LesEssaisResistanceDbPropre" de MaListeSonde
             Dim i As Integer
             Dim nb As Integer
 
@@ -663,7 +664,7 @@ Namespace GaiaPressCoreV17.Models
                     'nb = MaListeSonde.Tables("LesEssaisExpansionPropre").Rows.Count
                     nb = MySonde.Expansion.Count
                 Case EssaiCalib.Resistance
-                    'nb = MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Count
+                    'nb = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Count
                     nb = MySonde.Resistance.Count
             End Select
 
@@ -934,7 +935,7 @@ Namespace GaiaPressCoreV17.Models
 
             Try
                 ' Utilise le service de lecture au lieu de DataSet
-                Dim dataTable = _readService.GetEssaisResistanceBySonde(Me.RefSonde)
+                Dim dataTable = _readService.GetEssaisResistanceDbBySonde(Me.RefSonde)
 
                 If dataTable.Rows.Count > 0 Then
                     Dim firstRow = dataTable.Rows(0)
@@ -1096,7 +1097,7 @@ Namespace GaiaPressCoreV17.Models
                 Resistance.Clear()
 
                 ' Charger depuis la base de données
-                Dim dataTable = MaListeSonde.Tables("LesEssaisResistancePropre")
+                Dim dataTable = MaListeSonde.Tables("LesEssaisResistanceDbPropre")
 
                 If dataTable IsNot Nothing Then
                     For Each row In dataTable.Rows
@@ -1207,7 +1208,7 @@ Namespace GaiaPressCoreV17.Models
                 Case EssaiCalib.Resistance
 
                     ' Effaçage de l'Essai
-                    With MaListeSonde.Tables("LesEssaisResistancePropre")
+                    With MaListeSonde.Tables("LesEssaisResistanceDbPropre")
                         .Rows(i).Delete()
                     End With
 
@@ -1296,7 +1297,7 @@ Namespace GaiaPressCoreV17.Models
 
                 Case EssaiCalib.Resistance
                     ' Récupère tous les essais de résistance de cette sonde
-                    Dim dataTable = _readService.GetEssaisResistanceBySonde(Me.RefSonde)
+                    Dim dataTable = _readService.GetEssaisResistanceDbBySonde(Me.RefSonde)
 
                     For Each row In dataTable.Rows
                         Dim essai As New Dictionary(Of String, Object) From {
@@ -1370,7 +1371,7 @@ Namespace GaiaPressCoreV17.Models
                     ref = "Expansion"
             End Select
 
-            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistance ou des EssaisExpansion
+            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistanceDb ou des EssaisExpansion
             Do While Not MyListeSonde.IsRefEssaiUnique(ref & " " & k, typeEssai)
                 k = k + 1
             Loop

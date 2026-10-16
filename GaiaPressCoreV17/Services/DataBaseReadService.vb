@@ -174,22 +174,22 @@ Namespace GaiaPressCoreV17.Services
         ''' <summary>
         ''' Récupère tous les essais de forage
         ''' </summary>
-        Public Function GetAllEssaisForages() As DataTable
-            Return GetAllFromTable("LesEssaisForages")
+        Public Function GetAllEssaiForages() As DataTable
+            Return GetAllFromTable("LesEssaiForages")
         End Function
 
         ''' <summary>
         ''' Récupère les essais d'un forage
         ''' </summary>
         Public Function GetEssaisByForage(forageId As String) As DataTable
-            Return GetChildrenByParentRef("LesEssaisForages", "refForage", forageId)
+            Return GetChildrenByParentRef("LesEssaiForages", "refForage", forageId)
         End Function
 
         ''' <summary>
         ''' Récupère un essai de forage par sa référence
         ''' </summary>
         Public Function GetEssaiForageByRef(refEssai As String) As DataRow
-            Return GetByRefId("LesEssaisForages", "refEssai", refEssai)
+            Return GetByRefId("LesEssaiForages", "refEssai", refEssai)
         End Function
 
         ''' <summary>
@@ -281,29 +281,29 @@ Namespace GaiaPressCoreV17.Services
         ''' <summary>
         ''' Récupère tous les essais de résistance
         ''' </summary>
-        Public Function GetAllEssaisResistance() As DataTable
-            Return GetAllFromTable("LesEssaisResistancePropre")
+        Public Function GetAllEssaisResistanceDb() As DataTable
+            Return GetAllFromTable("LesEssaisResistanceDbPropre")
         End Function
 
         ''' <summary>
         ''' Récupère les essais de résistance d'une sonde
         ''' </summary>
-        Public Function GetEssaisResistanceBySonde(refSonde As String) As DataTable
-            Return GetChildrenByParentRef("LesEssaisResistancePropre", "refSonde", refSonde)
+        Public Function GetEssaisResistanceDbBySonde(refSonde As String) As DataTable
+            Return GetChildrenByParentRef("LesEssaisResistanceDbPropre", "refSonde", refSonde)
         End Function
 
         ''' <summary>
         ''' Récupère un essai de résistance par sa référence
         ''' </summary>
         Public Function GetEssaiResistanceByRef(refEssai As String) As DataRow
-            Return GetByRefId("LesEssaisResistancePropre", "refEssai", refEssai)
+            Return GetByRefId("LesEssaisResistanceDbPropre", "refEssai", refEssai)
         End Function
 
         ''' <summary>
         ''' Récupère les mesures d'un essai de résistance
         ''' </summary>
-        Public Function GetMesuresResistanceByEssai(refEssai As String) As DataTable
-            Return GetChildrenByParentRef("LesMesuresResistancePropre", "refEssai", refEssai)
+        Public Function GetMesuresResistanceDbByEssai(refEssai As String) As DataTable
+            Return GetChildrenByParentRef("LesMesuresResistanceDbPropre", "refEssai", refEssai)
         End Function
 
         ''' <summary>
@@ -312,7 +312,7 @@ Namespace GaiaPressCoreV17.Services
         Public Function GetMesureResistanceByIndice(refEssai As String, indiceMesure As Integer) As DataRow
             Try
                 Using connection As New SqlConnection(_connectionString)
-                    Dim query As String = "SELECT * FROM [LesMesuresResistancePropre] WHERE [refEssai] = @refEssai AND [indiceMesure] = @indiceMesure"
+                    Dim query As String = "SELECT * FROM [LesMesuresResistanceDbPropre] WHERE [refEssai] = @refEssai AND [indiceMesure] = @indiceMesure"
                     Dim command As New SqlCommand(query, connection)
                     command.Parameters.AddWithValue("@refEssai", refEssai)
                     command.Parameters.AddWithValue("@indiceMesure", indiceMesure)

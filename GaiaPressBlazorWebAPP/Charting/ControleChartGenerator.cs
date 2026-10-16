@@ -1,66 +1,71 @@
-﻿namespace GaiaPressBlazorWebApp.Charting
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GaiaPressCoreV17.Models;
+
+namespace GaiaPressBlazorWebAPP.Charting
 {
     /// <summary>
-    /// Génère des données de graphique pour les essais de forage.
+    /// GÃ©nÃ¨re des donnÃ©es de graphique pour les essais de forage.
     /// </summary>
     public class ControleChartGenerator
     {
-        // Propriété pour stocker l'essai courant
+        // PropriÃ©tÃ© pour stocker l'essai courant
         public Essai_Forage CurrentEssai { get; set; }
 
         /// <summary>
-        /// Génère des données pour un graphique Pression/Volume
+        /// GÃ©nÃ¨re des donnÃ©es pour un graphique Pression/Volume
         /// </summary>
         public Dictionary<string, List<double>> GeneratePressureVolumeChart()
         {
             if (CurrentEssai == null)
-                throw new InvalidOperationException("Aucun essai de forage n'est défini.");
+                throw new InvalidOperationException("Aucun essai de forage n'est dÃ©fini.");
 
             var data = new Dictionary<string, List<double>>();
 
             data.Add("Pression (bar)", new List<double> {
-                CurrentEssai.E_presP0,
-                CurrentEssai.E_presFluage,
-                CurrentEssai.E_presLimite
+                CurrentEssai.presP0,
+                CurrentEssai.presFluage,
+                CurrentEssai.presLimite
             });
 
-            data.Add("Volume (m³)", new List<double> {
-                CurrentEssai.E_VolSonde,
-                CurrentEssai.E_VolSonde * 1.2,
-                CurrentEssai.E_VolSonde * 1.5
+            data.Add("Volume (mÂ³)", new List<double> {
+                CurrentEssai.VolSonde,
+                CurrentEssai.VolSonde * 1.2,
+                CurrentEssai.VolSonde * 1.5
             });
 
             return data;
         }
 
         /// <summary>
-        /// Génère des données pour une courbe de fluage
+        /// GÃ©nÃ¨re des donnÃ©es pour une courbe de fluage
         /// </summary>
         public (double[] xValues, double[] yValues) GenerateCreepCurve()
         {
             if (CurrentEssai == null)
-                throw new InvalidOperationException("Aucun essai de forage n'est défini.");
+                throw new InvalidOperationException("Aucun essai de forage n'est dÃ©fini.");
 
             var xValues = new double[] { 0, 1, 2, 3, 4, 5 };
             var yValues = new double[] {
-                CurrentEssai.E_presP0,
-                CurrentEssai.E_presP0 * 0.95,
-                CurrentEssai.E_presP0 * 0.90,
-                CurrentEssai.E_presP0 * 0.85,
-                CurrentEssai.E_presP0 * 0.80,
-                CurrentEssai.E_presP0 * 0.75
+                CurrentEssai.presP0,
+                CurrentEssai.presP0 * 0.95,
+                CurrentEssai.presP0 * 0.90,
+                CurrentEssai.presP0 * 0.85,
+                CurrentEssai.presP0 * 0.80,
+                CurrentEssai.presP0 * 0.75
             };
 
             return (xValues, yValues);
         }
 
         /// <summary>
-        /// Génère des données pour un graphique de limite hyperbolique (1/VolumeNF)
+        /// GÃ©nÃ¨re des donnÃ©es pour un graphique de limite hyperbolique (1/VolumeNF)
         /// </summary>
         public (double[] xValues, double[] yValues) GenerateHyperbolicLimitChart()
         {
             if (CurrentEssai == null)
-                throw new InvalidOperationException("Aucun essai de forage n'est défini.");
+                throw new InvalidOperationException("Aucun essai de forage n'est dÃ©fini.");
 
             var xValues = new double[] { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
             var yValues = new double[xValues.Length];
@@ -85,10 +90,10 @@
 
 //        Dim Theo As Boolean
 
-//        'Paramétrage de la courbe
+//        'ParamÃ©trage de la courbe
 //        If MySonde Is Nothing Then
 //            If Lang = 1 Then
-//                MsgBox("Vous devez sélectionner une sonde", vbOKOnly)
+//                MsgBox("Vous devez sÃ©lectionner une sonde", vbOKOnly)
 //            Else
 //                MsgBox("You must select a probe", vbOKOnly)
 //            End If
@@ -96,7 +101,7 @@
 //        End If
 //        If MySol Is Nothing Then
 //            If Lang = 1 Then
-//                MsgBox("Vous devez sélectionner un sol", vbOKOnly)
+//                MsgBox("Vous devez sÃ©lectionner un sol", vbOKOnly)
 //            Else
 //                MsgBox("You must select a soil", vbOKOnly)
 //            End If
@@ -114,7 +119,7 @@
 //        End With
 
 
-//        'Dessin en Contrainte/Déformation
+//        'Dessin en Contrainte/DÃ©formation
 
 //        If (E_MesureCount > 0) And (Eelast > 0) And (Nu > 0) And (Phi + Coh > 0) Then
 //            Dim X(E_MesureCount - 1) As Single
@@ -122,12 +127,12 @@
 //            Dim X1(E_MesureCount - 1) As Single
 //            Dim Y1(E_MesureCount - 1) As Single
 
-//            ' Vérification des paramètre géomécaniques
+//            ' VÃ©rification des paramÃ¨tre gÃ©omÃ©caniques
 //            UaMax = 0
 //            Pmax = 0
 //            Theo = False
 
-//            'Préparation du calcul théorique
+//            'PrÃ©paration du calcul thÃ©orique
 //            A = Dext / 2000
 //            K0 = Nu / (1 - Nu)
 
@@ -147,7 +152,7 @@
 //                        .Series.Add("Theory " & MyEssai.E_nomEssai)
 //                    Case 1
 //                        .Series.Add("Experience " & MyEssai.E_nomEssai)
-//                        .Series.Add("Théorie " & MyEssai.E_nomEssai)
+//                        .Series.Add("ThÃ©orie " & MyEssai.E_nomEssai)
 //                End Select
 //            End With
 
@@ -168,7 +173,7 @@
 
 //            With graphe
 
-//                ' Dessin de la courbe expérimentale
+//                ' Dessin de la courbe expÃ©rimentale
 //                MinX = 0
 //                MinY = 0
 //                MaxX = 0
@@ -182,29 +187,29 @@
 //                    If Y(row) > MaxY Then MaxY = Y(row)
 //                Next row
 
-//                ' Dessin de la courbe théorique
+//                ' Dessin de la courbe thÃ©orique
 //                For row = 0 To E_MesureCount - 1
 //                    X1(row) = E_Mesures(9, row)
 //                    Pres = E_Mesures(7, row)
 //                    Sz = E_Mesures(8, row)
-//                    ' Calcul du comportement théorique du sol selon la théorie
+//                    ' Calcul du comportement thÃ©orique du sol selon la thÃ©orie
 //                    Theorie = ComptPres(Dext, A, Nu, Eelast, Sz, Phimu, Coh, Phi, U0, UaMax,
 //                       Pres, Pmax, K0, P0, Lambda, Mu, Phie, N, Np, True)
 
-//                    'Mémorisation des pressions et déformations maximum
+//                    'MÃ©morisation des pressions et dÃ©formations maximum
 //                    Pmax = Theorie.Pmax
 //                    UaMax = Theorie.UaMax
 //                    If Theorie.Plim > 0 Then
-//                        E_presLimiteTheo = Math.Round(Theorie.Plim, 1)
+//                        presLimiteTheo = Math.Round(Theorie.Plim, 1)
 //                    End If
 //                    If Theorie.Pf > 0 Then
-//                        E_presFluage = Math.Round(Theorie.Pf, 1)
+//                        presFluage = Math.Round(Theorie.Pf, 1)
 //                    End If
 //                    Y1(row) = Theorie.Pres
 //                    X1(row) = Theorie.Def
 //                Next row
 
-//                ' Définition du type de ligne
+//                ' DÃ©finition du type de ligne
 //                With .Series(0)
 
 //                    .ChartType = SeriesChartType.Line
@@ -218,11 +223,11 @@
 //                '.Series(1).BorderDashStyle = BorderStyle.FixedSingle
 //                .Series(1).BorderWidth = 1
 
-//                ' Ajouter les deux séries de points
+//                ' Ajouter les deux sÃ©ries de points
 //                .Series(0).Points.DataBindXY(X, Y)
 //                .Series(1).Points.DataBindXY(X1, Y1)
 
-//                ' Définition axe des Y
+//                ' DÃ©finition axe des Y
 //                With .ChartAreas(0).AxisY
 //                    Select Case Lang
 //                        Case 0
@@ -242,7 +247,7 @@
 //                    .LineWidth = 1
 //                    .MajorGrid.LineColor = System.Drawing.Color.Gray
 
-//                    ' recherche de la première arrondi supérieure à MaxX
+//                    ' recherche de la premiÃ¨re arrondi supÃ©rieure Ã  MaxX
 //                    .Minimum = 0
 //                    .RoundAxisValues()
 //                    .Maximum = Math.Truncate((MaxY * 100 + 1000) / 100)
@@ -251,7 +256,7 @@
 //                    .RoundAxisValues()
 //                End With
 
-//                ' Définition axe des X
+//                ' DÃ©finition axe des X
 //                With .ChartAreas(0).AxisX
 //                    Select Case Lang
 //                        Case 0
@@ -269,7 +274,7 @@
 //                    .Minimum = 0
 //                    .RoundAxisValues()
 
-//                    ' recherche de la première arrondi supérieure à MaxX
+//                    ' recherche de la premiÃ¨re arrondi supÃ©rieure Ã  MaxX
 //                    .Maximum = Math.Truncate(MaxX * 10 + 1) / 10
 //                    .MajorGrid.Interval = Math.Round(.Maximum / 10)
 //                End With
@@ -282,3 +287,5 @@
 //        End If
 
 //    End Sub
+
+

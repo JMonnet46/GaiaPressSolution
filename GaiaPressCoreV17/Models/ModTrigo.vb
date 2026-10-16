@@ -1,4 +1,6 @@
-﻿Module ModTrigo
+﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
+Module ModTrigo
 
     Public Function Sec(ByVal X As Single) As Single
         ' Sécante

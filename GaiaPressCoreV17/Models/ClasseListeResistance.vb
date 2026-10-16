@@ -1,4 +1,5 @@
 ﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Namespace GaiaPressCoreV17.Models
 
@@ -330,7 +331,7 @@ Namespace GaiaPressCoreV17.Models
         '    ' Ajout d'une ligne à la Table "LeResistance"
         '    If NewSoil Then
 
-        '        ' Ajout d'une ligne à la Table "LesEssaisForage"
+        '        ' Ajout d'une ligne à la Table "LesEssaiForage"
         '        'ObjetDataRow = MonChantier.Tables("LeResistance").NewRow()
 
         '        'ObjetDataRow("refSol") = MyListResistance.GiveMeANewRefSol

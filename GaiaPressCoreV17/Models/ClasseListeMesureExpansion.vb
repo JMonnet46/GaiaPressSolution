@@ -1,4 +1,6 @@
-﻿Public Class ClasseListeMesureExpansion
+﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
+Public Class ClasseListeMesureExpansion
     Public Property ListeMesureExpansion As New List(Of MesureExpansion)
 
     Private _items As List(Of MesureExpansion)

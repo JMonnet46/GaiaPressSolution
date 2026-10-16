@@ -2,6 +2,7 @@
 'Imports OpenTK.Graphics.ES11
 Imports System.Math
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Module ModPresSondeNue
 

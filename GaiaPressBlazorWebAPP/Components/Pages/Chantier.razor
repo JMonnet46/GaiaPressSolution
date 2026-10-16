@@ -1,0 +1,549 @@
+﻿@page "/chantier"
+@page "/chantier/{ChantierId:int}"
+@rendermode InteractiveServer
+@using GaiaPressBlazorWebAPP.Services
+@using System.ComponentModel.DataAnnotations
+@inject FileService FileService
+@inject LocalizationService Loc
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<div class="chantier-container">
+    <!-- En-tête avec titre et sélecteur de langue -->
+    <div class="chantier-header">
+        <h1>@Loc["ConstructionSite"]</h1>
+        <LanguageSelector />
+    </div>
+
+    @if (isNewFile)
+    {
+        <div class="new-file-banner">
+            @Loc["NewFileCreated"]
+        </div>
+    }
+
+    @if (currentChantier == null)
+    {
+        <!-- ============================================ -->
+        <!-- FORMULAIRE DE CRÉATION / ÉDITION             -->
+        <!-- ============================================ -->
+        <div class="chantier-form">
+            <h2>@(isEditing ? Loc["EditConstructionSite"] : Loc["NewConstructionSite"])</h2>
+
+            <EditForm Model="@newChantier" OnValidSubmit="SaveChantier">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="validation-summary" />
+
+                <!-- ============================================ -->
+                <!-- SECTION : PROPRIÉTÉS DU CHANTIER             -->
+                <!-- ============================================ -->
+                <fieldset class="form-section">
+                    <legend>@Loc["SiteProperties"]</legend>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="refChantier">
+                                @Loc["SiteReference"]
+                                <span class="required">*</span>
+                            </label>
+                            <InputText id="refChantier"
+                                       @bind-Value="newChantier.RefChantier"
+                                       class="form-control"
+                                       placeholder="@Loc["SiteReference"]" />
+                            <ValidationMessage For="@(() => newChantier.RefChantier)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nom">
+                                @Loc["SiteName"]
+                                <span class="required">*</span>
+                            </label>
+                            <InputText id="nom"
+                                       @bind-Value="newChantier.Nom"
+                                       class="form-control"
+                                       placeholder="@Loc["SiteName"]" />
+                            <ValidationMessage For="@(() => newChantier.Nom)" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="localisation">
+                            @Loc["SiteLocation"]
+                            <span class="required">*</span>
+                        </label>
+                        <InputText id="localisation"
+                                   @bind-Value="newChantier.Localisation"
+                                   class="form-control"
+                                   placeholder="@Loc["SiteLocation"]" />
+                        <ValidationMessage For="@(() => newChantier.Localisation)" />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dateProjet">@Loc["ProjectDate"]</label>
+                            <InputDate id="dateProjet"
+                                       @bind-Value="newChantier.DateProjet"
+                                       class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">@Loc["Description"]</label>
+                        <InputTextArea id="description"
+                                       @bind-Value="newChantier.Description"
+                                       class="form-control"
+                                       rows="3"
+                                       placeholder="@Loc["Description"]" />
+                    </div>
+                </fieldset>
+
+                <!-- ============================================ -->
+                <!-- SECTION : INFORMATIONS SOCIÉTÉ               -->
+                <!-- ============================================ -->
+                <fieldset class="form-section">
+                    <legend>@Loc["CompanyInformation"]</legend>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="refCompagny">@Loc["CompanyReference"]</label>
+                            <InputText id="refCompagny"
+                                       @bind-Value="newChantier.RefCompagny"
+                                       class="form-control"
+                                       placeholder="@Loc["CompanyReference"]" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sarl">
+                                @Loc["CompanyName"]
+                                <span class="required">*</span>
+                            </label>
+                            <InputText id="sarl"
+                                       @bind-Value="newChantier.SARL"
+                                       class="form-control"
+                                       placeholder="@Loc["CompanyName"]" />
+                            <ValidationMessage For="@(() => newChantier.SARL)" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telephone">@Loc["Phone"]</label>
+                            <InputText id="telephone"
+                                       @bind-Value="newChantier.Telephone"
+                                       class="form-control"
+                                       placeholder="+33 1 23 45 67 89" />
+                            <ValidationMessage For="@(() => newChantier.Telephone)" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adresse">@Loc["Address"]</label>
+                        <InputTextArea id="adresse"
+                                       @bind-Value="newChantier.Adresse"
+                                       class="form-control"
+                                       rows="2"
+                                       placeholder="@Loc["Address"]" />
+                    </div>
+                </fieldset>
+
+                <!-- ============================================ -->
+                <!-- SECTION : INFORMATIONS CLIENT                -->
+                <!-- ============================================ -->
+                <fieldset class="form-section">
+                    <legend>@Loc["ClientInformation"]</legend>
+
+                    <div class="form-group">
+                        <label for="client">
+                            @Loc["ClientName"]
+                            <span class="required">*</span>
+                        </label>
+                        <InputText id="client"
+                                   @bind-Value="newChantier.Client"
+                                   class="form-control"
+                                   placeholder="@Loc["ClientName"]" />
+                        <ValidationMessage For="@(() => newChantier.Client)" />
+                    </div>
+                </fieldset>
+
+                <!-- ============================================ -->
+                <!-- BOUTONS D'ACTION                             -->
+                <!-- ============================================ -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        @(isEditing ? Loc["Save"] : Loc["CreateSite"])
+                    </button>
+                    <button type="button" class="btn btn-secondary" @onclick="CancelEdit">
+                        @Loc["Cancel"]
+                    </button>
+                    @if (isEditing)
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="ConfirmDelete">
+                            @Loc["Delete"]
+                        </button>
+                    }
+                </div>
+            </EditForm>
+        </div>
+    }
+    else
+    {
+        <!-- ============================================ -->
+        <!-- AFFICHAGE DÉTAILS DU CHANTIER                -->
+        <!-- ============================================ -->
+        <div class="chantier-details">
+            <div class="details-header">
+                <h2>@currentChantier.Nom</h2>
+                <div class="details-actions">
+                    <button class="btn btn-primary" @onclick="EditChantier">
+                        @Loc["Edit"]
+                    </button>
+                    <button class="btn btn-secondary" @onclick="GoBack">
+                        @Loc["Back"]
+                    </button>
+                </div>
+            </div>
+
+            <!-- Propriétés du chantier -->
+            <div class="detail-section">
+                <h3>@Loc["SiteProperties"]</h3>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">@Loc["SiteReference"]</span>
+                        <span class="detail-value">@currentChantier.RefChantier</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">@Loc["SiteName"]</span>
+                        <span class="detail-value">@currentChantier.Nom</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">@Loc["SiteLocation"]</span>
+                        <span class="detail-value">@currentChantier.Localisation</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">@Loc["ProjectDate"]</span>
+                        <span class="detail-value">@currentChantier.DateProjet.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(currentChantier.Description))
+                    {
+                        <div class="detail-item full-width">
+                            <span class="detail-label">@Loc["Description"]</span>
+                            <span class="detail-value">@currentChantier.Description</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Informations société -->
+            <div class="detail-section">
+                <h3>@Loc["CompanyInformation"]</h3>
+                <div class="detail-grid">
+                    @if (!string.IsNullOrWhiteSpace(currentChantier.RefCompagny))
+                    {
+                        <div class="detail-item">
+                            <span class="detail-label">@Loc["CompanyReference"]</span>
+                            <span class="detail-value">@currentChantier.RefCompagny</span>
+                        </div>
+                    }
+                    <div class="detail-item">
+                        <span class="detail-label">@Loc["CompanyName"]</span>
+                        <span class="detail-value">@currentChantier.SARL</span>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(currentChantier.Telephone))
+                    {
+                        <div class="detail-item">
+                            <span class="detail-label">@Loc["Phone"]</span>
+                            <span class="detail-value">@currentChantier.Telephone</span>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(currentChantier.Adresse))
+                    {
+                        <div class="detail-item full-width">
+                            <span class="detail-label">@Loc["Address"]</span>
+                            <span class="detail-value">@currentChantier.Adresse</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Informations client -->
+            <div class="detail-section">
+                <h3>@Loc["ClientInformation"]</h3>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">@Loc["ClientName"]</span>
+                        <span class="detail-value">@currentChantier.Client</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Forages -->
+            <div class="detail-section forages-section">
+                <div class="section-header">
+                    <h3>@Loc["Boreholes"]</h3>
+                    <button class="btn btn-success" @onclick="AddBorehole">
+                        @Loc["AddBorehole"]
+                    </button>
+                </div>
+
+                @if (boreholes == null || !boreholes.Any())
+                {
+                    <p class="no-data">@Loc["NoBoreholes"]</p>
+                }
+                else
+                {
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>@Loc["BoreholeReference"]</th>
+                                <th>@Loc["BoreholeDepth"]</th>
+                                <th>@Loc["BoreholeDate"]</th>
+                                <th>@Loc["Actions"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var borehole in boreholes)
+                            {
+                                <tr>
+                                    <td>@borehole.Reference</td>
+                                    <td>@borehole.Depth.ToString("F2")</td>
+                                    <td>@borehole.Date.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" @onclick="() => ViewBorehole(borehole.Id)">
+                                            @Loc["ViewBoreholes"]
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int? ChantierId { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "new")]
+    public string? IsNew { get; set; }
+
+    private bool isNewFile;
+    private bool isEditing;
+    private ChantierModel newChantier = new();
+    private ChantierModel? currentChantier;
+    private List<BoreholeModel>? boreholes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // S'abonner aux changements d'état du fichier et de langue
+        FileService.OnFileStateChanged += OnFileStateChanged;
+        Loc.LanguageChanged += OnLanguageChanged;  // ✅ CORRIGÉ : LanguageChanged (événement)
+
+        // Charger l'état
+        await FileService.LoadStateAsync();
+
+        // Vérifier si c'est un nouveau fichier
+        isNewFile = IsNew == "true" || FileService.IsNewFile;
+
+        if (ChantierId.HasValue)
+        {
+            // Mode édition : charger le chantier existant
+            await LoadExistingChantier(ChantierId.Value);
+        }
+        else if (!isNewFile && !string.IsNullOrEmpty(FileService.CurrentFilePath))
+        {
+            // Charger le chantier depuis le fichier courant
+            await LoadExistingChantier();
+        }
+    }
+
+    private async Task SaveChantier()
+    {
+        try
+        {
+            if (isEditing && currentChantier != null)
+            {
+                // Mise à jour
+                currentChantier.RefChantier = newChantier.RefChantier;
+                currentChantier.Nom = newChantier.Nom;
+                currentChantier.Localisation = newChantier.Localisation;
+                currentChantier.DateProjet = newChantier.DateProjet;
+                currentChantier.Description = newChantier.Description;
+                currentChantier.RefCompagny = newChantier.RefCompagny;
+                currentChantier.SARL = newChantier.SARL;
+                currentChantier.Telephone = newChantier.Telephone;
+                currentChantier.Adresse = newChantier.Adresse;
+                currentChantier.Client = newChantier.Client;
+
+                // TODO: Appeler le service pour sauvegarder en base
+                // await ChantierService.UpdateAsync(currentChantier);
+
+                await FileService.MarkAsModifiedAsync();
+                // Afficher message de succès
+            }
+            else
+            {
+                // Création
+                currentChantier = newChantier;
+
+                // TODO: Appeler le service pour sauvegarder en base
+                // await ChantierService.CreateAsync(currentChantier);
+
+                await FileService.MarkAsModifiedAsync();
+                isNewFile = false;
+            }
+
+            isEditing = false;
+        }
+        catch (Exception ex)
+        {
+            // TODO: Afficher message d'erreur localisé
+            Console.WriteLine($"Erreur: {ex.Message}");
+        }
+    }
+
+    private void EditChantier()
+    {
+        if (currentChantier != null)
+        {
+            newChantier = new ChantierModel
+            {
+                RefChantier = currentChantier.RefChantier,
+                Nom = currentChantier.Nom,
+                Localisation = currentChantier.Localisation,
+                DateProjet = currentChantier.DateProjet,
+                Description = currentChantier.Description,
+                RefCompagny = currentChantier.RefCompagny,
+                SARL = currentChantier.SARL,
+                Telephone = currentChantier.Telephone,
+                Adresse = currentChantier.Adresse,
+                Client = currentChantier.Client
+            };
+            isEditing = true;
+            currentChantier = null; // Afficher le formulaire
+        }
+    }
+
+    private void CancelEdit()
+    {
+        if (isEditing && ChantierId.HasValue)
+        {
+            // Retourner aux détails
+            Navigation.NavigateTo($"/chantier/{ChantierId.Value}");
+        }
+        else
+        {
+            // Retourner à l'accueil ou annuler la création
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private void ConfirmDelete()
+    {
+        // TODO: Afficher boîte de dialogue de confirmation
+        // avec Loc["ConfirmDelete"]
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void AddBorehole()
+    {
+        Navigation.NavigateTo($"/borehole/new?chantierId={currentChantier?.Id}");
+    }
+
+    private void ViewBorehole(int boreholeId)
+    {
+        Navigation.NavigateTo($"/borehole/{boreholeId}");
+    }
+
+    private async Task LoadExistingChantier(int id)
+    {
+        // TODO: Charger depuis le service
+        // currentChantier = await ChantierService.GetByIdAsync(id);
+        // boreholes = await BoreholeService.GetByChantierIdAsync(id);
+    }
+
+    private async Task LoadExistingChantier()
+    {
+        // TODO: Charger depuis le fichier
+        // currentChantier = await FileService.LoadChantierAsync();
+        // boreholes = currentChantier?.Boreholes;
+    }
+
+    private void OnFileStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnLanguageChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        FileService.OnFileStateChanged -= OnFileStateChanged;
+        Loc.LanguageChanged -= OnLanguageChanged;  // ✅ CORRIGÉ : LanguageChanged (événement)
+    }
+
+    // ============================================
+    // MODÈLES DE DONNÉES
+    // ============================================
+
+    public class ChantierModel
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "La référence du chantier est obligatoire")]
+        [StringLength(50, ErrorMessage = "La référence ne doit pas dépasser 50 caractères")]
+        public string RefChantier { get; set; } = "";
+
+        [Required(ErrorMessage = "Le nom du chantier est obligatoire")]
+        [StringLength(200, ErrorMessage = "Le nom ne doit pas dépasser 200 caractères")]
+        public string Nom { get; set; } = "";
+
+        [Required(ErrorMessage = "La localisation est obligatoire")]
+        [StringLength(500, ErrorMessage = "La localisation ne doit pas dépasser 500 caractères")]
+        public string Localisation { get; set; } = "";
+
+        public DateTime DateProjet { get; set; } = DateTime.Today;
+
+        [StringLength(2000, ErrorMessage = "La description ne doit pas dépasser 2000 caractères")]
+        public string Description { get; set; } = "";
+
+        // Informations société
+        [StringLength(50)]
+        public string RefCompagny { get; set; } = "";
+
+        [Required(ErrorMessage = "Le nom de la société est obligatoire")]
+        [StringLength(200)]
+        public string SARL { get; set; } = "";
+
+        [Phone(ErrorMessage = "Numéro de téléphone invalide")]
+        [StringLength(20)]
+        public string Telephone { get; set; } = "";
+
+        [StringLength(500)]
+        public string Adresse { get; set; } = "";
+
+        // Client
+        [Required(ErrorMessage = "Le nom du client est obligatoire")]
+        [StringLength(200)]
+        public string Client { get; set; } = "";
+    }
+
+    public class BoreholeModel
+    {
+        public int Id { get; set; }
+        public string Reference { get; set; } = "";
+        public double Depth { get; set; }
+        public DateTime Date { get; set; }
+        public int ChantierId { get; set; }
+    }
+}

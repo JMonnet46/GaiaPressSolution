@@ -26,8 +26,8 @@ Namespace GaiaPressCoreV17.Services
         End Sub
 
         '' ✅ Déclaration de toutes les méthodes utilisées dans le contrôleur
-        'Public Function GetAllEssaisForages() As List(Of EssaiForage)
-        '    Return _context.EssaisForage.ToList()
+        'Public Function GetAllEssaiForages() As List(Of EssaiForage)
+        '    Return _context.EssaiForage.ToList()
         'End Function
 
         'Public Function GetEssaiForageByRef(refEssai As String) As Essai_Forage
@@ -66,15 +66,15 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         'Public Function UpdateEssaiForage(essai As EssaiForage) As EssaiForage
-        '    _context.EssaisForage.Update(essai)
+        '    _context.EssaiForage.Update(essai)
         '    _context.SaveChanges()
         '    Return essai
         'End Function
 
         'Public Function DeleteEssaiForage(refEssai As String) As Boolean
-        '    Dim essai = _context.EssaisForage.FirstOrDefault(Function(e) e.E_RefEssai = refEssai)
+        '    Dim essai = _context.EssaiForage.FirstOrDefault(Function(e) e.E_RefEssai = refEssai)
         '    If essai IsNot Nothing Then
-        '        _context.EssaisForage.Remove(essai)
+        '        _context.EssaiForage.Remove(essai)
         '        _context.SaveChanges()
         '        Return True
         '    End If
@@ -123,7 +123,7 @@ Namespace GaiaPressCoreV17.Services
         ' ✅ Ajoutez ici toutes vos autres méthodes existantes (214 lignes)
 
         ' ===============================================================================
-        ' Gestion de  ListEssaisForage
+        ' Gestion de  ListEssaiForage
         ' ===============================================================================
 
         ''' <summary>
@@ -170,7 +170,7 @@ Namespace GaiaPressCoreV17.Services
         ''' Récupère tous les essais de forage.
         ''' </summary>
         ''' <returns>Liste de tous les essais de forage.</returns>
-        Public Function GetAllEssaisForages() As List(Of Essai_Forage)
+        Public Function GetAllEssaiForages() As List(Of Essai_Forage)
             Dim essais = _dbContext.ListeEssaiForageDb.ToList()
 
             ' Mettre à jour la liste globale
@@ -184,7 +184,7 @@ Namespace GaiaPressCoreV17.Services
         ''' <summary>
         ''' Mettre à jour un essai forage
         ''' </summary>
-        Public Sub UpDateEssaisForage(NouvelEssai As Essai_Forage)
+        Public Sub UpDateEssaiForage(NouvelEssai As Essai_Forage)
 
             '    Public Async Function Exemple(refEssai As String) As Task(Of Essai_Forage)
             '       Dim essai As Essai_Forage =
@@ -243,7 +243,7 @@ Namespace GaiaPressCoreV17.Services
         ''' </summary>
         ''' <param name="refForage">Référence du forage.</param>
         ''' <returns>Liste des essais de forage pour le forage spécifié.</returns>
-        Public Async Function GetEssaisForageByRefForage(refForage As String) As Task(Of List(Of Essai_Forage))
+        Public Async Function GetEssaiForageByRefForage(refForage As String) As Task(Of List(Of Essai_Forage))
             Return Await _dbContext.ListeEssaiForageDb.Where(Function(e) e.RefForage = refForage).ToListAsync()
         End Function
 

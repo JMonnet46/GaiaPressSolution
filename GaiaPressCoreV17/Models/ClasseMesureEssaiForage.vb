@@ -1,5 +1,7 @@
 Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
+Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Namespace GaiaPressCoreV17.Models
 
@@ -62,5 +64,6 @@ Namespace GaiaPressCoreV17.Models
             Me.RefEssai = refEssai
             Me.IndiceMesure = indiceMesure
         End Sub
+
     End Class
 End Namespace

@@ -1,11 +1,13 @@
 ﻿Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
+Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Namespace GaiaPressCoreV17.Models
 
     Public Class MesureResistance
 
-        ' Définition de la clef primaire de la Table LesMesuresResistance
+        ' Définition de la clef primaire de la Table LesMesuresResistanceDb
         <Key>
         Public Property Ind As Integer
 

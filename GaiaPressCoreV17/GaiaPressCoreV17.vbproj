@@ -26,8 +26,12 @@
 		<!-- <AssemblyName>$MSBuildProjectName$</AssemblyName> -->
 		<RootNamespace />
 	</PropertyGroup>
-
-
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);SLL0001</NoWarn>
+	</PropertyGroup>
+	<PropertyGroup>
+		<SixLaborsLicenseFile>sixlabors.lic</SixLaborsLicenseFile>
+	</PropertyGroup>
 	<ItemGroup>
     <!-- Packages NuGet compatibles avec .NET 8.0 -->
     <PackageReference Include="Azure.Identity" Version="1.18.0" />
@@ -86,7 +90,10 @@
     <Compile Remove="Program.vb" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ClasseGaiaPressDbContext.vb" />
+    <Content Remove="wwwroot\WebChantier.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\GaiaPressDbContext.vb" />
     <Compile Include="Models\ClasseChantier.vb" />
     <Compile Include="Models\ClasseEssaiExpansion.vb" />
     <Compile Include="Models\ClasseEssaiForage.vb" />
@@ -121,14 +128,11 @@
     <Compile Include="Models\Dto\PrecisionElastDto.vb" />
     <Compile Include="Models\Dto\SolDto.vb" />
     <Compile Include="Models\Dto\SondeDto.vb" />
-    <Compile Include="Models\EssaiResistanceLogic.vb" />
-    <Compile Include="Models\MemoryImage.vb" />
     <Compile Include="Models\ModCohesion.vb" />
     <Compile Include="Models\ModComportPressio.vb" />
     <Compile Include="Models\ModDilatance.vb" />
     <Compile Include="Models\ModFrottement.vb" />
     <Compile Include="Models\ModLectureFichExcel.vb" />
-    <Compile Include="Models\ModMath.vb" />
     <Compile Include="Models\ModMoyVar.vb" />
     <Compile Include="Models\ModOptimisation.vb" />
     <Compile Include="Models\ModPresLanterne.vb" />
@@ -151,10 +155,12 @@
   <ItemGroup>
     <Folder Include="GaiaPressForm\Image\" />
     <Folder Include="GaiaPressForm\Stryle\" />
+    <Folder Include="Logic\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Data\GaiaPressSchema.sql" />
   </ItemGroup>
+	
 </Project>

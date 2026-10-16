@@ -3,7 +3,6 @@ Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17
 Imports System.Threading
-Imports GaiaPressCoreV17.Services
 
 
 Namespace GaiaPressCoreV17.Services
@@ -229,11 +228,11 @@ Namespace GaiaPressCoreV17.Services
 
 
         '**************************************************************************
-        ' Gestion des EssaisResistance
+        ' Gestion des EssaisResistanceDb
         '**************************************************************************
-        ' Méthodes pour manipuler les DataTables de  ObjetDataEssaisResistancePropre
+        ' Méthodes pour manipuler les DataTables de  ObjetDataEssaisResistanceDbPropre
         Public Sub AddEssaiResistance(NouvelEssai As EssaiResistance)
-            Dim row As DataRow = ObjetDataLesEssaisResistancePropre.NewRow()
+            Dim row As DataRow = ObjetDataLesEssaisResistanceDbPropre.NewRow()
             row("refEssai") = NouvelEssai.refEssai
             row("refSonde") = NouvelEssai.refSonde
             row("ClassPrecis") = NouvelEssai.ClassPrecis
@@ -249,7 +248,7 @@ Namespace GaiaPressCoreV17.Services
             row("Pe") = NouvelEssai.Pe
             row("MySondeResistance") = NouvelEssai.MySondeResistance
             'row("Mesures") = NouvelEssai. Mesure
-            ObjetDataLesEssaisResistancePropre.Rows.Add(row)
+            ObjetDataLesEssaisResistanceDbPropre.Rows.Add(row)
         End Sub
 
         ''' <summary>
@@ -259,7 +258,7 @@ Namespace GaiaPressCoreV17.Services
             Try
 
                 ' ✅ Accéder à ObjetDataEssaiResistancePropre via l'instance de Probe
-                Dim tableEssais As DataTable = ObjetDataLesEssaisResistancePropre
+                Dim tableEssais As DataTable = ObjetDataLesEssaisResistanceDbPropre
 
                 Dim rows() As DataRow = tableEssais.Select("refEssai = '" & refEssai.Replace("'", "''") & "'")
 
@@ -291,7 +290,7 @@ Namespace GaiaPressCoreV17.Services
 
 
         Public Sub UpdateEssaiResistance(NouvelEssai As EssaiResistance)
-            For Each row As DataRow In ObjetDataLesEssaisResistancePropre.Rows
+            For Each row As DataRow In ObjetDataLesEssaisResistanceDbPropre.Rows
                 If row("refEssai").ToString() = NouvelEssai.RefEssai Then
                     row("refEssai") = NouvelEssai.RefEssai
                     row("refSonde") = NouvelEssai.RefSonde
@@ -313,27 +312,27 @@ Namespace GaiaPressCoreV17.Services
         End Sub
 
         ' *******************************************************************************************************
-        ' Charge les Mesures depuis MaListeSonde.Tables("LesMesuresResistancePropre") vers MyResistance.Mesures
+        ' Charge les Mesures depuis MaListeSonde.Tables("LesMesuresResistanceDbPropre") vers MyResistance.Mesures
         ' *******************************************************************************************************
 
         '**************************************************************************
-        ' Gestion des EssaisMesuresResistancePropre
+        ' Gestion des EssaisMesuresResistanceDbPropre
         '**************************************************************************
-        ' Méthodes pour manipuler les DataTables de  ObjetDataMesuresResistancePropre
-        Public Sub AddEssaiMesuresResistancePropre(NouvelleMesure As MesureExpansion)
-            Dim row As DataRow = ObjetDataLesMesuresResistancePropre.NewRow()
+        ' Méthodes pour manipuler les DataTables de  ObjetDataMesuresResistanceDbPropre
+        Public Sub AddEssaiMesuresResistanceDbPropre(NouvelleMesure As MesureExpansion)
+            Dim row As DataRow = ObjetDataLesMesuresResistanceDbPropre.NewRow()
             row("refEssai") = NouvelleMesure.RefEssai
             row("IndiceMesure") = NouvelleMesure.IndiceMesure
             row("pression") = NouvelleMesure.Pression
             row("volume") = NouvelleMesure.Volume
-            ObjetDataLesMesuresResistancePropre.Rows.Add(row)
+            ObjetDataLesMesuresResistanceDbPropre.Rows.Add(row)
         End Sub
 
         '' Récupère une sonde par sa référence depuis ObjetDataListeSonde.
         ''' </summary>
-        Public Function GetEssaiMesuresResistancePropreByRef(refEssai As String, IndiceMesure As Integer) As MesureExpansion
+        Public Function GetEssaiMesuresResistanceDbPropreByRef(refEssai As String, IndiceMesure As Integer) As MesureExpansion
             ' Filtrer les lignes correspondantes dans ObjetDataListeSonde
-            Dim rows() As DataRow = ObjetDataLesMesuresResistancePropre.Select($"refEssai = '{refEssai}'" And $"IndiceMesure = '{IndiceMesure}'")
+            Dim rows() As DataRow = ObjetDataLesMesuresResistanceDbPropre.Select($"refEssai = '{refEssai}'" And $"IndiceMesure = '{IndiceMesure}'")
 
             ' Si aucune ligne n'est trouvée, retourner Nothing
             If rows.Length = 0 Then
@@ -349,8 +348,8 @@ Namespace GaiaPressCoreV17.Services
         }
         End Function
 
-        Public Sub UpdateEssaiMesuresResistancePropre(NouvelleMesure As MesureExpansion)
-            For Each row As DataRow In ObjetDataLesMesuresResistancePropre.Rows
+        Public Sub UpdateEssaiMesuresResistanceDbPropre(NouvelleMesure As MesureExpansion)
+            For Each row As DataRow In ObjetDataLesMesuresResistanceDbPropre.Rows
                 If row("refEssai").ToString() = NouvelleMesure.RefEssai And row("IndiceMesure").ToString() = NouvelleMesure.IndiceMesure Then
                     row("pression") = NouvelleMesure.Pression
                     row("volume") = NouvelleMesure.Volume

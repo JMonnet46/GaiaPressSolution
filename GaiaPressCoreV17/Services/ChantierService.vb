@@ -52,7 +52,7 @@ Namespace GaiaPressCoreV17.Services
         ''' Recherche un chantier par sa référence.
         ''' </summary>
         Public Function GetChantier(refChantier As String) As Chantier
-            Return _dbContext.LesChantiers.FirstOrDefault(Function(c) c.refChantier = refChantier)
+            Return _dbContext.LesChantiersDb.FirstOrDefault(Function(c) c.refChantier = refChantier)
         End Function
 
         Public Function GetAllChantiers() As List(Of Chantier)
@@ -111,7 +111,7 @@ Namespace GaiaPressCoreV17.Services
         End Sub
 
         Public Sub SaveChantier(chantier As Chantier)
-            _dbContext.LesChantiers.Update(chantier)
+            _dbContext.LesChantiersDb.Update(chantier)
             _dbContext.SaveChanges()
         End Sub
 
@@ -195,11 +195,11 @@ Namespace GaiaPressCoreV17.Services
         ' Si ces méthodes ne sont pas encore présentes dans DataService, les ajouter :
         ' -------------------------------------------------------------------------
         ' Public Function GetAllChantier() As List(Of Chantier)
-        '     Return _context.LesChantierss.ToList()
+        '     Return _context.LesChantiersDbs.ToList()
         ' End Function
         '
         ' Public Sub SaveChantier(Chantier As List(Of Chantier))
-        '     _context.LesChantierss.UpdateRange(Chantier)
+        '     _context.LesChantiersDbs.UpdateRange(Chantier)
         '     _context.SaveChanges()
         ' End Sub
         ' -------------------------------------------------------------------------

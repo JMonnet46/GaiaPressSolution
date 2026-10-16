@@ -1,4 +1,5 @@
 ﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 
 Public Class ClasseListeChantier
     Public Property ListeChantierSession As New List(Of Chantier)

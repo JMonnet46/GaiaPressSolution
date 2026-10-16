@@ -5,6 +5,7 @@ Imports System.ComponentModel.DataAnnotations.Schema
 Imports System.Data
 Imports System.Math
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports Microsoft.EntityFrameworkCore.Metadata.Internal
 ' Ajoutez d'autres namespaces si nécessaire
 
@@ -484,7 +485,7 @@ Namespace GaiaPressCoreV17.Models
 
                     MaListeSonde.Tables("LesEssaisExpansionPropre").Rows.Add(ObjetDataRow)
 
-                    'MonChantier.Tables("LesEssaisForage").Rows.Add()
+                    'MonChantier.Tables("LesEssaiForage").Rows.Add()
                 End If
             End If
 

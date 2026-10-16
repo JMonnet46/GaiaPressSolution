@@ -3,6 +3,7 @@ Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Collections.Generic
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports System.ComponentModel.DataAnnotations
 
 Namespace GaiaPressCoreV17.Models
@@ -212,10 +213,10 @@ Namespace GaiaPressCoreV17.Models
             ' Déclaration d'un essai
 
             '    MsgBox "NewEssai"
-            If NewTable Then  ' On ajoute un Essai à MonFichier.Tables("LesEssaisForage") seulement si Table est vrai
-                If MonChantier.Tables("LesEssaisForage") Is Nothing Then
-                    MonChantier.Tables.Add("LesEssaisForage")
-                    With MonChantier.Tables("LesEssaisForage")
+            If NewTable Then  ' On ajoute un Essai à MonFichier.Tables("LesEssaiForage") seulement si Table est vrai
+                If MonChantier.Tables("LesEssaiForage") Is Nothing Then
+                    MonChantier.Tables.Add("LesEssaiForage")
+                    With MonChantier.Tables("LesEssaiForage")
                         .Columns.Add("refChantier", GetType(String))
                         .Columns.Add("refForage", GetType(String))
 
@@ -265,7 +266,7 @@ Namespace GaiaPressCoreV17.Models
 
                     End With
                 Else
-                    MonChantier.Tables("LesEssaisForage").NewRow()
+                    MonChantier.Tables("LesEssaiForage").NewRow()
                 End If
             End If
 

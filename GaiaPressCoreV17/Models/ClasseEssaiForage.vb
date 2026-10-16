@@ -1,21 +1,19 @@
 ﻿Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
-Imports System.Data
-Imports GaiaPressCoreV17.Models
-Imports GaiaPressCoreV17.Controllers
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
+Imports System.Data
 
 Namespace GaiaPressCoreV17.Models
-
     Public Class Essai_Forage
 
         '===============================================================
         ' Propriétés de base
         '===============================================================
 
-        ' Définition de la clef primaire de la Table LesEssaisForage
+        ' Définition de la clef primaire de la Table LesEssaiForage
         <Key>
-        Public Property refEssai As String
+        Public Property RefEssai As String
         Public Property RefChantier As String
         Public Property RefForage As String
         Public Overridable Property MySol As Sol
@@ -154,7 +152,7 @@ Namespace GaiaPressCoreV17.Models
             If MyEssaiForage Is Nothing Then
                 MyEssaiForage = New Essai_Forage
                 'ReDim Preserve MyEssaiForage. ListEssais(i)
-                MyEssaiForage = MyChantier.ListEssaisForages(i)
+                MyEssaiForage = MyChantier.ListEssaiForages(i)
             End If
 
             IsRefUnique = unique
@@ -179,7 +177,7 @@ Namespace GaiaPressCoreV17.Models
             If MyEssaiForage Is Nothing Then
                 MyEssaiForage = New Essai_Forage
                 'ReDim Preserve MyEssaiForage. ListEssais(i)
-                MyEssaiForage = MyChantier.ListEssaisForages(i)
+                MyEssaiForage = MyChantier.ListEssaiForages(i)
             End If
 
             IsNomUnique = unique
@@ -1379,7 +1377,7 @@ Namespace GaiaPressCoreV17.Models
                     ref = "Expansion"
             End Select
 
-            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistance ou des EssaisExpansion
+            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistanceDb ou des EssaisExpansion
             Dim listeEssais As New ClasseListeEssaiForage()
             listeEssais.ListeEssaiForageSession = MyListeEssaiForageSession
 
@@ -1405,7 +1403,7 @@ Namespace GaiaPressCoreV17.Models
                     Nom = "Expansion"
             End Select
 
-            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistance ou des EssaisExpansion
+            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistanceDb ou des EssaisExpansion
             Dim listeEssais As New ClasseListeEssaiForage()
             listeEssais.ListeEssaiForageSession = MyListeEssaiForageSession
 

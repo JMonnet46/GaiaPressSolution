@@ -1,0 +1,121 @@
+﻿@rendermode InteractiveServer
+@using GaiaPressBlazorWebAPP.Services
+@inject LocalizationService Loc
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+
+<div class="file-menu">
+    <button class="file-menu-btn" @onclick="Toggle">@Loc["File"] ▾</button>
+
+    @if (_open)
+    {
+        <div class="file-menu-dropdown" @onclick="Close">
+            <button @onclick="NewFile">@Loc["NewFile"]</button>
+            <button @onclick="OpenFile">@Loc["OpenFile"]</button>
+            <button @onclick="CloseFile">@Loc["CloseFile"]</button>
+            <button @onclick="SaveFile">@Loc["SaveFile"]</button>
+            <button @onclick="SaveAsFile">@Loc["SaveUnderFile"]</button>
+            <hr />
+            <button @onclick="Quit">@Loc["Quit"]</button>
+        </div>
+    }
+</div>
+
+@code {
+    private bool _open = false;
+
+    protected override void OnInitialized()
+    {
+        Loc.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged()
+    {
+        StateHasChanged();
+    }
+
+    private void Toggle() => _open = !_open;
+    private void Close() => _open = false;
+
+    // ============================================
+    // NEW FILE - Créer un nouveau fichier
+    // ============================================
+    private async Task NewFile()
+    {
+        Close(); // Ferme le menu déroulant
+
+        // 1. Demander confirmation si un fichier est déjà ouvert
+        bool hasUnsavedChanges = await CheckUnsavedChanges();
+
+        if (hasUnsavedChanges)
+        {
+            bool confirm = await JSRuntime.InvokeAsync<bool>("confirm",
+                Loc["ConfirmNewFile"] ?? "Un fichier est déjà ouvert. Voulez-vous vraiment créer un nouveau fichier ? Les modifications non enregistrées seront perdues.");
+
+            if (!confirm)
+            {
+                return; // L'utilisateur a annulé
+            }
+        }
+
+        // 2. Réinitialiser l'état de l'application
+        await ResetApplicationState();
+
+        // 3. Naviguer vers la page principale avec un nouveau fichier
+        Navigation.NavigateTo("/chantier?new=true", forceLoad: false);
+    }
+
+    // ============================================
+    // Vérifier s'il y a des modifications non enregistrées
+    // ============================================
+    private async Task<bool> CheckUnsavedChanges()
+    {
+        // Appelle un service pour vérifier l'état du fichier courant
+        // Retourne true si des modifications non enregistrées existent
+        var state = await JSRuntime.InvokeAsync<object>("localStorage.getItem", "gaiaPress_hasUnsavedChanges");
+        return state?.ToString() == "true";
+    }
+
+    // ============================================
+    // Réinitialiser l'état de l'application
+    // ============================================
+    private async Task ResetApplicationState()
+    {
+        // Nettoyer le localStorage
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentFile");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_hasUnsavedChanges");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentChantier");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentForage");
+
+        // Réinitialiser les services injectés si nécessaire
+        // (à faire via un service dédié)
+    }
+
+    // ============================================
+    // Autres méthodes du menu
+    // ============================================
+    private void OpenFile() { /* ... */ Close(); }
+    private void CloseFile() { /* ... */ Close(); }
+    private void SaveFile() { /* ... */ Close(); }
+    private void SaveAsFile() { /* ... */ Close(); }
+
+    private async Task Quit()
+    {
+        Close();
+
+        bool confirm = await JSRuntime.InvokeAsync<bool>("confirm",
+            Loc["ConfirmQuit"] ?? "Voulez-vous vraiment quitter l'application ?");
+
+        if (confirm)
+        {
+            await JSRuntime.InvokeVoidAsync("window.close");
+        }
+    }
+        public void Dispose()
+    {
+        Loc.LanguageChanged -= OnLanguageChanged;
+    }
+    
+
+}

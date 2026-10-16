@@ -1,4 +1,6 @@
-﻿Public Class ClasseListeMesureEssaiForage
+﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
+Public Class ClasseListeMesureEssaiForage
     Public Property ListeMesureEssaiForageSession As New List(Of MesureEssaiForage)
 
     Private _items As List(Of MesureEssaiForage)

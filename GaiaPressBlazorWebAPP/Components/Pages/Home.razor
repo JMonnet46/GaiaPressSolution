@@ -1,7 +1,37 @@
 ﻿@page "/"
+@using GaiaPressBlazorWebAPP.Services
+@implements IDisposable
+@inject LocalizationService Loc
 
-<PageTitle>Home</PageTitle>
+<PageTitle>@Loc["Home"]</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>@Loc["HelloWorldTitle"]</h1>
 
-Welcome to your new app.
+<p>@Loc["HelloWorldDescription"]</p>
+
+<h3>@Loc["HelloWorldFonctionnalite"]</h3>
+
+<ul class="feature-list">
+    <li>@Loc["HelloWorldFeature1"]</li>
+    <li>@Loc["HelloWorldFeature2"]</li>
+    <li>@Loc["HelloWorldFeature3"]</li>
+    <li>@Loc["HelloWorldFeature4"]</li>
+</ul>
+
+<p>
+    @Loc["RequestedPlatform"]<br />
+    @Loc["Version"]<br />
+    @Loc["Languages"]
+</p>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Loc.LanguageChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Loc.LanguageChanged -= StateHasChanged;
+    }
+}

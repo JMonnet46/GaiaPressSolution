@@ -1,76 +1,58 @@
-using GaiaPressBlazorWebAPP.Components;
-using GaiaPressBlazorWebAPP.Components.Account;
-using GaiaPressBlazorWebAPP.Data;
-using GaiaPressCoreV17;
-using GaiaPressSolution.GaiaPressBlazorWebAPP.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using GaiaPressBlazorWebAPP.Components;
+using GaiaPressBlazorWebAPP.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace GaiaPressBlazorWebAPP;
 
-// Enregistrez les classes VB.NET comme services
-builder.Services.AddScoped<GaiaPressCoreV17.ClasseListeEssaiForage>();
-builder.Services.AddScoped<GaiaPressCoreV17.ClasseChantier>();
-builder.Services.AddScoped<GaiaPressCoreV17.Models.Sol>();
-
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-// Necessaire pour que les controleurs API (ForageController) fonctionnent
-builder.Services.AddControllers();
-
-builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped<IdentityUserAccessor>();
-builder.Services.AddScoped<IdentityRedirectManager>();
-builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-
-builder.Services.AddAuthentication(options =>
+public class Program
 {
-    options.DefaultScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-})
-    .AddIdentityCookies();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        // ============================================
+        // SERVICES PERSONNALISÉS - À AJOUTER ICI
+        // ============================================
 
-builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddSignInManager()
-    .AddDefaultTokenProviders();
+        // Service de localisation (déjà existant)
+        builder.Services.AddScoped<LocalizationService>();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+        // Service de gestion des fichiers (localStorage)
+        builder.Services.AddScoped<FileService>();
 
-// Build UNE SEULE FOIS, apres tous les services
-var app = builder.Build();
+        // Service de boîtes de dialogue (confirm, alert, prompt)
+        builder.Services.AddScoped<DialogService>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
+        // ============================================
+        // SERVICES BLAZOR (ne pas modifier)
+        // ============================================
+
+        builder.Services.AddRazorComponents()
+            .AddInteractiveServerComponents();
+
+        var app = builder.Build();
+
+        // ============================================
+        // PIPELINE HTTP (ne pas modifier l'ordre)
+        // ============================================
+
+        // Configure the HTTP request pipeline.
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseExceptionHandler("/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+        }
+
+        app.UseStatusCodePagesWithReExecute("/not-found");
+        app.UseHttpsRedirection();
+
+        app.UseStaticFiles();
+
+        app.UseAntiforgery();
+
+        app.MapRazorComponents<App>()
+            .AddInteractiveServerRenderMode();
+
+        app.Run();
+    }
 }
-else
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-app.UseAntiforgery();
-
-app.MapControllers();
-
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
-
-// Add additional endpoints required by the Identity /Account Razor components.
-app.MapAdditionalIdentityEndpoints();
-
-app.Run();

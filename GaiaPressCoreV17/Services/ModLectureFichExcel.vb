@@ -374,14 +374,14 @@ Namespace GaiaPressCoreV17.Services
         '        XlApp.Visible = False
         '        XlApp.Quit()
 
-        '        ' Mise à jour de la Table "LesEssaisForage"
+        '        ' Mise à jour de la Table "LesEssaiForage"
         '        '<<<<<<< HEAD
-        '        '        FrmEssai.UpDateLesEssaisForage(MyEssaiForage.RefEssai)
+        '        '        FrmEssai.UpDateLesEssaiForage(MyEssaiForage.RefEssai)
 
         '        '        ' Mise à jour de la Table "LesMesuresForages"
         '        '        FrmEssai.UpDateLesMesuresForages(MyEssaiForage.RefEssai)
         '        '=======
-        '        MyFrmEssai.UpDateLesEssaisForage(MyEssaiForage.RefEssai)
+        '        MyFrmEssai.UpDateLesEssaiForage(MyEssaiForage.RefEssai)
 
         '        ' Mise à jour de la Table "LesMesuresForage"
         '        MyFrmEssai.UpDateLesMesuresForage(MyEssaiForage.RefEssai)
@@ -532,14 +532,14 @@ Namespace GaiaPressCoreV17.Services
         '        XlApp.Visible = False
         '        XlApp.Quit()
 
-        '        ' Mise à jour de la Table "LesEssaisForage"
+        '        ' Mise à jour de la Table "LesEssaiForage"
         '        '<<<<<<< HEAD
-        '        '        FrmEssai.UpDateLesEssaisForage(MyEssaiForage.RefEssai)
+        '        '        FrmEssai.UpDateLesEssaiForage(MyEssaiForage.RefEssai)
 
         '        '        ' Mise à jour de la Table "LesMesuresForages"
         '        '        FrmEssai.UpDateLesMesuresForages(MyEssaiForage.RefEssai)
         '        '=======
-        '        MyFrmEssai.UpDateLesEssaisForage(MyEssaiForage.RefEssai)
+        '        MyFrmEssai.UpDateLesEssaiForage(MyEssaiForage.RefEssai)
 
         '        ' Mise à jour de la Table "LesMesuresForage"
         '        MyFrmEssai.UpDateLesMesuresForage(MyEssaiForage.RefEssai)

@@ -2,6 +2,7 @@
 Imports GaiaPressCoreV17.Data
 Imports GaiaPressCoreV17.Controllers
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports Microsoft.EntityFrameworkCore
 
 Namespace GaiaPressCoreV17.Models
@@ -245,14 +246,14 @@ Namespace GaiaPressCoreV17.Models
 
 
         '            ' *********************************************************************
-        '            ' Lecture de la Table "LesEssaisResistance"
+        '            ' Lecture de la Table "LesEssaisResistanceDb"
         '            ' *********************************************************************
         '            'ma requete
         '            Requete = "SELECT refEssai, refSonde, ClassPrecis, nomEssai, dateEssai, difPresEauAir, hauteurCpv, A0, A1, A2, A3" &
-        '                 " FROM LesEssaisResistancePropre"
+        '                 " FROM LesEssaisResistanceDbPropre"
 
         '            'Requete = "SELECT refEssai, refSonde, ClassPrecis, nomEssai, dateEssai, difPresEauAir, hauteurCpv, A0, A1, A2, A3" & _
-        '            '     " FROM LesEssaisResistancePropre"
+        '            '     " FROM LesEssaisResistanceDbPropre"
 
         '            ' Définition de la Commande
 
@@ -261,27 +262,27 @@ Namespace GaiaPressCoreV17.Models
         '            'MaListeSonde.AcceptChanges()
 
         '            ' Nettoyage de MaListeSonde avant le chargement
-        '            MaListeSonde.Tables("LesEssaisResistancePropre")?.Clear()
+        '            MaListeSonde.Tables("LesEssaisResistanceDbPropre")?.Clear()
 
         '            ' rempli le dataset depuis la BD vers la Table "LesSondes" de MaListeSonde
-        '            ' MaListeSonde contient toute la table "LesEssaisResistancePropre"
+        '            ' MaListeSonde contient toute la table "LesEssaisResistanceDbPropre"
 
         '            '' Mise à jour du compteur d'enregistrements
-        '            'ResistanceCount = MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Count
-        '            'ResistanceCountInit = MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Count
+        '            'ResistanceCount = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Count
+        '            'ResistanceCountInit = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Count
 
         '            Select Case Lang
         '                Case 0
-        '                    MsgBox("Reading of the Table 'LesEssaisResistancePropre' suceeded")
+        '                    MsgBox("Reading of the Table 'LesEssaisResistanceDbPropre' suceeded")
         '                Case 1
-        '                    MsgBox("Lecture de la Table 'LesEssaisResistancePropre' réussie")
+        '                    MsgBox("Lecture de la Table 'LesEssaisResistanceDbPropre' réussie")
         '            End Select
 
         '            ' *********************************************************************
-        '            ' Lecture de la Table "LesMesuresResistancePropre"
+        '            ' Lecture de la Table "LesMesuresResistanceDbPropre"
         '            ' *********************************************************************
         '            'ma requete
-        '            Requete = "SELECT Ind, indiceMesure, refEssai, pression, volume FROM LesMesuresResistancePropre "
+        '            Requete = "SELECT Ind, indiceMesure, refEssai, pression, volume FROM LesMesuresResistanceDbPropre "
 
         '            ' Définition de la Commande
 
@@ -290,20 +291,20 @@ Namespace GaiaPressCoreV17.Models
         '            'MaListeSonde.AcceptChanges()
 
         '            ' Nettoyage de MaListeSonde avant le chargement
-        '            MaListeSonde.Tables("LesMesuresResistancePropre")?.Clear()
+        '            MaListeSonde.Tables("LesMesuresResistanceDbPropre")?.Clear()
 
         '            ' rempli le dataset depuis la BD vers la Table "LesSondes" de MaListeSonde
-        '            ' MaListeSonde contient toute la table "LesMesuresResistancePropre"
+        '            ' MaListeSonde contient toute la table "LesMesuresResistanceDbPropre"
 
         '            '' Mise à jour du compteur d'enregistrements
-        '            'MesureResistanceCount = MaListeSonde.Tables("LesMesuresResistancePropre").Rows.Count
-        '            'MesureResistanceCountInit = MaListeSonde.Tables("LesMesuresResistancePropre").Rows.Count
+        '            'MesureResistanceCount = MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows.Count
+        '            'MesureResistanceCountInit = MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows.Count
 
         '            Select Case Lang
         '                Case 0
-        '                    MsgBox("Reading of the Table 'LesMesuresResistancePropre' suceeded")
+        '                    MsgBox("Reading of the Table 'LesMesuresResistanceDbPropre' suceeded")
         '                Case 1
-        '                    MsgBox("Lecture de la Table 'LesMesuresResistancePropre' réussie")
+        '                    MsgBox("Lecture de la Table 'LesMesuresResistanceDbPropre' réussie")
         '            End Select
 
 
@@ -540,19 +541,19 @@ Namespace GaiaPressCoreV17.Models
         '                    RefSonde = MyListeSonde.ListeSonde(i).RefSonde
         '                    'iResistance = 0
 
-        '                    ' On lit toutes les lignes de la Table "LesEssaisResistance" 
+        '                    ' On lit toutes les lignes de la Table "LesEssaisResistanceDb" 
         '                    ' On cherche la premiere occurance de nom Re Essai
         '                    For j = 0 To MyListeSonde.ListeSonde.Count - 1
 
-        '                        ' On cherche les Essais de nom RefProbe dans la table "LesEssaisResistance"
-        '                        Chaine = MaListeSonde.Tables("LesEssaisResistancePropre").Rows(j)(1).ToString
+        '                        ' On cherche les Essais de nom RefProbe dans la table "LesEssaisResistanceDb"
+        '                        Chaine = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(j)(1).ToString
 
         '                        If RefSonde = Chaine Then
 
         '                            ' -------------------- On a trouvé un essai de la meme sonde ---------------------------------------------
         '                            iResistance = iResistance + 1
 
-        '                            RefEssai = MaListeSonde.Tables("LesEssaisResistancePropre").Rows(j)(0).ToString
+        '                            RefEssai = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(j)(0).ToString
 
         '                            '' Vérifier si le tableau Resistance est initialisé
         '                            'If MyListeSonde. ListeSonde(i). Resistance Is Nothing Then
@@ -568,7 +569,7 @@ Namespace GaiaPressCoreV17.Models
         '                            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1) = New EssaiResistance
 
         '                            ' Remplir les propriétés
-        '                            'With MaListeSonde.Tables("LesEssaisResistancePropre")
+        '                            'With MaListeSonde.Tables("LesEssaisResistanceDbPropre")
         '                            '    MyListeSonde. ListeSonde(i). MaResistance(iResistance - 1). refEssai = CStr(.Rows(j)(0))
         '                            '    MyListeSonde. ListeSonde(i). MaResistance(iResistance - 1). refSonde = CStr(.Rows(j)(1))
         '                            '    If Not IsDBNull(.Rows(j)(2)) Then
@@ -621,16 +622,16 @@ Namespace GaiaPressCoreV17.Models
         '                            '    End If
         '                            'End With
 
-        '                            'iMesuresResistance = 0
+        '                            'iMesuresResistanceDb = 0
         '                            '' On charge mes Mesures correspondantes à cet essai RefEssai
         '                            'For k = 0 To MyListeSonde.MesureResistanceCount - 1
 
-        '                            '    ' On cherche les Essais de nom RefEssai dans la table "LesMesuresResistancePropre"
-        '                            '    Chaine2 = MaListeSonde.Tables("LesMesuresResistancePropre").Rows(k)(2).ToString
+        '                            '    ' On cherche les Essais de nom RefEssai dans la table "LesMesuresResistanceDbPropre"
+        '                            '    Chaine2 = MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows(k)(2).ToString
 
         '                            '    If RefEssai = Chaine2 Then
         '                            '        '---------------------  On a trouvé un essai de la même RefEssai  -----------------------
-        '                            '        iMesuresResistance = iMesuresResistance + 1
+        '                            '        iMesuresResistanceDb = iMesuresResistanceDb + 1
 
         '                            '        '' Vérifier si le tableau Resistance est initialisé
         '                            '        'If MyListeSonde. ListeSonde(i). Resistance Is Nothing Then
@@ -643,31 +644,31 @@ Namespace GaiaPressCoreV17.Models
         '                            '        End If
 
         '                            '        '' Redimensionner le tableau Mesures
-        '                            '        'ReDim Preserve MyListeSonde. ListeSonde(i). Resistance(iResistance - 1). Mesures(2, iMesuresResistance)
+        '                            '        'ReDim Preserve MyListeSonde. ListeSonde(i). Resistance(iResistance - 1). Mesures(2, iMesuresResistanceDb)
 
         '                            '        '    ' Instancier l'objet Resistance(iResistance)
-        '                            '        '    '   MyListeSonde. ListeSonde(i). Resistance(iResistance).Mesures(2, iMesuresResistance) = New Mesure
-        '                            '        With MaListeSonde.Tables("LesMesuresResistancePropre")
+        '                            '        '    '   MyListeSonde. ListeSonde(i). Resistance(iResistance).Mesures(2, iMesuresResistanceDb) = New Mesure
+        '                            '        With MaListeSonde.Tables("LesMesuresResistanceDbPropre")
         '                            '            ' Colonne 0 désigne le numéro du chargement
 
-        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(0, iMesuresResistance - 1) = iMesuresResistance
+        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(0, iMesuresResistanceDb - 1) = iMesuresResistanceDb
         '                            '            ' Colonne 1 désigne la pression
         '                            '            If Not IsDBNull(.Rows(j)(3)) Then
-        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(1, iMesuresResistance - 1) = CDbl(.Rows(k)(3))
+        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(1, iMesuresResistanceDb - 1) = CDbl(.Rows(k)(3))
         '                            '            Else
-        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(1, iMesuresResistance - 1) = 0
+        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(1, iMesuresResistanceDb - 1) = 0
         '                            '            End If
 
         '                            '            ' Colonne 2 désigne le volume
         '                            '            If Not IsDBNull(.Rows(j)(4)) Then
-        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(2, iMesuresResistance - 1) = CDbl(.Rows(k)(4))
+        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(2, iMesuresResistanceDb - 1) = CDbl(.Rows(k)(4))
         '                            '            Else
-        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(2, iMesuresResistance - 1) = 0
+        '                            '                'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(2, iMesuresResistanceDb - 1) = 0
 
         '                            '            End If
-        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(0, iMesuresResistance - 1) = CStr(.Rows(iMesuresResistance - 1)(0))
-        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(1, iMesuresResistance - 1) = CStr(.Rows(iMesuresResistance - 1)(1))
-        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(2, iMesuresResistance - 1) = CStr(.Rows(iMesuresResistance - 1)(2))                              End With
+        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(0, iMesuresResistanceDb - 1) = CStr(.Rows(iMesuresResistanceDb - 1)(0))
+        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(1, iMesuresResistanceDb - 1) = CStr(.Rows(iMesuresResistanceDb - 1)(1))
+        '                            '            'MyListeSonde. ListeSonde(i). Resistance(iResistance - 1).Mesures(2, iMesuresResistanceDb - 1) = CStr(.Rows(iMesuresResistanceDb - 1)(2))                              End With
         '                            '        End With
 
         '                            '    End If ' Fin du If RefEssai = Chaine2 Then
@@ -691,14 +692,14 @@ Namespace GaiaPressCoreV17.Models
         '            IsSaved = True
 
         '            ' Vérification initiale
-        '            ' Vérification de MaListeSonde.Tables("LesEssaisResistancePropre")
-        '            With MaListeSonde.Tables("LesEssaisResistancePropre")
+        '            ' Vérification de MaListeSonde.Tables("LesEssaisResistanceDbPropre")
+        '            With MaListeSonde.Tables("LesEssaisResistanceDbPropre")
         '                For i1 = 0 To .Rows.Count - 1
-        '                    Debug.WriteLine("ClasseListeSonde - LesEssaisResistancePropre Init i = " & i & " RefEssai = " & .Rows(i1).Item("RefEssai").ToString)
+        '                    Debug.WriteLine("ClasseListeSonde - LesEssaisResistanceDbPropre Init i = " & i & " RefEssai = " & .Rows(i1).Item("RefEssai").ToString)
         '                Next i1
         '            End With
 
-        '            ' Vérification de MyListeSonde.Tables("LesEssaisForage")
+        '            ' Vérification de MyListeSonde.Tables("LesEssaiForage")
         '            refSondes.Clear()
         '            For i1 = 0 To MyListeSonde.ListeSonde.Count - 1
         '                RowSonde = MyListeSonde.ListeSonde(i1)
@@ -1152,7 +1153,7 @@ errFind:
                 Case 0 ' Expansion
                     NbEssai = MaListeSonde.Tables("LesEssaisExpansionPropre").Rows.Count
                 Case 1 ' Resistance
-                    NbEssai = MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Count
+                    NbEssai = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Count
             End Select
 
             ' Lecture des références de chaque essai dans la liste des Esais
@@ -1165,8 +1166,8 @@ errFind:
                             If Not (unique) Then Exit For
                         End If
                     Case 1 ' Resistance
-                        If MaListeSonde.Tables("LesEssaisResistancePropre").Rows(i).RowState <> DataRowState.Deleted Then
-                            RefEssaiCourant = MaListeSonde.Tables("LesEssaisResistancePropre").Rows(i).Item("refEssai").ToString
+                        If MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(i).RowState <> DataRowState.Deleted Then
+                            RefEssaiCourant = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(i).Item("refEssai").ToString
                             unique = (RefEssaiCourant <> ref)
                             If Not (unique) Then Exit For
                         End If
@@ -1189,7 +1190,7 @@ errFind:
                 Case 0 ' Expansion
                     NbEssai = MaListeSonde.Tables("LesEssaisExpansionPropre").Rows.Count
                 Case 1 ' Resistance
-                    NbEssai = MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Count
+                    NbEssai = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Count
             End Select
 
             ' Lecture des références de chaque essai dans la liste des Esais
@@ -1202,8 +1203,8 @@ errFind:
                             If Not (unique) Then Exit For
                         End If
                     Case 1 ' Resistance
-                        If MaListeSonde.Tables("LesEssaisResistancePropre").Rows(i).RowState <> DataRowState.Deleted Then
-                            NomEssaiCourant = MaListeSonde.Tables("LesEssaisResistancePropre").Rows(i).Item("NomEssai").ToString
+                        If MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(i).RowState <> DataRowState.Deleted Then
+                            NomEssaiCourant = MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows(i).Item("NomEssai").ToString
                             unique = (NomEssaiCourant <> Nom)
                             If Not (unique) Then Exit For
                         End If

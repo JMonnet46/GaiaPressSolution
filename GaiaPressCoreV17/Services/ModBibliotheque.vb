@@ -214,7 +214,7 @@ Namespace GaiaPressCoreV17.Services
         Public MyChantier As New Chantier
         Public MyListeChantierSession As List(Of Chantier)
         Public MesSondes As New DataSet
-        Public ObjetDataLesChantiers As New System.Data.DataTable
+        Public ObjetDataLesChantiersDb As New System.Data.DataTable
         Public ObjetDataLesForages As New System.Data.DataTable
         Public ObjetDataEssai As New System.Data.DataTable
         Public ObjetDataMesures As New System.Data.DataTable
@@ -243,8 +243,8 @@ Namespace GaiaPressCoreV17.Services
         Public MyListeSondeSession As List(Of Probe)
         Public MaListeSonde As New DataSet
         Public ObjetDataListeSonde As New System.Data.DataTable
-        Public ObjetDataLesEssaisResistancePropre As New System.Data.DataTable
-        Public ObjetDataLesMesuresResistancePropre As New System.Data.DataTable
+        Public ObjetDataLesEssaisResistanceDbPropre As New System.Data.DataTable
+        Public ObjetDataLesMesuresResistanceDbPropre As New System.Data.DataTable
         Public ObjetDataLesEssaisExpansionPropre As New System.Data.DataTable
         Public ObjetDataLesMesuresExpansionPropre As New System.Data.DataTable
         Public MyListeSondeCount As Integer

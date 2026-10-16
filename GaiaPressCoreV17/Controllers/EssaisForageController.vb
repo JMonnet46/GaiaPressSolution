@@ -10,7 +10,7 @@ Namespace GaiaPressCoreV17.Controllers
 
     <ApiController>
     <Route("api/[controller]")>
-    Public Class EssaisForageController
+    Public Class EssaiForageController
         Inherits ControllerBase
 
         Public ReadOnly _dbContext As GaiaPressDbContext
@@ -23,7 +23,7 @@ Namespace GaiaPressCoreV17.Controllers
         ''' Récupère tous les essais de forage.
         ''' </summary>
         <HttpGet>
-        Public Async Function GetAllEssaisForages() As Task(Of IActionResult)
+        Public Async Function GetAllEssaiForages() As Task(Of IActionResult)
             Try
                 ' ✅ Correction: Utilisation de ToListAsync avec CancellationToken
                 Dim essais = Await _dbContext.ListeEssaiForageDb.ToListAsync(CancellationToken.None)

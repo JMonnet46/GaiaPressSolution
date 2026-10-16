@@ -142,10 +142,10 @@ Namespace GaiaPressCoreV17.Controllers
         <HttpGet("ByChantier/{chantierId}")>
         Public Async Function GetSondesByChantier(chantierId As String) As Task(Of IActionResult)
             Try
-                'Dim chantier = Await _context.LesChantierss
+                'Dim chantier = Await _context.LesChantiersDbs
                 '.Include(Function(c) c. ListSondes)
                 '.FirstOrDefaultAsync(Function(c) c. refChantier = chantierId)
-                Dim chantier = Await _context.LesChantiers _
+                Dim chantier = Await _context.LesChantiersDb _
                 .Include(Function(c) c.ListSondes) _
                 .FirstOrDefaultAsync(Function(c) c.refChantier = chantierId)
 
@@ -213,7 +213,7 @@ Namespace GaiaPressCoreV17.Controllers
         ''' GET: api/sonde/{id}/resistance
         ''' </summary>
         <HttpGet("{id}/resistance")>
-        Public Async Function GetEssaisResistance(id As String) As Task(Of IActionResult)
+        Public Async Function GetEssaisResistanceDb(id As String) As Task(Of IActionResult)
             Try
                 ' Vérifier si la sonde existe
                 Dim sonde = Await _context.ListeSondeDb.FirstOrDefaultAsync(Function(s) s.RefSonde = id)

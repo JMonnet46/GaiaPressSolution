@@ -240,7 +240,7 @@ Namespace GaiaPressCoreV17.Services
                 {"operateur", operateur},
                 {"enregistreur", enregistreur}
             }
-            Return InsertRow("LesEssaisForages", values)
+            Return InsertRow("LesEssaiForages", values)
         End Function
 
         ''' <summary>
@@ -254,14 +254,14 @@ Namespace GaiaPressCoreV17.Services
                 {"heureEssai", heureEssai},
                 {"operateur", operateur}
             }
-            Return UpdateRowByRef("LesEssaisForages", "refEssai", refEssai, values)
+            Return UpdateRowByRef("LesEssaiForages", "refEssai", refEssai, values)
         End Function
 
         ''' <summary>
         ''' Supprime un essai de forage
         ''' </summary>
         Public Function DeleteEssaiForage(refEssai As String) As Boolean
-            Return DeleteRowByRef("LesEssaisForages", "refEssai", refEssai)
+            Return DeleteRowByRef("LesEssaiForages", "refEssai", refEssai)
         End Function
 
         ''' <summary>
@@ -510,7 +510,7 @@ Namespace GaiaPressCoreV17.Services
                 {"a2", a2},
                 {"a3", a3}
             }
-            Return InsertRow("LesEssaisResistancePropre", values)
+            Return InsertRow("LesEssaisResistanceDbPropre", values)
         End Function
 
         ''' <summary>
@@ -527,14 +527,14 @@ Namespace GaiaPressCoreV17.Services
                 {"cohesion", cohesion},
                 {"frottement", frottement}
             }
-            Return UpdateRowByRef("LesEssaisResistancePropre", "refEssai", refEssai, values)
+            Return UpdateRowByRef("LesEssaisResistanceDbPropre", "refEssai", refEssai, values)
         End Function
 
         ''' <summary>
         ''' Supprime un essai de résistance
         ''' </summary>
         Public Function DeleteEssaiResistance(refEssai As String) As Boolean
-            Return DeleteRowByRef("LesEssaisResistancePropre", "refEssai", refEssai)
+            Return DeleteRowByRef("LesEssaisResistanceDbPropre", "refEssai", refEssai)
         End Function
 
         ''' <summary>
@@ -553,7 +553,7 @@ Namespace GaiaPressCoreV17.Services
                 {"contrainteVerticale", contrainteVerticale},
                 {"deformation", deformation}
             }
-            Return InsertRow("LesMesuresResistancePropre", values)
+            Return InsertRow("LesMesuresResistanceDbPropre", values)
         End Function
 
         ''' <summary>
@@ -565,7 +565,7 @@ Namespace GaiaPressCoreV17.Services
                                                deformation As Single) As Boolean
             Try
                 Using connection As New SqlConnection(_connectionString)
-                    Dim query As String = "UPDATE [LesMesuresResistancePropre] SET [pression]=@pression, [volume]=@volume, [contrainteRadiale]=@contrainteRadiale, [contrainteVerticale]=@contrainteVerticale, [deformation]=@deformation WHERE [refEssai]=@refEssai AND [indiceMesure]=@indiceMesure"
+                    Dim query As String = "UPDATE [LesMesuresResistanceDbPropre] SET [pression]=@pression, [volume]=@volume, [contrainteRadiale]=@contrainteRadiale, [contrainteVerticale]=@contrainteVerticale, [deformation]=@deformation WHERE [refEssai]=@refEssai AND [indiceMesure]=@indiceMesure"
                     Dim command As New SqlCommand(query, connection)
                     command.Parameters.AddWithValue("@refEssai", refEssai)
                     command.Parameters.AddWithValue("@indiceMesure", indiceMesure)
@@ -590,7 +590,7 @@ Namespace GaiaPressCoreV17.Services
         Public Function DeleteMesureResistance(refEssai As String, indiceMesure As Integer) As Boolean
             Try
                 Using connection As New SqlConnection(_connectionString)
-                    Dim query As String = "DELETE FROM [LesMesuresResistancePropre] WHERE [refEssai]=@refEssai AND [indiceMesure]=@indiceMesure"
+                    Dim query As String = "DELETE FROM [LesMesuresResistanceDbPropre] WHERE [refEssai]=@refEssai AND [indiceMesure]=@indiceMesure"
                     Dim command As New SqlCommand(query, connection)
                     command.Parameters.AddWithValue("@refEssai", refEssai)
                     command.Parameters.AddWithValue("@indiceMesure", indiceMesure)

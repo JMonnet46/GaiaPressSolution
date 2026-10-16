@@ -1,4 +1,4 @@
 <Solution>
+  <Project Path="GaiaPressBlazorWebAPP/GaiaPressBlazorWebAPP.csproj" />
   <Project Path="GaiaPressCoreV17/GaiaPressCoreV17.vbproj" />
-  <Project Path="GaiaPressSolution.csproj" />
 </Solution>

@@ -1,7 +1,4 @@
-﻿Imports Microsoft.AspNetCore.Mvc
-Imports Microsoft.EntityFrameworkCore
-Imports GaiaPressCoreV17
-Imports System.Threading
+﻿Imports System.Math
 
 Namespace GaiaPressCoreV17.Services
     Module ModMath

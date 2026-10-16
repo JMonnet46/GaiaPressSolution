@@ -138,7 +138,7 @@ Namespace GaiaPressCoreV17.Controllers
         Public Async Function GetSolsByChantier(chantierId As String) As Task(Of IActionResult)
             Try
                 ' ✅ Syntaxe correcte pour votre modèle ( ListSols,  refChantier)
-                Dim chantier = Await _context.LesChantiers _
+                Dim chantier = Await _context.LesChantiersDb _
                 .Include(Function(c) c.ListSols) _
                 .FirstOrDefaultAsync(Function(c) c.refChantier = chantierId)
 

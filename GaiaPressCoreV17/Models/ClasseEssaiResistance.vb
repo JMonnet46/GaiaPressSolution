@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports System.Data
 
 Namespace GaiaPressCoreV17.Models
@@ -33,15 +34,15 @@ Namespace GaiaPressCoreV17.Models
         Public Overridable Property MySonde As Probe
 
         <InverseProperty("EssaiResistance")>
-        Public Overridable Property MesuresResistance As New List(Of MesureResistance)
+        Public Overridable Property MesuresResistanceDb As New List(Of MesureResistance)
 
         Public ReadOnly Property Mesures As List(Of MesureResistance)
             Get
-                Return MesuresResistance
+                Return MesuresResistanceDb
             End Get
         End Property
 
-        'Public Overridable Property MesuresResistance As ICollection(Of MesureResistance) = New List(Of MesureResistance)
+        'Public Overridable Property MesuresResistanceDb As ICollection(Of MesureResistance) = New List(Of MesureResistance)
 
         Public Sub New()
             dateEssai = Date.Today.ToString("yyyy-MM-dd")
@@ -96,16 +97,16 @@ Namespace GaiaPressCoreV17.Models
         End Function
 
         Public Function GetMesureCount() As Integer
-            GetMesureCount = MesuresResistance.Count
+            GetMesureCount = MesuresResistanceDb.Count
         End Function
 
         Public Function GetMesures(Ligne As Integer, colonne As Integer) As Single
             Select Case colonne
-                Case 0 : GetMesures = MesuresResistance(Ligne).Ind
-                Case 1 : GetMesures = MesuresResistance(Ligne).RefEssai
-                Case 2 : GetMesures = MesuresResistance(Ligne).IndiceMesure
-                Case 3 : GetMesures = MesuresResistance(Ligne).Pression
-                Case 4 : GetMesures = MesuresResistance(Ligne).Volume
+                Case 0 : GetMesures = MesuresResistanceDb(Ligne).Ind
+                Case 1 : GetMesures = MesuresResistanceDb(Ligne).RefEssai
+                Case 2 : GetMesures = MesuresResistanceDb(Ligne).IndiceMesure
+                Case 3 : GetMesures = MesuresResistanceDb(Ligne).Pression
+                Case 4 : GetMesures = MesuresResistanceDb(Ligne).Volume
             End Select
         End Function
 
@@ -145,7 +146,7 @@ Namespace GaiaPressCoreV17.Models
         End Sub
 
         Public Sub SetMesureCount(ByVal Count As Integer)
-            MesureCount = MesuresResistance.Count
+            MesureCount = MesuresResistanceDb.Count
             Call IHaveBeenModified()
         End Sub
 
@@ -188,8 +189,8 @@ Namespace GaiaPressCoreV17.Models
         .Pression = pression,
         .Volume = volume
     }
-            MesuresResistance.Add(newMesure)
-            MesureCount = MesuresResistance.Count
+            MesuresResistanceDb.Add(newMesure)
+            MesureCount = MesuresResistanceDb.Count
         End Sub
 
         ' ============================================================
@@ -213,10 +214,10 @@ Namespace GaiaPressCoreV17.Models
         '     A3 = 0
         '    setResistanceNouvelleMesure(0, 0, 0)
 
-        '    If Table Then ' On ajoute un essai à MonFichier.Tables("LesEssaisResistancePropre") seulement si Table est vrai
-        '        If MonChantier.Tables("LesEssaisResistancePropre") Is Nothing Then
-        '            MonChantier.Tables.Add("LesEssaisResistancePropre")
-        '            With MonChantier.Tables("LesEssaisResistancePropre")
+        '    If Table Then ' On ajoute un essai à MonFichier.Tables("LesEssaisResistanceDbPropre") seulement si Table est vrai
+        '        If MonChantier.Tables("LesEssaisResistanceDbPropre") Is Nothing Then
+        '            MonChantier.Tables.Add("LesEssaisResistanceDbPropre")
+        '            With MonChantier.Tables("LesEssaisResistanceDbPropre")
         '                .Columns.Add("refEssai", GetType(String))
         '                .Columns.Add("refSonde", GetType(String))
         '                .Columns.Add("nomEssai", GetType(String))
@@ -230,17 +231,17 @@ Namespace GaiaPressCoreV17.Models
         '                .Columns.Add("a3", GetType(String))
         '            End With
         '        Else
-        '            ' Ajout d'une ligne à la Table "LesEssaisForage"
-        '            ObjetDataRow = MaListeSonde.Tables("LesEssaisResistancePropre").NewRow()
+        '            ' Ajout d'une ligne à la Table "LesEssaiForage"
+        '            ObjetDataRow = MaListeSonde.Tables("LesEssaisResistanceDbPropre").NewRow()
 
         '            ObjetDataRow("refEssai") = MySonde.GiveMeANewRefEssai(EssaiCalib.Resistance)
         '            ObjetDataRow("refSonde") = MySonde.refSonde
         '            MyResistance. RefEssai = ObjetDataRow("refEssai").ToString
 
-        '            MaListeSonde.Tables("LesEssaisResistancePropre").Rows.Add(ObjetDataRow)
+        '            MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Add(ObjetDataRow)
 
 
-        '            'MonChantier.Tables("LesEssaisResistancePropre").Rows.Add()
+        '            'MonChantier.Tables("LesEssaisResistanceDbPropre").Rows.Add()
         '        End If
         '    End If
 
@@ -251,7 +252,7 @@ Namespace GaiaPressCoreV17.Models
         ' =========================================================
 
         '' **********************************************************************************
-        '' Affiche les MesuresResistances dans DgridResistance de FrmSonde
+        '' Affiche les MesuresResistanceDbs dans DgridResistance de FrmSonde
         '' **********************************************************************************
         'Public Sub AfficheMesuresDansTab(ByRef Table As DataGridView, ByVal RefEssaiResistance As String)
         '    Dim i As Integer
@@ -260,15 +261,15 @@ Namespace GaiaPressCoreV17.Models
         '    ' Remplissage du Tableau
 
         '    Table.Rows.Clear()
-        '    If MesuresResistance.Count = 0 Then
+        '    If MesuresResistanceDb.Count = 0 Then
         '        ' Création du nouveau tableau si mesurecount est nul
         '        Me.MyResistanceNouvelleMesure(0, 0, 0)
         '    End If
-        '    For i = 0 To MesuresResistance.Count - 1
+        '    For i = 0 To MesuresResistanceDb.Count - 1
         '        With Table
         '            .Rows.Add()
-        '            pression = MesuresResistance(0).Pression
-        '            volume = MesuresResistance(0).Volume60
+        '            pression = MesuresResistanceDb(0).Pression
+        '            volume = MesuresResistanceDb(0).Volume60
         '            'Me.MyResistanceNouvelleMesure(i, pression, volume)
         '            .Rows(i).Cells(0).Value = pression
         '            .Rows(i).Cells(1).Value = volume
@@ -277,30 +278,30 @@ Namespace GaiaPressCoreV17.Models
         'End Sub
 
         ' ********************************************************************************
-        ' Enregistre les Mesuresresistance depuis Table
+        ' Enregistre les MesuresResistanceDb depuis Table
         ' ********************************************************************************
         'Public Sub AfficheMesuresDepuisTab(ByRef Table As DataGridView)
         '    Dim i, NbRow As Integer
 
 
         '    NbRow = Table.Rows.Count
-        '     MesureCount = MesuresResistance.Count - 1
+        '     MesureCount = MesuresResistanceDb.Count - 1
 
         '    ' Remplissage du Tableau
         '    For i = 0 To NbRow - 1
         '        With Table
-        '            MesuresResistance(i).Pression = .Rows(i).Cells(0).Value
-        '            MesuresResistance(i).Volume60 = .Rows(i).Cells(1).Value
+        '            MesuresResistanceDb(i).Pression = .Rows(i).Cells(0).Value
+        '            MesuresResistanceDb(i).Volume60 = .Rows(i).Cells(1).Value
         '        End With
         '    Next
         'End Sub
 
         ' *************************************************************************************************************************
-        ' Ajour d'une nouvelle mesure à la Table "LesMesuresResistancePropre"
+        ' Ajour d'une nouvelle mesure à la Table "LesMesuresResistanceDbPropre"
         ' si Table est Faux, il faut créer la Table, sinon on la remplit avec une nouvelle ligne de mesure
         ' *************************************************************************************************************************
 
-        Public Sub LesMesuresResistancePropreNouvelleMesure(ByVal Table As Boolean, ByVal Reference As String, ByVal Indice As Integer, ByVal pression As Single, ByVal Volume As Single)
+        Public Sub LesMesuresResistanceDbPropreNouvelleMesure(ByVal Table As Boolean, ByVal Reference As String, ByVal Indice As Integer, ByVal pression As Single, ByVal Volume As Single)
             Dim NbCount As Integer
             Dim NewLine As Boolean
 
@@ -313,24 +314,24 @@ Namespace GaiaPressCoreV17.Models
             End If
 
             ' La Table existe, on peut la remplir
-            If MaListeSonde.Tables("LesMesuresResistancePropre") Is Nothing Then
+            If MaListeSonde.Tables("LesMesuresResistanceDbPropre") Is Nothing Then
                 Select Case Lang
                     Case 0
-                        MsgBox("Table 'LesMesuresResistancePropre' is not created")
+                        MsgBox("Table 'LesMesuresResistanceDbPropre' is not created")
                     Case 1
-                        MsgBox("La Table 'LesMesuresResistancePropre' n'existe pas")
+                        MsgBox("La Table 'LesMesuresResistanceDbPropre' n'existe pas")
                 End Select
                 Exit Sub
             End If
 
-            ' Ajout d'une ligne à la Table "LesMesuresResistancePropre"
+            ' Ajout d'une ligne à la Table "LesMesuresResistanceDbPropre"
             'Reference = MySonde.GiveMeANewRefEssai(EssaiCalib.Resistance)
             Reference = MyResistance.RefEssai
-            MaListeSonde.Tables("LesMesuresResistancePropre").Rows.Add(Reference, Indice, 0, 0)
-            'MonChantier.Tables("LesMesuresResistancePropre").Rows.Add()
+            MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows.Add(Reference, Indice, 0, 0)
+            'MonChantier.Tables("LesMesuresResistanceDbPropre").Rows.Add()
 
             ' Remplissage des nouvelles Valeurss
-            With MaListeSonde.Tables("LesMesuresResistancePropre")
+            With MaListeSonde.Tables("LesMesuresResistanceDbPropre")
                 NbCount = .Rows.Count
                 If NewLine Then
                     ' Ajout d'une nouvelle ligne de mesure
@@ -358,28 +359,28 @@ Namespace GaiaPressCoreV17.Models
             If MyResistance Is Nothing Then Exit Sub
 
             With MyResistance
-                If .MesuresResistance Is Nothing Then
-                    .MesuresResistance = New List(Of MesureResistance)
+                If .MesuresResistanceDb Is Nothing Then
+                    .MesuresResistanceDb = New List(Of MesureResistance)
                 End If
 
                 ' Autoriser une modification ou un ajout en fin de liste.
-                If Indice < 0 OrElse Indice > .MesuresResistance.Count Then
+                If Indice < 0 OrElse Indice > .MesuresResistanceDb.Count Then
                     Exit Sub
                 End If
 
-                If Indice = .MesuresResistance.Count Then
+                If Indice = .MesuresResistanceDb.Count Then
                     ' Ajout d'une nouvelle mesure.
-                    .MesuresResistance.Add(New MesureResistance With {
+                    .MesuresResistanceDb.Add(New MesureResistance With {
                 .Pression = pression,
                 .Volume = Volume
             })
                 Else
                     ' Modification de la mesure à l'indice demandé.
-                    .MesuresResistance(Indice).Pression = pression
-                    .MesuresResistance(Indice).Volume = Volume
+                    .MesuresResistanceDb(Indice).Pression = pression
+                    .MesuresResistanceDb(Indice).Volume = Volume
                 End If
 
-                MesureCount = .MesuresResistance.Count
+                MesureCount = .MesuresResistanceDb.Count
             End With
 
             Call IHaveBeenModified()
@@ -567,15 +568,15 @@ Namespace GaiaPressCoreV17.Models
             Dim MesureCount As Integer
 
             ' Dimensionnement des deux tableaux de mesures à passer à RegPolynome
-            MesureCount = MyResistance.MesuresResistance.Count
+            MesureCount = MyResistance.MesuresResistanceDb.Count
             ReDim x(MesureCount - 1)
             ReDim Y(MesureCount - 1)
 
             ' Remplissage des tableaux avec les mesures
             Dim i As Integer
             For i = 0 To MesureCount - 1
-                x(i) = MyResistance.MesuresResistance(i).Pression
-                Y(i) = MyResistance.MesuresResistance(i).Volume
+                x(i) = MyResistance.MesuresResistanceDb(i).Pression
+                Y(i) = MyResistance.MesuresResistanceDb(i).Volume
             Next
 
             poly = RegPolynome(MesureCount, x, Y, 3)
@@ -591,7 +592,7 @@ Namespace GaiaPressCoreV17.Models
 
             '' Mise à jour de MySonde.Resistance(ind)
             'With MySonde
-            '    For i = 0 To MyResistance.MesuresResistance.Count - 1
+            '    For i = 0 To MyResistance.MesuresResistanceDb.Count - 1
             '        If .Resistance(i).RefEssai = MyResistance.RefEssai Then
             '            .Resistance(i) = MyResistance.MesureResistance(i)
             '        End If
@@ -602,7 +603,7 @@ Namespace GaiaPressCoreV17.Models
         End Sub
 
         ' *******************************************************************************************************
-        ' Charge les Mesures depuis MaListeSonde.Tables("LesMesuresResistancePropre") vers MyResistance.Mesures
+        ' Charge les Mesures depuis MaListeSonde.Tables("LesMesuresResistanceDbPropre") vers MyResistance.Mesures
         ' *******************************************************************************************************
         Public Sub ChargeMesures(ByVal ReferenceEssai As String)
             Dim j, k As Integer
@@ -612,17 +613,17 @@ Namespace GaiaPressCoreV17.Models
             MesureCount = 0
             k = 0
             If MyResistance Is Nothing Then MyResistance = New EssaiResistance
-            For j = 0 To MaListeSonde.Tables("LesMesuresResistancePropre").Rows.Count - 1
-                If MaListeSonde.Tables("LesMesuresResistancePropre").Rows(j).RowState <> DataRowState.Deleted Then
-                    If ReferenceEssai = MaListeSonde.Tables("LesMesuresResistancePropre").Rows(j).Item("RefEssai").ToString Then
-                        'And MesureCount = Valeurs(MaListeSonde.Tables("LesMesuresResistancePropre").Rows(j).Item("indiceMesure").ToString) Then
+            For j = 0 To MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows.Count - 1
+                If MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows(j).RowState <> DataRowState.Deleted Then
+                    If ReferenceEssai = MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows(j).Item("RefEssai").ToString Then
+                        'And MesureCount = Valeurs(MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows(j).Item("indiceMesure").ToString) Then
                         ' Nouvel essai
 
                         ' Chargement des attributs de l'objet depuis la base de données
                         With Me
-                            champ = MaListeSonde.Tables("LesMesuresResistancePropre").Rows(j).Item("pression").ToString
+                            champ = MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows(j).Item("pression").ToString
                             Pression = Valeurs(champ)
-                            champ = MaListeSonde.Tables("LesMesuresResistancePropre").Rows(j).Item("volume").ToString
+                            champ = MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows(j).Item("volume").ToString
                             Volume = Valeurs(champ)
 
                             ' Création et enregistrement des mesures dans MyResistanceMesures
@@ -651,7 +652,7 @@ Namespace GaiaPressCoreV17.Models
 
 
         ' *******************************************************************************
-        ' Ajoute une nouvelle ligne à MaListeSonde.Tables("LesMesuresResistancePropre")
+        ' Ajoute une nouvelle ligne à MaListeSonde.Tables("LesMesuresResistanceDbPropre")
         ' Ajoute une nouvelle ligne à MyResistance.Mesures
         ' *******************************************************************************
         Public Sub AddMesures(ByVal Ref As String, ByVal IndMesure As Integer, ByVal Pression As Single, ByVal Volume As Single)
@@ -665,7 +666,7 @@ Namespace GaiaPressCoreV17.Models
             ' 2. Ajouter à la liste (pas besoin de ReDim !)
             Mesures.Add(nouvelleMesure)
 
-            ' 3. Ajouter une ligne dans la Table "LesMesuresResistancePropre"
+            ' 3. Ajouter une ligne dans la Table "LesMesuresResistanceDbPropre"
             With MaListeSonde.Tables(3)
                 .Rows.Add(.Rows.Count - 1, IndMesure, Pression, Volume)
             End With
@@ -674,7 +675,7 @@ Namespace GaiaPressCoreV17.Models
             Call IHaveBeenModified()
         End Sub
 
-        Public Sub AddMesuresResistance(ByVal Ref As String, ByVal IndMesure As Integer, ByVal Pression As Single, ByVal Volume As Single) ' i est le nombre de mesures à ajouter
+        Public Sub AddMesuresResistanceDb(ByVal Ref As String, ByVal IndMesure As Integer, ByVal Pression As Single, ByVal Volume As Single) ' i est le nombre de mesures à ajouter
 
             ' Ajout d'une ligne dans le Tableau Mesures
             MesureCount = MesureCount + 1
@@ -692,16 +693,16 @@ Namespace GaiaPressCoreV17.Models
                           ByVal Volume As Single)
 
             ' Vérification de la table.
-            If ObjetDataLesMesuresResistancePropre Is Nothing Then Exit Sub
+            If ObjetDataLesMesuresResistanceDbPropre Is Nothing Then Exit Sub
 
             ' IndMesure est la position de la ligne, à partir de zéro.
             If IndMesure < 0 OrElse
-       IndMesure >= ObjetDataLesMesuresResistancePropre.Rows.Count Then
+       IndMesure >= ObjetDataLesMesuresResistanceDbPropre.Rows.Count Then
                 Exit Sub
             End If
 
             ' Suppression de la ligne dans la table.
-            ObjetDataLesMesuresResistancePropre.Rows.RemoveAt(IndMesure)
+            ObjetDataLesMesuresResistanceDbPropre.Rows.RemoveAt(IndMesure)
 
             ' Notification de la modification.
             Call IHaveBeenModified()

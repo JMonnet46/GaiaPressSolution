@@ -7,6 +7,7 @@ Imports GaiaPressCoreV17.Data
 Imports GaiaPressCoreV17.Models.Dto ' ← IMPORT CRUCIAL POUR Dto.PrecisionElastDto
 Imports GaiaPressCoreV17.Models
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
 Imports Microsoft.EntityFrameworkCore
 
 ''' <summary>

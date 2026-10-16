@@ -1,4 +1,6 @@
-﻿Public Class ClasseListeMesureResistance
+﻿Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Logic
+Public Class ClasseListeMesureResistance
 
     Private _items As List(Of MesureResistance)
 
