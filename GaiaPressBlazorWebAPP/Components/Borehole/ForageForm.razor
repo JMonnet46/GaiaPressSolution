@@ -1,22 +1,145 @@
-﻿namespace GaiaPressBlazorWebAPP.Services;
+﻿@page "/ForageForm/{RefForage?}"
+@using GaiaPressCoreV17.Models
+@using GaiaPressBlazorWebAPP.Services
+@inject LocalizationService Loc
+@inject IForageService ForageService
+@inject NavigationManager NavigationManager
+@using ForageModel = GaiaPressCoreV17.Models.Forage
+<PageTitle>@Loc["Borehole"]</PageTitle>
 
-/// <summary>
-/// Holds the currently selected construction-site reference for the Blazor Server circuit.
-///
-</summary>
-public sealed class ChantierState
+<h1>@Loc["Borehole"]</h1>
+
+@if (CurrentForage == null)
 {
-public string? RefChantier { get; private set; }
-
-public event Action? OnChange;
-
-public void SetChantier(string? refChantier)
-{
-var normalized = string.IsNullOrWhiteSpace(refChantier) ? null : refChantier.Trim();
-if (string.Equals(RefChantier, normalized, StringComparison.Ordinal))
-return;
-
-RefChantier = normalized;
-OnChange?.Invoke();
+    <p><em>@Loc["Loading"]</em></p>
 }
+else
+{
+    <EditForm Model="@CurrentForage" OnValidSubmit="@SaveForage">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+                @Loc["Identification"]
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["BoreholeReference"]</label>
+                        <InputText class="form-control" @bind-Value="CurrentForage.RefForage" readonly="@(!string.IsNullOrEmpty(RefForage))" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["BoreholeNumber"]</label>
+                        <InputNumber class="form-control" @bind-Value="CurrentForage.numeroForage" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["BoreholeName"]</label>
+                        <InputText class="form-control" @bind-Value="CurrentForage.NomForage" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["BoreholeDate"]</label>
+                        <InputDate class="form-control" @bind-Value="CurrentForage.dateForage" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["DrillingMaterial"]</label>
+                        <InputText class="form-control" @bind-Value="CurrentForage.materiel" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["DrillingTool"]</label>
+                        <InputText class="form-control" @bind-Value="CurrentForage.outil" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-secondary text-white">
+                @Loc["Coordinates"]
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">@Loc["XCoordinate"]</label>
+                        <InputNumber class="form-control" @bind-Value="CurrentForage.abscisseX" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">@Loc["YCoordinate"]</label>
+                        <InputNumber class="form-control" @bind-Value="CurrentForage.ordonneeY" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">@Loc["ZAltitude"]</label>
+                        <InputNumber class="form-control" @bind-Value="CurrentForage.altitudeZ" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["InitialDepth"]</label>
+                        <InputNumber class="form-control" @bind-Value="CurrentForage.coteInit" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">@Loc["FinalDepth"]</label>
+                        <InputNumber class="form-control" @bind-Value="CurrentForage.coteFinale" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">@Loc["Save"]</button>
+        <button type="button" class="btn btn-secondary" @onclick="Cancel">@Loc["Cancel"]</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public string? RefChantier { get; set; }
+    [Parameter] public string? RefForage { get; set; }
+    [Parameter] public EventCallback<ForageModel> OnSaved { get; set; }
+
+    private ForageModel? CurrentForage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(RefForage))
+        {
+            CurrentForage = await ForageService.GetForageAsync(RefForage);
+        }
+
+        CurrentForage ??= new ForageModel
+        {
+            RefForage = RefForage ?? Guid.NewGuid().ToString("N")[..8].ToUpper(),
+            dateForage = DateTime.Today
+        };
+
+        // Associe le forage au chantier sélectionné.
+        if (!string.IsNullOrWhiteSpace(RefChantier))
+        {
+            CurrentForage.RefChantier = RefChantier;
+        }
+    }
+
+
+    private async Task SaveForage()
+    {
+        if (CurrentForage != null)
+        {
+            await ForageService.SaveForageAsync(CurrentForage);
+            NavigationManager.NavigateTo("/forages");
+        }
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/forages");
+    }
 }
