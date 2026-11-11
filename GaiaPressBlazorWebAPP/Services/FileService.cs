@@ -13,7 +13,7 @@ namespace GaiaPressBlazorWebAPP.Services
 
         // État du fichier courant
         public bool HasUnsavedChanges { get; private set; }
-        public string? CurrentFilePath { get; private set; }
+        public string CurrentFilePath { get; private set; }
         public bool IsNewFile { get; private set; }
 
         public FileService(IJSRuntime jsRuntime, ILogger<FileService> logger)

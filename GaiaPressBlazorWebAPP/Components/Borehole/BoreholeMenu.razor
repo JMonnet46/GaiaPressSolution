@@ -1,0 +1,60 @@
+﻿@* Components/Forage/ForageMenu.razor *@
+@inject LocalizationService Loc
+
+<div class="forage-menu">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="forageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            @Loc["Forage"]
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="forageDropdown">
+            <li>
+                <button class="dropdown-item" @onclick="OnNouveauForage">
+                    <i class="bi bi-plus-circle"></i> @Loc["NewBorehole"]
+                </button>
+            </li>
+            <li>
+                <button class="dropdown-item" @onclick="OnAjouterForage">
+                    <i class="bi bi-folder-plus"></i> @Loc["AddBorehole"]
+                </button>
+            </li>
+            <li>
+                <button class="dropdown-item" @onclick="OnSupprimerForage">
+                    <i class="bi bi-trash"></i> @Loc["DeleteBorehole"]
+                </button>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <button class="dropdown-item" @onclick="OnFeuilleForage">
+                    <i class="bi bi-file-earmark-text"></i> @Loc["BoreholeSheet"]
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnNouveauForageClicked { get; set; }
+    [Parameter] public EventCallback OnAjouterForageClicked { get; set; }
+    [Parameter] public EventCallback OnSupprimerForageClicked { get; set; }
+    [Parameter] public EventCallback OnFeuilleForageClicked { get; set; }
+
+    private async Task OnNouveauForage()
+    {
+        await OnNouveauForageClicked.InvokeAsync();
+    }
+
+    private async Task OnAjouterForage()
+    {
+        await OnAjouterForageClicked.InvokeAsync();
+    }
+
+    private async Task OnSupprimerForage()
+    {
+        await OnSupprimerForageClicked.InvokeAsync();
+    }
+
+    private async Task OnFeuilleForage()
+    {
+        await OnFeuilleForageClicked.InvokeAsync();
+    }
+}

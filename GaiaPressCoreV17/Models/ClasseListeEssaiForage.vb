@@ -199,7 +199,7 @@ Namespace GaiaPressCoreV17.Models
         '        If Index >= 0 Then Call MyListeExpansion.SetSol(MySol, Index)
         '    End If
 
-        '    ' Enregistrement de la référence du chantier auprès de sa feuille
+        '    ' Enregistrement de la référence du ConstructionSite auprès de sa feuille
         '    ' Call MyListeSonde.SetSonde(MySonde, Index)
         '    ' -----------------------------------------------------
 
@@ -209,12 +209,12 @@ Namespace GaiaPressCoreV17.Models
         Public Sub CloseListeEssaiForage()
 
             ' fermeture de la Liste des Sondes (fermeture de sa fenêtre)
-            'Call MyListeSonde.CloseChantier()
+            'Call MyListeSonde.CloseConstructionSite()
 
-            ' Extinction des menus liés au chantier
+            ' Extinction des menus liés au ConstructionSite
             'Call ActivationMenus(False)
 
-            ' Effacement de la référence vers le chantier
+            ' Effacement de la référence vers le ConstructionSite
             ListeEssaiForageSession = Nothing
 
             ' Nettoyage de l'arborescence

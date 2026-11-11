@@ -16,7 +16,7 @@ namespace GaiaPressBlazorWebAPP.Components.Account
         };
 
         [DoesNotReturn]
-        public void RedirectTo(string? uri)
+        public void RedirectTo(string uri)
         {
             uri ??= "";
 

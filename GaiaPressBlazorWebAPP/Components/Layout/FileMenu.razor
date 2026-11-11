@@ -1,121 +1,308 @@
 ﻿@rendermode InteractiveServer
 @using GaiaPressBlazorWebAPP.Services
+@using Microsoft.Data.SqlClient
 @inject LocalizationService Loc
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
+@inject ConnectionService ConnectionService
 @implements IDisposable
 
 <div class="file-menu">
-    <button class="file-menu-btn" @onclick="Toggle">@Loc["File"] ▾</button>
-
+    <button class="file-menu-btn" @onclick="Toggle">@Loc["ConstructionSite"] ▾</button>
+    <span class="connection-status" role="status">
+        @(ConnectionService.IsConnected ? "● " + Loc["ConnectedToDatabase"] : "○ " + Loc["DisconnectedFromDatabase"])
+    </span>
     @if (_open)
     {
         <div class="file-menu-dropdown" @onclick="Close">
-            <button @onclick="NewFile">@Loc["NewFile"]</button>
-            <button @onclick="OpenFile">@Loc["OpenFile"]</button>
-            <button @onclick="CloseFile">@Loc["CloseFile"]</button>
-            <button @onclick="SaveFile">@Loc["SaveFile"]</button>
-            <button @onclick="SaveAsFile">@Loc["SaveUnderFile"]</button>
-            <hr />
-            <button @onclick="Quit">@Loc["Quit"]</button>
+            <button @onclick="OpenFile">@Loc["OpenConstructionSite"]</button>
+            <button @onclick="NewFile">@Loc["NewConstructionSite"]</button>
+            <button @onclick="ConnectAction" disabled="@ConnectionService.IsConnected">@Loc["ConnectToDatabase"]</button>
+            <button @onclick="Disconnect" disabled="@(!ConnectionService.IsConnected)">@Loc["DisconnectFromDatabase"]</button>
         </div>
     }
 </div>
 
+@if (_showLoginDialog)
+{
+    <div class="modal-overlay" @onclick="CancelLogin">
+        <div class="modal-content" @onclick:stopPropagation="true">
+            <h3>@Loc["ConnectToGaiaPressBD"]</h3>
+            <p class="server-info">@Loc["Server"] : gaiatech-2026.database.windows.net<br />@Loc["Database"] : GaiaPressBD</p>
+            <div class="form-group">
+                <label for="id2">@Loc["Username"] :</label>
+                <input id="id2" type="text" @bind="id2" class="form-control" autocomplete="username" @onkeydown="HandleKeyPress" />
+            </div>
+            <div class="form-group">
+                <label for="pw2">@Loc["Password"] :</label>
+                <input id="pw2" type="password" @bind="pw2" class="form-control" autocomplete="current-password" @onkeydown="HandleKeyPress" />
+            </div>
+            @if (!string.IsNullOrWhiteSpace(_errorMessage))
+            {
+                <div class="alert alert-danger" role="alert">@_errorMessage</div>
+            }
+            <div class="modal-buttons">
+                <button class="btn btn-primary" @onclick="ConnectToDatabase" disabled="@_isConnecting">
+                    @(_isConnecting ? Loc["Connecting"] : Loc["Connect"])
+                </button>
+                <button class="btn btn-secondary" @onclick="CancelLogin">@Loc["Cancel"]</button>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .connection-status {
+        margin-left: .75rem;
+        font-size: .9rem;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        min-width: 360px;
+        max-width: 600px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.3);
+    }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #1e3a5f;
+        }
+
+    .server-info {
+        background: #f0f4f8;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: .9em;
+        color: #555;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 22px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 12px;
+        border-radius: 5px;
+    }
+</style>
+
 @code {
-    private bool _open = false;
+    private bool _open;
+    private bool _showLoginDialog;
+    private bool _isConnecting;
+    private string id2 = "";
+    private string pw2 = "";
+    private string _errorMessage = "";
+    private string? _pendingAction;
 
-    protected override void OnInitialized()
-    {
-        Loc.LanguageChanged += OnLanguageChanged;
-    }
-
-    private void OnLanguageChanged()
-    {
-        StateHasChanged();
-    }
+    protected override void OnInitialized() => ConnectionService.OnConnectionChanged += OnConnectionChanged;
 
     private void Toggle() => _open = !_open;
     private void Close() => _open = false;
 
-    // ============================================
-    // NEW FILE - Créer un nouveau fichier
-    // ============================================
-    private async Task NewFile()
-    {
-        Close(); // Ferme le menu déroulant
-
-        // 1. Demander confirmation si un fichier est déjà ouvert
-        bool hasUnsavedChanges = await CheckUnsavedChanges();
-
-        if (hasUnsavedChanges)
-        {
-            bool confirm = await JSRuntime.InvokeAsync<bool>("confirm",
-                Loc["ConfirmNewFile"] ?? "Un fichier est déjà ouvert. Voulez-vous vraiment créer un nouveau fichier ? Les modifications non enregistrées seront perdues.");
-
-            if (!confirm)
-            {
-                return; // L'utilisateur a annulé
-            }
-        }
-
-        // 2. Réinitialiser l'état de l'application
-        await ResetApplicationState();
-
-        // 3. Naviguer vers la page principale avec un nouveau fichier
-        Navigation.NavigateTo("/chantier?new=true", forceLoad: false);
-    }
-
-    // ============================================
-    // Vérifier s'il y a des modifications non enregistrées
-    // ============================================
-    private async Task<bool> CheckUnsavedChanges()
-    {
-        // Appelle un service pour vérifier l'état du fichier courant
-        // Retourne true si des modifications non enregistrées existent
-        var state = await JSRuntime.InvokeAsync<object>("localStorage.getItem", "gaiaPress_hasUnsavedChanges");
-        return state?.ToString() == "true";
-    }
-
-    // ============================================
-    // Réinitialiser l'état de l'application
-    // ============================================
-    private async Task ResetApplicationState()
-    {
-        // Nettoyer le localStorage
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentFile");
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_hasUnsavedChanges");
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentChantier");
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentForage");
-
-        // Réinitialiser les services injectés si nécessaire
-        // (à faire via un service dédié)
-    }
-
-    // ============================================
-    // Autres méthodes du menu
-    // ============================================
-    private void OpenFile() { /* ... */ Close(); }
-    private void CloseFile() { /* ... */ Close(); }
-    private void SaveFile() { /* ... */ Close(); }
-    private void SaveAsFile() { /* ... */ Close(); }
-
-    private async Task Quit()
+    private void OpenFile()
     {
         Close();
-
-        bool confirm = await JSRuntime.InvokeAsync<bool>("confirm",
-            Loc["ConfirmQuit"] ?? "Voulez-vous vraiment quitter l'application ?");
-
-        if (confirm)
+        if (ConnectionService.IsConnected)
         {
-            await JSRuntime.InvokeVoidAsync("window.close");
+            Navigation.NavigateTo("/ConstructionSite?mode=ouvrir");
+            return;
+        }
+        _pendingAction = "ouvrir";
+        ShowLoginDialog();
+    }
+
+    private async Task NewFile()
+    {
+        Close();
+        var state = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "gaiaPress_hasUnsavedChanges");
+        if (state == "true")
+        {
+            var confirm = await JSRuntime.InvokeAsync<bool>("confirm",
+                Loc["ConfirmNewFile"]);
+            if (!confirm) return;
+        }
+        if (!ConnectionService.IsConnected)
+        {
+            _pendingAction = "nouveau";
+            ShowLoginDialog();
+            return;
+        }
+        await ResetApplicationState();
+        Navigation.NavigateTo("/ConstructionSite?new=true");
+    }
+
+    private void ConnectAction()
+    {
+        Close();
+        if (ConnectionService.IsConnected) return;
+        _pendingAction = "ouvrir";
+        ShowLoginDialog();
+    }
+
+    private void ShowLoginDialog()
+    {
+        _showLoginDialog = true;
+        id2 = "";
+        pw2 = "";
+        _errorMessage = "";
+    }
+
+    private void CancelLogin()
+    {
+        _pendingAction = null;
+        _showLoginDialog = false;
+        _errorMessage = "";
+        pw2 = "";
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await ConnectToDatabase();
+    }
+
+    private async Task ConnectToDatabase()
+    {
+        if (_isConnecting) return;
+        if (string.IsNullOrWhiteSpace(id2) || string.IsNullOrWhiteSpace(pw2))
+        {
+            _errorMessage = Loc["MissingCredentials"];
+            return;
+        }
+
+        _isConnecting = true;
+        _errorMessage = "";
+        var connected = false;
+
+        try
+        {
+            // Création du builder de chaîne de connexion
+            var builder = new SqlConnectionStringBuilder
+            {
+                DataSource = "tcp:gaiatech-2026.database.windows.net,1433",
+                InitialCatalog = "GaiaPressBD",
+                Encrypt = true,
+                TrustServerCertificate = false,
+                PersistSecurityInfo = false,
+                UserID = id2,
+                Password = pw2,
+                ConnectTimeout = 60
+            };
+
+            // **Correction : Suppression des Console.WriteLine invalides dans le builder**
+            // **Ces lignes ont été déplacées après la création du builder**
+
+            // Logs sécurisés (dans la console de débogage uniquement)
+            Console.WriteLine("=== Test connexion ===");
+            Console.WriteLine($"id2 : {id2}");
+            // ⚠️ NE JAMAIS écrire le mot de passe ici !
+            // Console.WriteLine($"pw2 : {pw2}"); // INTERDIT dans les logs publics
+
+            connected = await ConnectionService.TrySetConnectionAsync(builder.ConnectionString, id2);
+
+            if (!connected)
+            {
+                _errorMessage = Loc["SqlConnectionNotValidated"];
+            }
+        }
+        catch (Exception)
+        {
+            // Ne jamais renvoyer au navigateur l'exception brute
+            ConnectionService.ClearConnection();
+            _errorMessage = Loc["SqlConnectionFailed"];
+        }
+        finally
+        {
+            _isConnecting = false;
+        }
+
+        if (!connected) return;
+
+        _showLoginDialog = false;
+        pw2 = "";
+        var action = _pendingAction;
+        _pendingAction = null;
+        if (string.Equals(action, "nouveau", StringComparison.Ordinal))
+        {
+            await ResetApplicationState();
+            Navigation.NavigateTo("/ConstructionSite?new=true");
+        }
+        else
+        {
+            Navigation.NavigateTo("/ConstructionSite?mode=ouvrir");
         }
     }
-        public void Dispose()
-    {
-        Loc.LanguageChanged -= OnLanguageChanged;
-    }
-    
 
+    private void Disconnect()
+    {
+        Close();
+        ConnectionService.ClearConnection();
+        Navigation.NavigateTo("/");
+    }
+
+    private async Task ResetApplicationState()
+    {
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentFile");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_hasUnsavedChanges");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentConstructionSite");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentForage");
+    }
+
+    private void OnConnectionChanged() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => ConnectionService.OnConnectionChanged -= OnConnectionChanged;
 }

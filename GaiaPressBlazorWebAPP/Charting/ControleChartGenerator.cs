@@ -6,33 +6,33 @@ using GaiaPressCoreV17.Models;
 namespace GaiaPressBlazorWebAPP.Charting
 {
     /// <summary>
-    /// GÃ©nÃ¨re des donnÃ©es de graphique pour les essais de forage.
+    /// GÃ©nÃ¨re des donnÃ©es de graphique pour les Tests de forage.
     /// </summary>
     public class ControleChartGenerator
     {
-        // PropriÃ©tÃ© pour stocker l'essai courant
-        public Essai_Forage CurrentEssai { get; set; }
+        // PropriÃ©tÃ© pour stocker l'Test courant
+        public Essai_Forage CurrentTest { get; set; }
 
         /// <summary>
         /// GÃ©nÃ¨re des donnÃ©es pour un graphique Pression/Volume
         /// </summary>
         public Dictionary<string, List<double>> GeneratePressureVolumeChart()
         {
-            if (CurrentEssai == null)
-                throw new InvalidOperationException("Aucun essai de forage n'est dÃ©fini.");
+            if (CurrentTest == null)
+                throw new InvalidOperationException("Aucun Test de forage n'est dÃ©fini.");
 
             var data = new Dictionary<string, List<double>>();
 
             data.Add("Pression (bar)", new List<double> {
-                CurrentEssai.presP0,
-                CurrentEssai.presFluage,
-                CurrentEssai.presLimite
+                CurrentTest.presP0,
+                CurrentTest.presFluage,
+                CurrentTest.presLimite
             });
 
             data.Add("Volume (mÂ³)", new List<double> {
-                CurrentEssai.VolSonde,
-                CurrentEssai.VolSonde * 1.2,
-                CurrentEssai.VolSonde * 1.5
+                CurrentTest.VolSonde,
+                CurrentTest.VolSonde * 1.2,
+                CurrentTest.VolSonde * 1.5
             });
 
             return data;
@@ -43,17 +43,17 @@ namespace GaiaPressBlazorWebAPP.Charting
         /// </summary>
         public (double[] xValues, double[] yValues) GenerateCreepCurve()
         {
-            if (CurrentEssai == null)
-                throw new InvalidOperationException("Aucun essai de forage n'est dÃ©fini.");
+            if (CurrentTest == null)
+                throw new InvalidOperationException("Aucun Test de forage n'est dÃ©fini.");
 
             var xValues = new double[] { 0, 1, 2, 3, 4, 5 };
             var yValues = new double[] {
-                CurrentEssai.presP0,
-                CurrentEssai.presP0 * 0.95,
-                CurrentEssai.presP0 * 0.90,
-                CurrentEssai.presP0 * 0.85,
-                CurrentEssai.presP0 * 0.80,
-                CurrentEssai.presP0 * 0.75
+                CurrentTest.presP0,
+                CurrentTest.presP0 * 0.95,
+                CurrentTest.presP0 * 0.90,
+                CurrentTest.presP0 * 0.85,
+                CurrentTest.presP0 * 0.80,
+                CurrentTest.presP0 * 0.75
             };
 
             return (xValues, yValues);
@@ -64,8 +64,8 @@ namespace GaiaPressBlazorWebAPP.Charting
         /// </summary>
         public (double[] xValues, double[] yValues) GenerateHyperbolicLimitChart()
         {
-            if (CurrentEssai == null)
-                throw new InvalidOperationException("Aucun essai de forage n'est dÃ©fini.");
+            if (CurrentTest == null)
+                throw new InvalidOperationException("Aucun Test de forage n'est dÃ©fini.");
 
             var xValues = new double[] { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
             var yValues = new double[xValues.Length];
@@ -108,7 +108,7 @@ namespace GaiaPressBlazorWebAPP.Charting
 //            Exit Sub
 //        End If
 
-//        With MyEssai
+//        With MyTest
 //            Dext = MySonde.Getds
 //            Nu = .E_coefPoisson
 //            Eelast = .E_modElastique
@@ -148,11 +148,11 @@ namespace GaiaPressBlazorWebAPP.Charting
 //                .Series.Clear()
 //                Select Case Lang
 //                    Case 0
-//                        .Series.Add("Experemental data " & MyEssai.E_nomEssai)
-//                        .Series.Add("Theory " & MyEssai.E_nomEssai)
+//                        .Series.Add("Experemental data " & MyTest.E_nomTest)
+//                        .Series.Add("Theory " & MyTest.E_nomTest)
 //                    Case 1
-//                        .Series.Add("Experience " & MyEssai.E_nomEssai)
-//                        .Series.Add("ThÃ©orie " & MyEssai.E_nomEssai)
+//                        .Series.Add("Experience " & MyTest.E_nomTest)
+//                        .Series.Add("ThÃ©orie " & MyTest.E_nomTest)
 //                End Select
 //            End With
 

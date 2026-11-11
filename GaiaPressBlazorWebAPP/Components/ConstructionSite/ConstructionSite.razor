@@ -1,0 +1,453 @@
+﻿@page "/ConstructionSite"
+@page "/ConstructionSite/{ConstructionSiteReference}"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@using GaiaPressCoreV17.Data
+@using ConstructionSiteModel = GaiaPressCoreV17.Models.ConstructionSite
+@using GaiaPressBlazorWebAPP.Services
+@using Microsoft.EntityFrameworkCore
+@inject GaiaPressDbContext Db
+@inject FileService FileService
+@inject ConnectionService ConnectionService
+@inject LocalizationService Loc
+@inject NavigationManager Navigation
+@inject ChantierState ChantierState
+@implements IDisposable
+
+
+<div class="ConstructionSite-container">
+    <div class="ConstructionsSite-header">
+        <h1>@Loc["ConstructionSite"]</h1>
+        <LanguageSelector />
+    </div>
+
+    @if (isNewFile)
+    {
+        <div class="new-file-banner">Nouveau ConstructionSite créé</div>
+    }
+
+    @if (isOpenMode && currentConstructionSite == null && !isEditing)
+    {
+        <div class="ConstructionSite-list">
+            <div class="section-header">
+                <h2>ConstructionSites existants</h2>
+                <button type="button" class="btn btn-primary" @onclick="CreateNewConstructionSite">
+                    @Loc["NewConstructionSite"]
+                </button>
+            </div>
+            @if (isLoadingConstructionSites)
+            {
+                <p class="no-data">Chargement des ConstructionSites...</p>
+            }
+            else if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                <p class="no-data" role="alert">@errorMessage</p>
+            }
+            else if (ConstructionSites.Count == 0)
+            {
+                <p class="no-data">Aucun ConstructionSite trouvé</p>
+            }
+            else
+            {
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>@Loc["SiteReference"]</th>
+                            <th>@Loc["SiteName"]</th>
+                            <th>@Loc["SiteLocation"]</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ConstructionSite in ConstructionSites)
+                        {
+                            <tr @onclick="() => OpenConstructionSite(ConstructionSite.RefChantier)" style="cursor: pointer;">
+                                <td>@ConstructionSite.RefChantier</td>
+                                <td>@ConstructionSite.NameConstructionSite</td>
+                                <td>@ConstructionSite.DescriptionConstructionSite</td>
+                                <td>@ConstructionSite.DateConstructionSite.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+    else if (currentConstructionSite == null)
+    {
+        <div class="ConstructionSite-form">
+            <h2>@(isEditing ? Loc["EditConstructionSite"] : Loc["NewConstructionSite"])</h2>
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                <p class="alert alert-danger" role="alert">@errorMessage</p>
+            }
+            <EditForm Model="@newConstructionSite" OnValidSubmit="SaveConstructionSite">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="validation-summary" />
+                <fieldset class="form-section">
+                    <legend>@Loc["SiteProperties"]</legend>
+                    <div class="form-group">
+                        <label for="RefConstructionSite">@Loc["SiteReference"] <span class="required">*</span></label>
+                        <InputText id="RefConstructionSite" @bind-Value="newConstructionSite.RefConstructionSite" class="form-control" />
+                        <ValidationMessage For="@(() => newConstructionSite.RefConstructionSite)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="NameConstructionSite">@Loc["SiteName"] <span class="required">*</span></label>
+                        <InputText id="NameConstructionSite" @bind-Value="newConstructionSite.NameConstructionSite" class="form-control" />
+                        <ValidationMessage For="@(() => newConstructionSite.NameConstructionSite)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DescriptionConstructionSite">@Loc["SiteLocation"]</label>
+                        <InputTextArea id="DescriptionConstructionSite" @bind-Value="newConstructionSite.DescriptionConstructionSite" class="form-control" rows="3" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DateConstructionSite">Date du ConstructionSite</label>
+                        <InputDate id="DateConstructionSite" @bind-Value="newConstructionSite.DateConstructionSite" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="RefClient">Référence client</label>
+                        <InputText id="RefClient" @bind-Value="newConstructionSite.RefClient" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Entreprise">Entreprise</label>
+                        <InputText id="Entreprise" @bind-Value="newConstructionSite.Entreprise" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Adresse">Adresse</label>
+                        <InputTextArea id="Adresse" @bind-Value="newConstructionSite.Adresse" class="form-control" rows="2" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Telephone">Téléphone</label>
+                        <InputText id="Telephone"
+                                   @bind-Value="newConstructionSite.Telephone"
+                                   class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Reference">Référence</label>
+                        <InputText id="Reference"
+                                   @bind-Value="newConstructionSite.Reference"
+                                   class="form-control" />
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">@(isEditing ? Loc["Save"] : Loc["CreateSite"])</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CancelEdit">@Loc["Cancel"]</button>
+                </div>
+            </EditForm>
+        </div>
+    }
+    else
+    {
+        <div class="ConstructionSite-details">
+            <div class="details-header">
+                <h2>@currentConstructionSite!.NameConstructionSite</h2>
+                <button type="button" class="btn btn-secondary" @onclick="EditConstructionSite">
+                    @Loc["EditConstructionSite"]
+                </button>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                <p class="alert alert-danger" role="alert">@errorMessage</p>
+            }
+            <div class="detail-section">
+                <h3>@Loc["SiteProperties"]</h3>
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">@Loc["SiteReference"]</span><span class="detail-value">@currentConstructionSite.RefChantier</span></div>
+                    <div class="detail-item"><span class="detail-label">@Loc["SiteName"]</span><span class="detail-value">@currentConstructionSite.NameConstructionSite</span></div>
+                    @if (!string.IsNullOrWhiteSpace(currentConstructionSite.DescriptionConstructionSite))
+                    {
+                        <div class="detail-item full-width"><span class="detail-label">@Loc["SiteLocation"]</span><span class="detail-value">@currentConstructionSite.DescriptionConstructionSite</span></div>
+                    }
+                    <div class="detail-item"><span class="detail-label">Référence client</span><span class="detail-value">@currentConstructionSite.RefClient</span></div>
+                    <div class="detail-item"><span class="detail-label">Entreprise</span><span class="detail-value">@currentConstructionSite.Entreprise</span></div>
+                </div>
+            </div>
+
+            <!-- Section Forages (Borehole) -->
+            <!-- DEBUG TEMPORAIRE : retirer apres verification de RefChantier. -->
+            <p class="text-muted">DEBUG RefChantier = [@currentConstructionSite?.RefChantier]</p>
+            @if (currentConstructionSite != null && !string.IsNullOrWhiteSpace(currentConstructionSite.RefChantier))
+            {
+                <div class="borehole-section mt-4">
+                    <Borehole RefChantier="@currentConstructionSite.RefChantier" @key="currentConstructionSite.RefChantier" />
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mt-4">Enregistrez d'abord le chantier pour pouvoir ajouter des forages.</div>
+            }
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public string? ConstructionSiteReference { get; set; }
+
+    [SupplyParameterFromQuery(Name = "new")]
+    public string? IsNew { get; set; }
+
+    private bool isOpenMode;
+    private bool isLoadingConstructionSites;
+    private bool isEditing;
+    private bool isNewFile;
+    private List<ConstructionSiteModel> ConstructionSites = new();
+    private string? errorMessage;
+    private ConstructionSiteForm newConstructionSite = new();
+    private ConstructionSiteModel? currentConstructionSite;
+    private ConstructionSiteModel? editingConstructionSite;
+    private string? lastProcessedUri;
+
+    protected override async Task OnInitializedAsync()
+    {
+        FileService.OnFileStateChanged += OnFileStateChanged;
+        Loc.LanguageChanged += OnLanguageChanged;
+        ConnectionService.OnConnectionChanged += OnConnectionChanged;
+        await FileService.LoadStateAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var uri = Navigation.Uri;
+        if (string.Equals(lastProcessedUri, uri, StringComparison.Ordinal)) return;
+        lastProcessedUri = uri;
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(Navigation.ToAbsoluteUri(uri).Query);
+        isOpenMode = query.TryGetValue("mode", out var modeValues)
+            && string.Equals(modeValues.ToString(), "ouvrir", StringComparison.OrdinalIgnoreCase);
+        isNewFile = !isOpenMode && string.Equals(IsNew, "true", StringComparison.OrdinalIgnoreCase);
+        isEditing = false;
+        currentConstructionSite = null;
+        errorMessage = null;
+
+        if (isOpenMode && string.IsNullOrWhiteSpace(ConstructionSiteReference))
+        {
+            await LoadConstructionSitesAsync();
+        }
+        else if (!string.IsNullOrWhiteSpace(ConstructionSiteReference))
+        {
+            await LoadExistingConstructionSite(ConstructionSiteReference);
+        }
+        else
+        {
+            newConstructionSite = new ConstructionSiteForm();
+        }
+    }
+
+    private void ConfigureDatabaseConnection()
+    {
+        if (!ConnectionService.IsConnected || string.IsNullOrWhiteSpace(ConnectionService.ConnectionString))
+            throw new InvalidOperationException("Aucune connexion SQL validée pour cette session. Connectez-vous d'abord.");
+
+        Db.Database.SetConnectionString(ConnectionService.ConnectionString);
+    }
+
+    private async Task LoadConstructionSitesAsync()
+    {
+        isLoadingConstructionSites = true;
+        errorMessage = null;
+        ConstructionSites.Clear();
+
+        try
+        {
+            ConfigureDatabaseConnection();
+
+            var connexion = Db.Database.GetDbConnection();
+            Console.WriteLine($"Serveur SQL : {connexion.DataSource}");
+            Console.WriteLine($"Base SQL : {connexion.Database}");
+            Console.WriteLine($"Délai de connexion : {connexion.ConnectionTimeout} secondes");
+
+            ConstructionSites = await Db.ConstructionSitesDb.OrderBy(c => c.RefChantier).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message + (ex.InnerException == null ? "" : " | InnerException: " + ex.InnerException.Message);
+        }
+        finally
+        {
+            isLoadingConstructionSites = false;
+        }
+    }
+
+    private async Task LoadExistingConstructionSite(string Reference)
+    {
+        errorMessage = null;
+        try
+        {
+            ConfigureDatabaseConnection();
+            currentConstructionSite = await Db.ConstructionSitesDb.FirstOrDefaultAsync(c => c.RefChantier == Reference.Trim());
+            if (currentConstructionSite == null)
+                errorMessage = "Le ConstructionSite demandé est introuvable dans la base de données.";
+            else
+                newConstructionSite.DateConstructionSite = currentConstructionSite.DateConstructionSite;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message + (ex.InnerException == null ? "" : " | InnerException: " + ex.InnerException.Message);
+        }
+        ChantierState.SetChantier(currentConstructionSite?.RefChantier);
+        StateHasChanged();
+    }
+
+    private void OpenConstructionSite(string Reference)
+    {
+        Navigation.NavigateTo($"/ConstructionSite/{Uri.EscapeDataString(Reference)}?mode=ouvrir");
+    }
+
+    private async Task SaveConstructionSite()
+    {
+        errorMessage = null;
+        try
+        {
+            ConfigureDatabaseConnection();
+
+            var wasNew = !isEditing;
+            if (isEditing && editingConstructionSite != null)
+            {
+                editingConstructionSite.RefChantier = newConstructionSite.RefConstructionSite;
+                editingConstructionSite.NameConstructionSite = newConstructionSite.NameConstructionSite;
+                editingConstructionSite.DescriptionConstructionSite = newConstructionSite.DescriptionConstructionSite;
+                editingConstructionSite.DateConstructionSite = newConstructionSite.DateConstructionSite;
+                editingConstructionSite.RefClient = newConstructionSite.RefClient;
+                editingConstructionSite.Entreprise = newConstructionSite.Entreprise;
+                editingConstructionSite.Adresse = newConstructionSite.Adresse;
+                editingConstructionSite.Telephone = newConstructionSite.Telephone;
+                editingConstructionSite.Reference = newConstructionSite.Reference;
+                currentConstructionSite = editingConstructionSite;
+                editingConstructionSite = null;
+            }
+            else
+            {
+                // Rechercher d'abord le ConstructionSite pour éviter d'insérer une clé primaire déjà existante.
+                currentConstructionSite = await Db.ConstructionSitesDb
+                    .FirstOrDefaultAsync(c => c.RefChantier == newConstructionSite.RefConstructionSite);
+
+                if (currentConstructionSite == null)
+                {
+                    currentConstructionSite = new ConstructionSiteModel
+                    {
+                        RefChantier = newConstructionSite.RefConstructionSite,
+                        NameConstructionSite = newConstructionSite.NameConstructionSite,
+                        DescriptionConstructionSite = newConstructionSite.DescriptionConstructionSite,
+                        DateConstructionSite = newConstructionSite.DateConstructionSite,
+                        RefClient = newConstructionSite.RefClient,
+                        Entreprise = newConstructionSite.Entreprise,
+                        Adresse = newConstructionSite.Adresse,
+                        Telephone = newConstructionSite.Telephone,
+                        Reference = newConstructionSite.Reference
+                    };
+                    Db.ConstructionSitesDb.Add(currentConstructionSite);
+                }
+                else
+                {
+                    currentConstructionSite.NameConstructionSite = newConstructionSite.NameConstructionSite;
+                    currentConstructionSite.DescriptionConstructionSite = newConstructionSite.DescriptionConstructionSite;
+                    currentConstructionSite.DateConstructionSite = newConstructionSite.DateConstructionSite;
+                    currentConstructionSite.RefClient = newConstructionSite.RefClient;
+                    currentConstructionSite.Entreprise = newConstructionSite.Entreprise;
+                    currentConstructionSite.Adresse = newConstructionSite.Adresse;
+                    currentConstructionSite.Telephone = newConstructionSite.Telephone;
+                    currentConstructionSite.Reference = newConstructionSite.Reference;
+                }
+            }
+
+            await Db.SaveChangesAsync();
+            await FileService.MarkAsModifiedAsync();
+            isEditing = false;
+            isNewFile = wasNew;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message + (ex.InnerException == null ? "" : " | InnerException: " + ex.InnerException.Message);
+        }
+        ChantierState.SetChantier(currentConstructionSite?.RefChantier);
+    }
+
+    private void EditConstructionSite()
+    {
+        if (currentConstructionSite == null) return;
+        newConstructionSite = new ConstructionSiteForm
+        {
+            RefConstructionSite = currentConstructionSite.RefChantier,
+            NameConstructionSite = currentConstructionSite.NameConstructionSite,
+            DescriptionConstructionSite = currentConstructionSite.DescriptionConstructionSite,
+            DateConstructionSite = currentConstructionSite.DateConstructionSite,
+            RefClient = currentConstructionSite.RefClient,
+            Entreprise = currentConstructionSite.Entreprise,
+            Adresse = currentConstructionSite.Adresse,
+            Telephone = currentConstructionSite.Telephone,
+            Reference = currentConstructionSite.Reference
+        };
+        isEditing = true;
+        editingConstructionSite = currentConstructionSite;
+        currentConstructionSite = null;
+    }
+
+    private async Task CancelEdit()
+    {
+        isEditing = false;
+        editingConstructionSite = null;
+        if (!string.IsNullOrWhiteSpace(ConstructionSiteReference))
+        {
+            await LoadExistingConstructionSite(ConstructionSiteReference);
+            Navigation.NavigateTo($"/ConstructionSite/{Uri.EscapeDataString(ConstructionSiteReference)}{(isOpenMode ? "?mode=ouvrir" : "")}");
+        }
+        else if (isOpenMode)
+        {
+            Navigation.NavigateTo("/ConstructionSite?mode=ouvrir");
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private void CreateNewConstructionSite()
+    {
+        isOpenMode = false;
+        isEditing = false;
+        currentConstructionSite = null;
+        newConstructionSite = new ConstructionSiteForm();
+        Navigation.NavigateTo("/ConstructionSite?new=true");
+    }
+
+    private void OnFileStateChanged() => InvokeAsync(StateHasChanged);
+    private void OnLanguageChanged() => InvokeAsync(StateHasChanged);
+
+    private void OnConnectionChanged() => InvokeAsync(async () =>
+    {
+        StateHasChanged();
+        if (!ConnectionService.IsConnected) return;
+
+        if (isOpenMode && string.IsNullOrWhiteSpace(ConstructionSiteReference))
+            await LoadConstructionSitesAsync();
+        else if (!isEditing && !string.IsNullOrWhiteSpace(ConstructionSiteReference))
+            await LoadExistingConstructionSite(ConstructionSiteReference);
+    });
+
+    public void Dispose()
+    {
+        FileService.OnFileStateChanged -= OnFileStateChanged;
+        Loc.LanguageChanged -= OnLanguageChanged;
+        ConnectionService.OnConnectionChanged -= OnConnectionChanged;
+    }
+
+    private sealed class ConstructionSiteForm
+    {
+        [Required(ErrorMessage = "La référence du ConstructionSite est obligatoire")]
+        [StringLength(50)]
+        public string RefConstructionSite { get; set; } = "";
+        [Required(ErrorMessage = "Le nom du ConstructionSite est obligatoire")]
+        [StringLength(200)]
+        public string NameConstructionSite { get; set; } = "";
+        [StringLength(2000)]
+        public string DescriptionConstructionSite { get; set; } = "";
+        public DateTime DateConstructionSite { get; set; } = DateTime.Today;
+        public string RefClient { get; set; } = "";
+        public string Entreprise { get; set; } = "";
+        public string Adresse { get; set; } = "";
+        public string Telephone { get; set; } = string.Empty;
+        public string Reference { get; set; } = string.Empty;
+    }
+}

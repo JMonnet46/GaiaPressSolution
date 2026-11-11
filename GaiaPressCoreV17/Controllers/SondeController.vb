@@ -16,15 +16,15 @@ Namespace GaiaPressCoreV17.Controllers
 
         ' ✅ Déclarer les dépendances
         Public ReadOnly _context As GaiaPressDbContext
-        PUBLIC ReadOnly _ChantierService As ChantierService
+        PUBLIC ReadOnly _ConstructionSiteService As ConstructionSiteService
 
 
         ''' <summary>
         ''' Constructeur avec injection de dépendances.
         ''' </summary>
-        Public Sub New(context As GaiaPressDbContext, ChantierService As ChantierService)
+        Public Sub New(context As GaiaPressDbContext, ConstructionSiteService As ConstructionSiteService)
             _context = context
-            _ChantierService = ChantierService
+            _ConstructionSiteService = ConstructionSiteService
         End Sub
 
         ' ======================
@@ -134,28 +134,28 @@ Namespace GaiaPressCoreV17.Controllers
         End Function
 
         ' ================================================
-        ' GET: api/Sonde/ByChantier/{chantierId}
+        ' GET: api/Sonde/ByConstructionSite/{ConstructionSiteId}
         ' ================================================
         ''' <summary>
-        ''' Récupère toutes les sondes associées à un chantier.
+        ''' Récupère toutes les sondes associées à un ConstructionSite.
         ''' </summary>
-        <HttpGet("ByChantier/{chantierId}")>
-        Public Async Function GetSondesByChantier(chantierId As String) As Task(Of IActionResult)
+        <HttpGet("ByConstructionSite/{ConstructionSiteId}")>
+        Public Async Function GetSondesByConstructionSite(ConstructionSiteId As String) As Task(Of IActionResult)
             Try
-                'Dim chantier = Await _context.LesChantiersDbs
+                'Dim ConstructionSite = Await _context.ConstructionSitesDbs
                 '.Include(Function(c) c. ListSondes)
-                '.FirstOrDefaultAsync(Function(c) c. refChantier = chantierId)
-                Dim chantier = Await _context.LesChantiersDb _
+                '.FirstOrDefaultAsync(Function(c) c. RefChantier = ConstructionSiteId)
+                Dim ConstructionSite = Await _context.ConstructionSitesDb _
                 .Include(Function(c) c.ListSondes) _
-                .FirstOrDefaultAsync(Function(c) c.refChantier = chantierId)
+                .FirstOrDefaultAsync(Function(c) c.RefChantier = ConstructionSiteId)
 
-                If chantier Is Nothing Then
-                    Return NotFound($"Le chantier avec l'ID {chantierId} n'existe pas.")
+                If ConstructionSite Is Nothing Then
+                    Return NotFound($"Le ConstructionSite avec l'ID {ConstructionSiteId} n'existe pas.")
                 End If
 
-                Return Ok(chantier.ListSondes)
+                Return Ok(ConstructionSite.ListSondes)
             Catch ex As Exception
-                Return StatusCode(500, $"Erreur lors de la récupération des sondes du chantier: {ex.Message}")
+                Return StatusCode(500, $"Erreur lors de la récupération des sondes du ConstructionSite: {ex.Message}")
             End Try
         End Function
 

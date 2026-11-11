@@ -1,8 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @implements IDisposable
 @inject LocalizationService Loc
+@inject AuthService AuthService
 @using GaiaPressBlazorWebAPP.Components
 @using GaiaPressBlazorWebAPP.Components.Layout
+@using GaiaPressBlazorWebAPP.Services
 
 @* Menu principal en haut de l'écran *@
 
@@ -37,13 +39,25 @@
 </div>
 
 @code {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        // Initialiser l'authentification (récupère l'utilisateur depuis localStorage)
+        await AuthService.InitializeAsync();
+
+        // S'abonner aux changements d'état d'authentification
+        AuthService.OnAuthStateChanged += OnAuthStateChanged;
         Loc.LanguageChanged += StateHasChanged;
+    }
+
+    private void OnAuthStateChanged()
+    {
+        // Rafraîchir l'UI quand l'utilisateur se connecte/déconnecte
+        StateHasChanged();
     }
 
     public void Dispose()
     {
+        AuthService.OnAuthStateChanged -= OnAuthStateChanged;
         Loc.LanguageChanged -= StateHasChanged;
     }
 }

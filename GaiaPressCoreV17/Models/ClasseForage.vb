@@ -5,38 +5,50 @@ Imports System.Collections.Generic
 Imports GaiaPressCoreV17.Services
 Imports GaiaPressCoreV17.Logic
 Imports System.ComponentModel.DataAnnotations
+Imports System.ComponentModel.DataAnnotations.Schema
 
 Namespace GaiaPressCoreV17.Models
 
+    <Table("LesForagesDb", Schema:="dbo")>
     Public Class Forage
 
         ' Tableau des Essais
         Public Property ListEssais As New List(Of Essai_Forage)()
 
-        ' les proprietes
-        Public RefChantier As String
+        ' Clé primaire
         <Key>
-        Public RefForage As String
-        Public numeroForage As Integer
-        Public NomForage As String
-        Public dateForage As Date
-        Public materiel As String
-        Public outil As String
-        Public abscisseX As Single
-        Public ordonneeY As Single
-        Public altitudeZ As Single
-        Public coteInit As Single
-        Public coteFinale As Single
-        Public EventsSuspendus As Boolean
-        Public IsSaved As Boolean
+        Public Property RefForage As String
+
+        ' Clé étrangère : mappée sur la colonne SQL refChantier
+        <Column("refChantier")>
+        Public Property RefChantier As String
+
+        ' Propriété de navigation vers le chantier
+        Public Property ConstructionSite As ConstructionSite
+
+        ' Propriétés du forage
+        Public Property numeroForage As Integer
+        Public Property NomForage As String
+        Public Property dateForage As Date
+        Public Property materiel As String
+        Public Property outil As String
+        Public Property abscisseX As Single
+        Public Property ordonneeY As Single
+        Public Property altitudeZ As Single
+        Public Property coteInit As Single
+        Public Property coteFinale As Single
+
+        ' Propriétés NON mappées en base (uniquement en mémoire)
+        <NotMapped>
+        Public Property EventsSuspendus As Boolean
+
+        <NotMapped>
+        Public Property IsSaved As Boolean
+
+        <NotMapped>
+        Public Property FichierConstructionSite As String
+
         Public Event HasBeenModified()
-        Public FichierChantier As String
-
-        ' ⚠️ PROPRIÉTÉ DE NAVIGATION OBLIGATOIRE !
-        Public Property Chantier As Chantier ' ← Navigation vers l'entité liée
-
-        ' Puis utilisez :
-        Dim column As DataColumn = New DataColumn("NomColonne", GetType(String))
 
         '================================================================================
         ' Constructeur
@@ -51,7 +63,6 @@ Namespace GaiaPressCoreV17.Models
         ' ================================================================================
 
         Public Sub IHaveBeenModified()
-            ' Génère un événement indiquant que des modifications du Chantier ont eu lieu
             If Not EventsSuspendus Then
                 RaiseEvent HasBeenModified()
                 IsSaved = False
@@ -104,11 +115,11 @@ Namespace GaiaPressCoreV17.Models
         End Function
 
         Public Function GetForageParRef(refForage As String) As Forage
-            If Me.Chantier Is Nothing Then
+            If Me.ConstructionSite Is Nothing Then
                 Return Nothing
             End If
 
-            Return Me.Chantier.GetForageParRef(refForage)
+            Return Me.ConstructionSite.GetForageParRef(refForage)
         End Function
 
         Public Sub SetNomForage(ByVal nom As String)
@@ -214,10 +225,10 @@ Namespace GaiaPressCoreV17.Models
 
             '    MsgBox "NewEssai"
             If NewTable Then  ' On ajoute un Essai à MonFichier.Tables("LesEssaiForage") seulement si Table est vrai
-                If MonChantier.Tables("LesEssaiForage") Is Nothing Then
-                    MonChantier.Tables.Add("LesEssaiForage")
-                    With MonChantier.Tables("LesEssaiForage")
-                        .Columns.Add("refChantier", GetType(String))
+                If MonConstructionSite.Tables("LesEssaiForage") Is Nothing Then
+                    MonConstructionSite.Tables.Add("LesEssaiForage")
+                    With MonConstructionSite.Tables("LesEssaiForage")
+                        .Columns.Add("RefChantier", GetType(String))
                         .Columns.Add("refForage", GetType(String))
 
                         Dim columns() As DataColumn
@@ -266,7 +277,7 @@ Namespace GaiaPressCoreV17.Models
 
                     End With
                 Else
-                    MonChantier.Tables("LesEssaiForage").NewRow()
+                    MonConstructionSite.Tables("LesEssaiForage").NewRow()
                 End If
             End If
 
@@ -315,7 +326,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Sub UpdateEssaiForage(ByVal essai As Essai_Forage)
             For i As Integer = 0 To Me.ListEssais.Count - 1
-                If Me.ListEssais(i).refEssai = essai.refEssai Then
+                If Me.ListEssais(i).RefEssai = essai.RefEssai Then
                     Me.ListEssais(i) = essai
                     Exit For
                 End If

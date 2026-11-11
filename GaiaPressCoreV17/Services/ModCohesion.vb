@@ -95,7 +95,7 @@ Namespace GaiaPressCoreV17.Services
             P0 = -K0 * Sz
 
 
-            'Ndp = _chantier. ListMesuresForage.count
+            'Ndp = _ConstructionSite. ListMesuresForage.count
             Ndp = Essai. Mesures.Count
 
             k = -1

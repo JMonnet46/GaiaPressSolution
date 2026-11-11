@@ -162,7 +162,7 @@ jQuery.fn = jQuery.prototype = {
 		// Build a new jQuery matched element set
 		var ret = jQuery.merge( this.constructor(), elems );
 
-		// Add the old object onto the stack (as a reference)
+		// Add the old object onto the stack (as a Reference)
 		ret.prevObject = this;
 
 		// Return the newly-formed element set
@@ -2592,7 +2592,7 @@ jQuery.fn.extend( {
 
 // Initialize a jQuery object
 
-// A central reference to the root jQuery(document)
+// A central Reference to the root jQuery(document)
 var rootjQuery,
 
 	// A simple way to check for HTML strings
@@ -2704,7 +2704,7 @@ var rootjQuery,
 // Give the init function the jQuery prototype for later instantiation
 init.prototype = jQuery.fn;
 
-// Initialize central reference
+// Initialize central Reference
 rootjQuery = jQuery( document$1 );
 
 var rparentsprev = /^(?:parents|prev(?:Until|All))/,
@@ -4530,7 +4530,7 @@ function domManip( collection, args, callback, ignored ) {
 				if ( i !== iNoClone ) {
 					node = jQuery.clone( node, true, true );
 
-					// Keep references to cloned scripts for later restoration
+					// Keep References to cloned scripts for later restoration
 					if ( hasScripts ) {
 						jQuery.merge( scripts, getAll( node, "script" ) );
 					}
@@ -8642,7 +8642,7 @@ jQuery.extend( {
 				window.clearTimeout( timeoutTimer );
 			}
 
-			// Dereference transport for early garbage collection
+			// DeReference transport for early garbage collection
 			// (no matter how long the jqXHR object will be used)
 			transport = undefined;
 

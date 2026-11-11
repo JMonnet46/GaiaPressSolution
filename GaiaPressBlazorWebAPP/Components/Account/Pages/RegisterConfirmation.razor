@@ -29,17 +29,17 @@ else
 }
 
 @code {
-    private string? emailConfirmationLink;
-    private string? statusMessage;
+    private string emailConfirmationLink;
+    private string statusMessage;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 
     [SupplyParameterFromQuery]
-    private string? Email { get; set; }
+    private string Email { get; set; }
 
     [SupplyParameterFromQuery]
-    private string? ReturnUrl { get; set; }
+    private string ReturnUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

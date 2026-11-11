@@ -29,7 +29,7 @@ namespace Microsoft.AspNetCore.Routing
             {
                 IEnumerable<KeyValuePair<string, StringValues>> query = [
                     new("ReturnUrl", returnUrl),
-                    new("Action", ExternalLogin.LoginCallbackAction)];
+                    new("Action", "LoginCallback");
 
                 var redirectUrl = UriHelper.BuildRelative(
                     context.Request.PathBase,

@@ -26,8 +26,8 @@ Namespace GaiaPressCoreV17.Logic
         Public Property MonEssaiForage As Essai_Forage
         Public Property MyEssaiForage As Essai_Forage
 
-        ' Propriété pour stocker le chantier associé
-        'Public Property MonChantier As LesChantier
+        ' Propriété pour stocker le ConstructionSite associé
+        'Public Property MonConstructionSite As LesConstructionSite
 
         ''' <summary>
         ''' Définit l'essai de forage actuel.
@@ -37,10 +37,10 @@ Namespace GaiaPressCoreV17.Logic
         End Sub
 
         ''' <summary>
-        ''' Définit le chantier associé.
+        ''' Définit le ConstructionSite associé.
         ''' </summary>
-        'Public Sub SetMonChantier(chantier As LesChantier)
-        '    MonChantier = chantier
+        'Public Sub SetMonConstructionSite(ConstructionSite As LesConstructionSite)
+        '    MonConstructionSite = ConstructionSite
         'End Sub
 
         ''' <summary>
@@ -213,8 +213,8 @@ Namespace GaiaPressCoreV17.Logic
                                                                            ' Espacement
                                                                            column.Item().PaddingVertical(5)
 
-                                                                           ' Chantier associé
-                                                                           column.Item().Text("Chantier : " & essai. RefChantier).
+                                                                           ' ConstructionSite associé
+                                                                           column.Item().Text("ConstructionSite : " & essai. RefChantier).
                                                                                FontSize(12)
 
                                                                            ' Espacement

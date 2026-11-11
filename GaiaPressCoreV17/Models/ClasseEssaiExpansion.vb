@@ -42,7 +42,10 @@ Namespace GaiaPressCoreV17.Models
         <ForeignKey("RefSonde")>
         Public Overridable Property  MySonde As Probe
 
-        <InverseProperty("MesureExpansion")>
+        '<InverseProperty("MesureExpansion")>
+        'Public Overridable Property ListeMesureExpansion As List(Of MesureExpansion) = New List(Of MesureExpansion)()
+        ' ✅ APRÈS (corrigé)
+        <InverseProperty("EssaiExpansion")>
         Public Overridable Property ListeMesureExpansion As List(Of MesureExpansion) = New List(Of MesureExpansion)()
 
         Public EventsSuspendus As Boolean
@@ -450,10 +453,10 @@ Namespace GaiaPressCoreV17.Models
             End With
             MyExpansionNouvelleMesure(0, 0, 0)
 
-            If Table Then ' On ajoute un essai à MonChantier.Tables("LesEssaisExpansionPropre") seulement si Table est vrai
-                If MonChantier.Tables("LesEssaisExpansionPropre") Is Nothing Then
-                    MonChantier.Tables.Add("LesEssaisExpansionPropre")
-                    With MonChantier.Tables("LesEssaisExpansionPropre")
+            If Table Then ' On ajoute un essai à MonConstructionSite.Tables("LesEssaisExpansionPropre") seulement si Table est vrai
+                If MonConstructionSite.Tables("LesEssaisExpansionPropre") Is Nothing Then
+                    MonConstructionSite.Tables.Add("LesEssaisExpansionPropre")
+                    With MonConstructionSite.Tables("LesEssaisExpansionPropre")
                         .Columns.Add("refEssai", GetType(String))
                         .Columns.Add("refSonde", GetType(String))
                         .Columns.Add("nomEssai", GetType(String))
@@ -485,7 +488,7 @@ Namespace GaiaPressCoreV17.Models
 
                     MaListeSonde.Tables("LesEssaisExpansionPropre").Rows.Add(ObjetDataRow)
 
-                    'MonChantier.Tables("LesEssaiForage").Rows.Add()
+                    'MonConstructionSite.Tables("LesEssaiForage").Rows.Add()
                 End If
             End If
 

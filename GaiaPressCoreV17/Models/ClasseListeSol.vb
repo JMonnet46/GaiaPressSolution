@@ -27,7 +27,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Sub AddSol(Soil As Sol)
             Me.ListeSol.Add(Soil)
-            ' Lier le forage au chantier (si nécessaire)
+            ' Lier le forage au ConstructionSite (si nécessaire)
             'Myforage.RefSol = Soil.RefSol
         End Sub
 

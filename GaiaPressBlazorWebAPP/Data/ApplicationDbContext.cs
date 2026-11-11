@@ -11,6 +11,17 @@ namespace GaiaPressBlazorWebAPP.Data
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // important : évite d’écraser la config venant de DI
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder
+                    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
+                    .EnableSensitiveDataLogging(); // optionnel
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

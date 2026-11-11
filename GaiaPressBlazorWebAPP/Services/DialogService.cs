@@ -30,9 +30,9 @@ namespace GaiaPressBlazorWebAPP.Services
         /// <summary>
         /// Affiche une boîte de dialogue de saisie (prompt)
         /// </summary>
-        public async Task<string?> PromptAsync(string message, string? defaultValue = null)
+        public async Task<string> PromptAsync(string message, string defaultValue = null)
         {
-            return await _jsRuntime.InvokeAsync<string?>("prompt", message, defaultValue);
+            return await _jsRuntime.InvokeAsync<string>("prompt", message, defaultValue);
         }
     }
 }

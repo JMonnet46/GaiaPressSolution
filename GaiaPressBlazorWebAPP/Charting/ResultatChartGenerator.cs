@@ -7,48 +7,48 @@ using System.Reflection;
 namespace GaiaPressBlazorWebAPP.Charting
 {
     /// <summary>
-    /// Génère des données de graphique pour les essais de forage.
+    /// Génère des données de graphique pour les Tests de forage.
     /// Remplace les anciennes fonctions utilisant DataVisualization.
     /// </summary>
     public class ResultatChartGenerator
     {        // Exemple : Générer des données pour un graphique Pression/Volume
-        public Dictionary<string, List<double>> GeneratePressureVolumeChart(Essai_Forage essai)
+        public Dictionary<string, List<double>> GeneratePressureVolumeChart(Essai_Forage Test)
         {
             var data = new Dictionary<string, List<double>>();
 
             data.Add("Pression (bar)", new List<double> {
-                essai.presP0,
-                essai.presFluage,
-                essai.presLimite
+                Test.presP0,
+                Test.presFluage,
+                Test.presLimite
             });
 
             data.Add("Volume (m³)", new List<double> {
-                essai.VolSonde,
-                essai.VolSonde * 1.2,
-                essai.VolSonde * 1.5
+                Test.VolSonde,
+                Test.VolSonde * 1.2,
+                Test.VolSonde * 1.5
             });
 
             return data;
         }
 
         // Exemple : Générer des données pour une courbe de fluage
-        public (double[] xValues, double[] yValues) GenerateCreepCurve(Essai_Forage essai)
+        public (double[] xValues, double[] yValues) GenerateCreepCurve(Essai_Forage Test)
         {
             var xValues = new double[] { 0, 1, 2, 3, 4, 5 };
             var yValues = new double[] {
-                essai.presP0,
-                essai.presP0 * 0.95,
-                essai.presP0 * 0.90,
-                essai.presP0 * 0.85,
-                essai.presP0 * 0.80,
-                essai.presP0 * 0.75
+                Test.presP0,
+                Test.presP0 * 0.95,
+                Test.presP0 * 0.90,
+                Test.presP0 * 0.85,
+                Test.presP0 * 0.80,
+                Test.presP0 * 0.75
             };
 
             return (xValues, yValues);
         }
 
         // Exemple : Générer des données pour un graphique de limite hyperbolique
-        public (double[] xValues, double[] yValues) GenerateHyperbolicLimitChart(Essai_Forage essai)
+        public (double[] xValues, double[] yValues) GenerateHyperbolicLimitChart(Essai_Forage Test)
         {
             var xValues = new double[] { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
             var yValues = new double[xValues.Length];

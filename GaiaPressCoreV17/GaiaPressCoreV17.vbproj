@@ -4,6 +4,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Language>VB</Language>
+		
 		<UserSecretsId>8cd7467b-65f2-48d7-9600-087c5217cb82</UserSecretsId>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<!-- ✅ Supprimez ou corrigez cette section -->
@@ -34,7 +35,8 @@
 	</PropertyGroup>
 	<ItemGroup>
     <!-- Packages NuGet compatibles avec .NET 8.0 -->
-    <PackageReference Include="Azure.Identity" Version="1.18.0" />
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.2" />
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
     <PackageReference Include="itext" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.12" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
@@ -53,7 +55,7 @@
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.6" />
     <!-- Promoted transitive dependency to address vulnerabilities -->
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12-pre20260709125052" />
-    <!-- NuGet libraries promoted as direct references to ensure safe versions -->
+    <!-- NuGet libraries promoted as direct References to ensure safe versions -->
     <PackageReference Include="NuGet.Protocol" Version="6.3.3" />
     <PackageReference Include="NuGet.Packaging" Version="6.3.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
@@ -66,6 +68,8 @@
 
   <!-- Suppression des fichiers non nécessaires -->
   <ItemGroup>
+	<Compile Remove="Program.vb" />
+	<Compile Remove="CHANGELOG_GaiaPress.md\**" />
     <Compile Remove="CHANGELOG_GaiaPress.md\**" />
     <Compile Remove="Datas\**" />
     <Compile Remove="Data\**" />
@@ -90,20 +94,21 @@
     <Compile Remove="Program.vb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="wwwroot\WebChantier.vb" />
+    <Content Remove="wwwroot\WebConstructionSite.vb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DesignTimeDbContextFactory.vb" />
     <Compile Include="Data\GaiaPressDbContext.vb" />
-    <Compile Include="Models\ClasseChantier.vb" />
+    <Compile Include="Models\ClasseConstructionSite.vb" />
     <Compile Include="Models\ClasseEssaiExpansion.vb" />
     <Compile Include="Models\ClasseEssaiForage.vb" />
     <Compile Include="Models\ClasseEssaiResistance.vb" />
     <Compile Include="Models\ClasseForage.vb" />
+    <Compile Include="Models\ClasseListeChantier.vb" />
     <Compile Include="Models\ClasseListeMesureEssaiForage.vb" />
     <Compile Include="Models\ClasseListeMesureResistance.vb" />
     <Compile Include="Models\ClasseListeMesureExpansion.vb" />
     <Compile Include="Models\ClasseListeForage.vb" />
-    <Compile Include="Models\ClasseListeChantier.vb" />
     <Compile Include="Models\ClasseListeEssaiForage.vb" />
     <Compile Include="Models\ClasseListeExpansion.vb" />
     <Compile Include="Models\ClasseListeResistance.vb" />
@@ -128,6 +133,7 @@
     <Compile Include="Models\Dto\PrecisionElastDto.vb" />
     <Compile Include="Models\Dto\SolDto.vb" />
     <Compile Include="Models\Dto\SondeDto.vb" />
+    <Compile Include="Models\ForageEntity.vb" />
     <Compile Include="Models\ModCohesion.vb" />
     <Compile Include="Models\ModComportPressio.vb" />
     <Compile Include="Models\ModDilatance.vb" />

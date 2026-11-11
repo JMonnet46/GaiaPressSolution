@@ -107,10 +107,10 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         ''' <summary>
-        ''' Récupère les essais d'Resistance par référence de chantier.
+        ''' Récupère les essais d'Resistance par référence de ConstructionSite.
         ''' </summary>
-        ''' <param name="refChantier">Référence du chantier.</param>
-        ''' <returns>Liste des essais d'Resistance pour le chantier spécifié.</returns>
+        ''' <param name="RefChantier">Référence du ConstructionSite.</param>
+        ''' <returns>Liste des essais d'Resistance pour le ConstructionSite spécifié.</returns>
         Public Async Function GetEssaisResistanceDbByRefSonde(refSonde As String) As Task(Of List(Of EssaiResistance))
             Return Await _dbContext.ListeEssaiResistancesDb.Where(Function(e) e.RefSonde = refSonde).ToListAsync()
         End Function

@@ -1,0 +1,167 @@
+﻿@* Components/Forage/ForageSheet.razor *@
+@inject LocalizationService Loc
+
+<div class="forage-sheet">
+    <!-- Onglets -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="forage-tab" data-bs-toggle="tab" data-bs-target="#forage" type="button" role="tab">
+                @Loc["Borehole"]
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="Tests-tab" data-bs-toggle="tab" data-bs-target="#Tests" type="button" role="tab">
+                @Loc["Tests"]
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="rapport-tab" data-bs-toggle="tab" data-bs-target="#rapport" type="button" role="tab">
+                @Loc["Report"]
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Onglet Forage -->
+        <div class="tab-pane fade show active" id="forage" role="tabpanel">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>@Loc["Identification"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["BoreholeReference"]</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" @bind="Borehole.RefForage" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["BoreholeName"]</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" @bind="Borehole.NomForage" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["BoreholeNumber"]</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" @bind="Borehole.numeroForage" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>@Loc["Realization"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["BoreholeDate"]</label>
+                        <div class="col-sm-8">
+                            <input type="datetime-local" class="form-control" @bind="Borehole.dateForage" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["DrillingMaterial"]</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" @bind="Borehole.materiel" readonly="@IsReadOnly" placeholder="@Loc["ToFill"]" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["DrillingTool"]</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" @bind="Borehole.outil" readonly="@IsReadOnly" placeholder="@Loc["ToFill"]" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>@Loc["Parameters"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["XCoordinate"] (m)</label>
+                        <div class="col-sm-8">
+                            <input type="number" step="0.01" class="form-control" @bind="Borehole.abscisseX" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["YCoordinate"] (m)</label>
+                        <div class="col-sm-8">
+                            <input type="number" step="0.01" class="form-control" @bind="Borehole.ordonneeY" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["ZAltitude"] (m)</label>
+                        <div class="col-sm-8">
+                            <input type="number" step="0.01" class="form-control" @bind="Borehole.altitudeZ" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["InitialDepth"] (m)</label>
+                        <div class="col-sm-8">
+                            <input type="number" step="0.01" class="form-control" @bind="Borehole.coteInit" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">@Loc["FinalDepth"] (m)</label>
+                        <div class="col-sm-8">
+                            <input type="number" step="0.01" class="form-control" @bind="Borehole.coteFinale" readonly="@IsReadOnly" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="d-flex justify-content-end mt-3 gap-2">
+                <button class="btn btn-outline-primary" @onclick="OnModifier" disabled="@(!IsReadOnly)">
+                    @Loc["Modify"]
+                </button>
+                <button class="btn btn-success" @onclick="OnOk" disabled="@IsReadOnly">
+                    @Loc["Ok"]
+                </button>
+                <button class="btn btn-secondary" @onclick="OnAnnuler">
+                    @Loc["Cancel"]
+                </button>
+            </div>
+        </div>
+
+        <!-- Onglet Tests -->
+        <div class="tab-pane fade" id="Tests" role="tabpanel">
+            <TestForm MyTest="@CurrentTest" />
+        </div>
+
+        <!-- Onglet Rapport -->
+        <div class="tab-pane fade" id="rapport" role="tabpanel">
+            <p>@Loc["ReportContent"]</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public global::GaiaPressCoreV17.Models.Forage Borehole { get; set; } = new();
+    [Parameter] public EventCallback<global::GaiaPressCoreV17.Models.Forage?> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    private bool IsReadOnly { get; set; } = true;
+    private Essai_Forage CurrentTest { get; set; } = new();
+
+    private void OnModifier()
+    {
+        IsReadOnly = false;
+    }
+
+    private async Task OnOk()
+    {
+        IsReadOnly = true;
+        await OnSave.InvokeAsync(Borehole);
+    }
+
+    private async Task OnAnnuler()
+    {
+        IsReadOnly = true;
+        await OnCancel.InvokeAsync();
+    }
+}

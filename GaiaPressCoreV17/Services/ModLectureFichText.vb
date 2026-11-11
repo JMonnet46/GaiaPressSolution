@@ -13,7 +13,7 @@ Namespace GaiaPressCoreV17.Services
         ' Passer l'instance de Probe (MySonde) à la méthode
         Dim essaiResistance = MySonde.GetEssaiResistanceParRef("ESSAI_001", 1)
 
-        Public Function LectureEssaiTexte(FichierChantier As String, Essai As Essai_Forage) As Boolean
+        Public Function LectureEssaiTexte(FichierConstructionSite As String, Essai As Essai_Forage) As Boolean
             On Error GoTo errorFind
 
             Dim i, l As Integer
@@ -30,7 +30,7 @@ Namespace GaiaPressCoreV17.Services
             Dim objStreamReader As StreamReader
 
             'Pass the file path and the file name to the StreamReader constructor.
-            objStreamReader = New StreamReader(FichierChantier)
+            objStreamReader = New StreamReader(FichierConstructionSite)
 
             ''Read the first line of text.
             'TextLine = objStreamReader.ReadLine
@@ -171,7 +171,7 @@ errorFind:
         '  Lecture des fichiers texte Jean Lutz
         ' ******************************************************
 
-        Public Function LectureEssaiJeanLutzTexte(ByVal FichierChantier As String) As Boolean
+        Public Function LectureEssaiJeanLutzTexte(ByVal FichierConstructionSite As String) As Boolean
             '    Dim ListeDesEssais() As EssaiForage
             Dim Essai As Essai_Forage
             Dim EssaiResistance As EssaiResistance
@@ -194,7 +194,7 @@ errorFind:
             Dim objStreamReader As StreamReader
 
             ''Pass the file path and the file name to the StreamReader constructor.
-            'objStreamReader = New StreamReader(FichierChantier)
+            'objStreamReader = New StreamReader(FichierConstructionSite)
 
             ''Read the first line of text.
             'TextLine = objStreamReader.ReadLine
@@ -231,7 +231,7 @@ errorFind:
             Call MyEssaiForage.SuspendreEvents()
 
             'Pass the file path and the file name to the StreamReader constructor.
-            objStreamReader = New StreamReader(FichierChantier)
+            objStreamReader = New StreamReader(FichierConstructionSite)
 
             'Read the first line of text.
             TextLine = objStreamReader.ReadLine
@@ -615,7 +615,7 @@ errorFind:
 
                                 Index = 0
                                 ' Déclaration d'un nouvel essai sur MonForage
-                                If MonChantier.Tables("LesEssaiForage") Is Nothing Then
+                                If MonConstructionSite.Tables("LesEssaiForage") Is Nothing Then
                                     Call MyForage.NouveauEssai(True)
                                 Else
                                     Call MyForage.NouveauEssai(False)

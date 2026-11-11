@@ -55,16 +55,16 @@ Namespace GaiaPressCoreV17.Logic
         End Function
 
         '''' <summary>
-        '''' Récupère les sondes par référence de chantier avec une logique métier spécifique.
+        '''' Récupère les sondes par référence de ConstructionSite avec une logique métier spécifique.
         '''' </summary>
-        '''' <param name="refChantier">Référence du chantier.</param>
-        '''' <returns>Liste des sondes pour le chantier spécifié.</returns>
-        'Public Async Function GetProbesByChantier(refChantier As String) As Task(Of IActionResult)
+        '''' <param name="RefChantier">Référence du ConstructionSite.</param>
+        '''' <returns>Liste des sondes pour le ConstructionSite spécifié.</returns>
+        'Public Async Function GetProbesByConstructionSite(RefChantier As String) As Task(Of IActionResult)
         '    Try
-        '        Dim probes = Await _SondeService.GetProbesByChantier(refChantier)
+        '        Dim probes = Await _SondeService.GetProbesByConstructionSite(RefChantier)
         '        Return Ok(probes)
         '    Catch ex As Exception
-        '        Return BadRequest(New With {Key .Message = $"Erreur lors de la récupération des sondes pour le chantier {refChantier} : {ex.Message}"})
+        '        Return BadRequest(New With {Key .Message = $"Erreur lors de la récupération des sondes pour le ConstructionSite {RefChantier} : {ex.Message}"})
         '    End Try
         'End Function
 
@@ -137,19 +137,19 @@ Namespace GaiaPressCoreV17.Logic
         End Function
 
         '''' <summary>
-        '''' Supprime toutes les sondes associées à un chantier avec une logique métier spécifique.
+        '''' Supprime toutes les sondes associées à un ConstructionSite avec une logique métier spécifique.
         '''' </summary>
-        '''' <param name="refChantier">Référence du chantier.</param>
+        '''' <param name="RefChantier">Référence du ConstructionSite.</param>
         '''' <returns>Ok si la suppression a réussi, NotFound sinon.</returns>
-        'Public Async Function DeleteProbesByChantier(refChantier As String) As Task(Of IActionResult)
+        'Public Async Function DeleteProbesByConstructionSite(RefChantier As String) As Task(Of IActionResult)
         '    Try
-        '        Dim success = Await _SondeService.DeleteProbesByChantier(refChantier)
+        '        Dim success = Await _SondeService.DeleteProbesByConstructionSite(RefChantier)
         '        If Not success Then
-        '            Return NotFound(New With {Key .Message = $"Aucune probe trouvée pour le chantier {refChantier}."})
+        '            Return NotFound(New With {Key .Message = $"Aucune probe trouvée pour le ConstructionSite {RefChantier}."})
         '        End If
-        '        Return Ok(New With {Key .Message = $"Probes du chantier {refChantier} supprimées avec succès."})
+        '        Return Ok(New With {Key .Message = $"Probes du ConstructionSite {RefChantier} supprimées avec succès."})
         '    Catch ex As Exception
-        '        Return BadRequest(New With {Key .Message = $"Erreur lors de la suppression des sondes du chantier : {ex.Message}"})
+        '        Return BadRequest(New With {Key .Message = $"Erreur lors de la suppression des sondes du ConstructionSite : {ex.Message}"})
         '    End Try
         'End Function
     End Class

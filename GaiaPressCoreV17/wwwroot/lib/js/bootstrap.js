@@ -69,7 +69,7 @@
       const instanceMap = elementMap.get(element);
       instanceMap.delete(key);
 
-      // free up element references if there are no instances left for an element
+      // free up element References if there are no instances left for an element
       if (instanceMap.size === 0) {
         elementMap.delete(element);
       }
@@ -1760,7 +1760,7 @@
     display: 'dynamic',
     offset: [0, 2],
     popperConfig: null,
-    reference: 'toggle'
+    Reference: 'toggle'
   };
   const DefaultType$9 = {
     autoClose: '(boolean|string)',
@@ -1768,7 +1768,7 @@
     display: 'string',
     offset: '(array|string|function)',
     popperConfig: '(null|object|function)',
-    reference: '(string|element|object)'
+    Reference: '(string|element|object)'
   };
 
   /**
@@ -1875,9 +1875,9 @@
     }
     _getConfig(config) {
       config = super._getConfig(config);
-      if (typeof config.reference === 'object' && !isElement(config.reference) && typeof config.reference.getBoundingClientRect !== 'function') {
+      if (typeof config.Reference === 'object' && !isElement(config.Reference) && typeof config.Reference.getBoundingClientRect !== 'function') {
         // Popper virtual elements require a getBoundingClientRect method
-        throw new TypeError(`${NAME$a.toUpperCase()}: Option "reference" provided type "object" without a required "getBoundingClientRect" method.`);
+        throw new TypeError(`${NAME$a.toUpperCase()}: Option "Reference" provided type "object" without a required "getBoundingClientRect" method.`);
       }
       return config;
     }
@@ -1885,16 +1885,16 @@
       if (typeof Poppe _namespace === 'undefined') {
         throw new TypeError('Bootstrap\'s dropdowns require Popper (https://popper.js.org/docs/v2/)');
       }
-      let referenceElement = this._element;
-      if (this._config.reference === 'parent') {
-        referenceElement = this._parent;
-      } else if (isElement(this._config.reference)) {
-        referenceElement = getElement(this._config.reference);
-      } else if (typeof this._config.reference === 'object') {
-        referenceElement = this._config.reference;
+      let ReferenceElement = this._element;
+      if (this._config.Reference === 'parent') {
+        ReferenceElement = this._parent;
+      } else if (isElement(this._config.Reference)) {
+        ReferenceElement = getElement(this._config.Reference);
+      } else if (typeof this._config.Reference === 'object') {
+        ReferenceElement = this._config.Reference;
       }
       const popperConfig = this._getPopperConfig();
-      this._popper = Poppe _namespace.createPopper(referenceElement, this._menu, popperConfig);
+      this._popper = Poppe _namespace.createPopper(ReferenceElement, this._menu, popperConfig);
     }
     _isShown() {
       return this._menu.classList.contains(CLASNAM SHOW$6);

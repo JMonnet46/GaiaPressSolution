@@ -5,19 +5,38 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <UserSecretsId>42d54601-0780-413c-a9c0-198d75a4f5df</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <Content Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Components\Account\IdentityComponentsEndpointRouteBuilderExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Components\Account\Pages\ExternalLogin.razor" />
+    <Content Remove="Components\Pages\Auth.razor" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GaiaPressCoreV17\GaiaPressCoreV17.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
+	<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.2" />
+	<PackageReference Include="Azure.Identity" Version="1.21.0" />
 	<PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
     <PackageReference Include="Microsoft.JSInterop" Version="3.1.8" />
   </ItemGroup>
-	
 
 </Project>

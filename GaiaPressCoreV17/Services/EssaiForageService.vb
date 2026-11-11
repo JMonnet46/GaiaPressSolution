@@ -127,7 +127,7 @@ Namespace GaiaPressCoreV17.Services
         ' ===============================================================================
 
         ''' <summary>
-        ''' Add un essai forage au chantier
+        ''' Add un essai forage au ConstructionSite
         ''' </summary>
         ' Charger les essais depuis la base vers la mémoire
         Public Async Function ChargerEssaisDepuisBase() As Task

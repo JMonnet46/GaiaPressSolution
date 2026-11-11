@@ -69,10 +69,10 @@ else
 @code {
     private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
-    private string? message;
+    private string message;
     private ApplicationUser user = default!;
-    private string? sharedKey;
-    private string? authenticatorUri;
+    private string sharedKey;
+    private string authenticatorUri;
     private IEnumerable<string>? recoveryCodes;
 
     [CascadingParameter]

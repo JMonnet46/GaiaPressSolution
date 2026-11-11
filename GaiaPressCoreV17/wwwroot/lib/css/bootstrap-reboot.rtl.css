@@ -186,7 +186,7 @@
   box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-pReference) {
   :root {
     scroll-behavior: smooth;
   }

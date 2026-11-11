@@ -137,10 +137,10 @@ Namespace GaiaPressCoreV17.Logic
         End Function
 
         ''' <summary>
-        ''' Récupère les essais d'expansion par référence de chantier avec une logique métier spécifique.
+        ''' Récupère les essais d'expansion par référence de ConstructionSite avec une logique métier spécifique.
         ''' </summary>
-        ''' <param name="refChantier">Référence du chantier.</param>
-        ''' <returns>Liste des essais d'expansion pour le chantier spécifié.</returns>
+        ''' <param name="RefChantier">Référence du ConstructionSite.</param>
+        ''' <returns>Liste des essais d'expansion pour le ConstructionSite spécifié.</returns>
         Public Async Function GetEssaisExpansionByrefSonde(refSonde As String) As Task(Of IActionResult)
             Try
                 Dim essais = Await _essaisExpansionService.GetEssaiExpansionByRef(refSonde)

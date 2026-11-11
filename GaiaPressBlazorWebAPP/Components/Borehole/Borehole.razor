@@ -1,0 +1,224 @@
+﻿@page "/Borehole"
+@page "/Borehole/{RefChantier?}"
+@using GaiaPressCoreV17.Services
+@using GaiaPressCoreV17.Models
+@using GaiaPressBlazorWebAPP.Components.Borehole
+@using GaiaPressBlazorWebAPP.Services
+@using ForageModel = GaiaPressCoreV17.Models.Forage
+@implements IDisposable
+
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@inject LocalizationService Loc
+@inject IForageService ForageService
+@inject ChantierState ChantierState
+
+<PageTitle>@Loc["Borehole"]</PageTitle>
+
+<div class="container-fluid mt-3">
+    @if (isInitializing)
+    {
+        <p><em>@Loc["Loading"]</em></p>
+    }
+    else if (isCreating)
+    {
+        @if (string.IsNullOrWhiteSpace(RefChantier))
+        {
+            <div class="alert alert-warning" role="alert">
+                Sélectionnez d'abord un chantier pour créer ou modifier un forage.
+                <div class="mt-3">
+                    <a href="/ConstructionSite" class="btn btn-secondary">@Loc["GoToConstructionSite"]</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <ForageForm RefChantier="@RefChantier" RefForage="@refForage" OnSaved="OnForageSaved" />
+        }
+    }
+    else if (selectedBorehole == null)
+    {
+        <div class="alert alert-warning" role="alert">
+            @if (string.IsNullOrWhiteSpace(RefChantier))
+            {
+                <strong>Sélectionnez d'abord un chantier.</strong>
+            }
+            else
+            {
+                <strong>@Loc["NoBoreholeSelected"]</strong><br />
+                @Loc["SelectBoreholeFirst"]
+            }
+
+            <div class="mt-3">
+                <a href="/ConstructionSite" class="btn btn-secondary me-2">@Loc["GoToConstructionSite"]</a>
+                @if (!string.IsNullOrWhiteSpace(RefChantier))
+                {
+                    <button type="button" class="btn btn-primary" @onclick="CreateBorehole">@Loc["AddBorehole"]</button>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <h3>@Loc["Borehole"]: @selectedBorehole.RefForage</h3>
+
+        <div class="mb-3">
+            <button type="button" class="btn btn-warning" @onclick="EditBorehole">@Loc["Modify"]</button>
+        </div>
+
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item"><button type="button" class="nav-link @(activeTab == "Borehole" ? "active" : "")" @onclick='() => SetTab("Borehole")'>@Loc["Borehole"]</button></li>
+            <li class="nav-item"><button type="button" class="nav-link @(activeTab == "Test" ? "active" : "")" @onclick='() => SetTab("Test")'>@Loc["Test"]</button></li>
+            <li class="nav-item"><button type="button" class="nav-link @(activeTab == "Probe" ? "active" : "")" @onclick='() => SetTab("Probe")'>@Loc["Probe"]</button></li>
+            <li class="nav-item"><button type="button" class="nav-link @(activeTab == "Soil" ? "active" : "")" @onclick='() => SetTab("Soil")'>@Loc["Soil"]</button></li>
+        </ul>
+
+        <div class="tab-content">
+            @if (activeTab == "Borehole")
+            {
+                <BoreholeDetails Borehole="selectedBorehole" />
+            }
+            else if (activeTab == "Test")
+            {
+                <TestList BoreholeId="selectedBorehole.Id" />
+            }
+            else if (activeTab == "Probe")
+            {
+                <ProbeList BoreholeId="selectedBorehole.Id" />
+            }
+            else if (activeTab == "Soil")
+            {
+                <SoilList BoreholeId="selectedBorehole.Id" />
+            }
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+            <button type="button" class="btn btn-secondary" @onclick="Close">@Loc["Close"]</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert @(isError ? "alert-danger" : "alert-success") mt-2" role="alert">@message</div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? RefChantier { get; set; }
+
+    private ForageModel? selectedBorehole;
+    private string? refForage;
+    private bool isCreating;
+    private bool isInitializing = true;
+    private string activeTab = "Borehole";
+    private bool isError;
+    private string message = "";
+
+    protected override void OnInitialized()
+    {
+        ChantierState.OnChange += HandleChantierChanged;
+        if (!string.IsNullOrWhiteSpace(RefChantier))
+            ChantierState.SetChantier(RefChantier);
+        else
+            RefChantier = ChantierState.RefChantier;
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(RefChantier))
+            ChantierState.SetChantier(RefChantier);
+        else if (string.IsNullOrWhiteSpace(RefChantier))
+            RefChantier = ChantierState.RefChantier;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        var boreholeJson = await JSRuntime.InvokeAsync<string?>("localStorage.getItem", "selectedBorehole");
+        if (!string.IsNullOrWhiteSpace(boreholeJson))
+        {
+            try
+            {
+                selectedBorehole = System.Text.Json.JsonSerializer.Deserialize<ForageModel>(boreholeJson);
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                selectedBorehole = null;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(RefChantier))
+        {
+            var storedChantier = await JSRuntime.InvokeAsync<string?>("localStorage.getItem", "selectedChantier");
+            RefChantier = ExtractRefChantier(storedChantier) ?? selectedBorehole?.RefChantier ?? ChantierState.RefChantier;
+            if (!string.IsNullOrWhiteSpace(RefChantier))
+                ChantierState.SetChantier(RefChantier);
+        }
+
+        isInitializing = false;
+        StateHasChanged();
+    }
+
+    private static string? ExtractRefChantier(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return null;
+        try
+        {
+            using var document = System.Text.Json.JsonDocument.Parse(value);
+            var root = document.RootElement;
+            if (root.ValueKind == System.Text.Json.JsonValueKind.String)
+                return root.GetString();
+            if (root.ValueKind == System.Text.Json.JsonValueKind.Object)
+            {
+                foreach (var property in root.EnumerateObject())
+                    if (string.Equals(property.Name, "RefChantier", StringComparison.OrdinalIgnoreCase) && property.Value.ValueKind == System.Text.Json.JsonValueKind.String)
+                        return property.Value.GetString();
+            }
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return value.Trim();
+        }
+        return null;
+    }
+
+    private void HandleChantierChanged()
+    {
+        if (string.IsNullOrWhiteSpace(RefChantier))
+            RefChantier = ChantierState.RefChantier;
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void CreateBorehole()
+    {
+        isCreating = true;
+        refForage = null;
+        selectedBorehole = null;
+    }
+
+    private void EditBorehole()
+    {
+        isCreating = true;
+        refForage = selectedBorehole?.RefForage;
+        RefChantier ??= selectedBorehole?.RefChantier;
+    }
+
+    private async Task OnForageSaved(ForageModel savedForage)
+    {
+        selectedBorehole = savedForage;
+        isCreating = false;
+        message = "Forage enregistré avec succès.";
+        isError = false;
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "selectedBorehole", System.Text.Json.JsonSerializer.Serialize(savedForage));
+    }
+
+    private void SetTab(string tab) => activeTab = tab;
+
+    private void Close() => Navigation.NavigateTo("/ConstructionSite");
+
+    public void Dispose() => ChantierState.OnChange -= HandleChantierChanged;
+}

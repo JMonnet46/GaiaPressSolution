@@ -712,15 +712,15 @@ Namespace GaiaPressCoreV17.Models
         '                End If
         '            Next i1
 
-        '            ' Affectation de la Liste des Sondes à MyChantier
+        '            ' Affectation de la Liste des Sondes à MyConstructionSite
         '            For i1 = 0 To MyListeSonde.ListeSonde.Count - 1
         '                RowSonde = New Probe
         '                RowSonde = MyListeSonde.ListeSonde(i1)
-        '                'If MyChantier.ListeSonde.Count - 1 <= i1 Then
-        '                '    ReDim Preserve MyChantier.ListeSonde(i1)
-        '                '    MyChantier.ListeSonde(i1) = New Probe
+        '                'If MyConstructionSite.ListeSonde.Count - 1 <= i1 Then
+        '                '    ReDim Preserve MyConstructionSite.ListeSonde(i1)
+        '                '    MyConstructionSite.ListeSonde(i1) = New Probe
         '                'End If
-        '                'MyChantier.ListeSonde(i1) = RowSonde
+        '                'MyConstructionSite.ListeSonde(i1) = RowSonde
         '            Next i1
         '            Exit Function
 
@@ -734,7 +734,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Sub CloseListeSonde()
 
-            ' Effacement de la référence vers le chantier
+            ' Effacement de la référence vers le ConstructionSite
             MyListeSonde = Nothing
 
         End Sub
@@ -845,7 +845,7 @@ Namespace GaiaPressCoreV17.Models
             '    If MaListeSonde.Tables("LesSondes") Is Nothing Then
 
             '        ' Création de la Table("LesSondes") dans MaListeSonde
-            '        MonChantier.Tables.Add("LesSondes")
+            '        MonConstructionSite.Tables.Add("LesSondes")
             '        With MaListeSonde.Tables("LesSondes")
             '            .Columns.Add("refSonde", GetType(String))
             '            .Columns.Add("typeSonde", GetType(Int32))

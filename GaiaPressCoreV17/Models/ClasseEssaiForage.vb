@@ -54,7 +54,7 @@ Namespace GaiaPressCoreV17.Models
         Public Property modElastiqueNf As Single
         Public Property Cohesion As Single
         Public Property Frottement As Single
-        Public Property FrottementIntergranulaire
+        Public Property FrottementIntergranulaire As Single
         Public Property U0 As Single
         Public Property profNappe As Single
         Public Property profSonde As Single
@@ -81,7 +81,7 @@ Namespace GaiaPressCoreV17.Models
 
         ' === CONSTRUCTEURS ===
         Public Sub New()
-            RefChantier = MyChantier.GetRefChantier
+            RefChantier = MyConstructionSite.GetRefChantier
             RefForage = MyForage.GetRefForage
             MySol = New Sol
             MySonde = New Probe
@@ -89,7 +89,7 @@ Namespace GaiaPressCoreV17.Models
             MaResistance = MySonde.MaResistance
             MaExpansion = MySonde.MaExpansion
             refSonde = MySonde.RefSonde
-            refEssai = MyForage.GiveMeANewRefEssai()
+            RefEssai = MyForage.GiveMeANewRefEssai()
             nomEssai = MyForage.GiveMeANewNomEssai()
             dateEssai = Date.Today.ToString("yyyy-MM-dd")
             heureEssai = DateTime.Now.ToString("HH:mm:ss")
@@ -152,7 +152,7 @@ Namespace GaiaPressCoreV17.Models
             If MyEssaiForage Is Nothing Then
                 MyEssaiForage = New Essai_Forage
                 'ReDim Preserve MyEssaiForage. ListEssais(i)
-                MyEssaiForage = MyChantier.ListEssaiForages(i)
+                MyEssaiForage = MyConstructionSite.ListEssaiForages(i)
             End If
 
             IsRefUnique = unique
@@ -177,7 +177,7 @@ Namespace GaiaPressCoreV17.Models
             If MyEssaiForage Is Nothing Then
                 MyEssaiForage = New Essai_Forage
                 'ReDim Preserve MyEssaiForage. ListEssais(i)
-                MyEssaiForage = MyChantier.ListEssaiForages(i)
+                MyEssaiForage = MyConstructionSite.ListEssaiForages(i)
             End If
 
             IsNomUnique = unique
@@ -966,7 +966,7 @@ Namespace GaiaPressCoreV17.Models
             ' nouvelleSerie est conservé dans la signature historique de l'importeur.
             If Mesures Is Nothing Then Mesures = New List(Of MesureEssaiForage)
 
-            Dim mesure As New MesureEssaiForage(refEssai, indiceMesure)
+            Dim mesure As New MesureEssaiForage(RefEssai, indiceMesure)
             mesure.Ind = indice
             mesure.Pression = pression
             mesure.Volume15 = volume15
