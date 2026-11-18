@@ -1,8 +1,8 @@
 ﻿Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
-Imports GaiaPressCoreV17.Services
-Imports GaiaPressCoreV17.Logic
 Imports System.Data
+Imports GaiaPressCoreV17.Logic
+Imports GaiaPressCoreV17.Services
 
 Namespace GaiaPressCoreV17.Models
     Public Class Essai_Forage
@@ -23,6 +23,7 @@ Namespace GaiaPressCoreV17.Models
         Public Property MaExpansion As EssaiExpansion
         Public Property MonEssai As Essai_Forage
         'Public Property MyEssaiForage As Essai_Forage
+        Public Property Context As GaiaPressDbContext
         Public Property refSonde As String
         Public Property refEssaiResistancePropre As String
         Public Property refEssaiExpansionPropre As String
@@ -68,8 +69,8 @@ Namespace GaiaPressCoreV17.Models
 
         '========= Propriétés supplémentaires =======================
         Public Property Pe As Single
-
         Public Property Ie As Integer
+
         Public IsSaved As Boolean
         Public Event HasBeenModified()
 
@@ -1364,12 +1365,9 @@ Namespace GaiaPressCoreV17.Models
         End Sub
 
         Public Function GiveMeANewRefEssai(ByVal typeEssai As Integer) As String
-            ' Détermination d'une nouvelle référence pour un essai
-            Dim k As Integer
-            Dim ref As String
-            k = 1
+            Dim k As Integer = 1
+            Dim ref As String = ""
 
-            ref = ""
             Select Case typeEssai
                 Case EssaiCalib.Resistance
                     ref = "Resistance"
@@ -1377,25 +1375,20 @@ Namespace GaiaPressCoreV17.Models
                     ref = "Expansion"
             End Select
 
-            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistanceDb ou des EssaisExpansion
-            Dim listeEssais As New ClasseListeEssaiForage()
+            Dim listeEssais As New ClasseListeEssaiForage(context)
             listeEssais.ListeEssaiForageSession = MyListeEssaiForageSession
 
             Do While Not listeEssais.IsRefEssaiUnique(ref & " " & k)
                 k += 1
             Loop
 
-            GiveMeANewRefEssai = ref & " " & k
-
+            Return ref & " " & k
         End Function
 
         Public Function GiveMeANewNomssai(ByVal typeEssai As Integer) As String
-            ' Détermination d'une nouvelle référence pour un essai
-            Dim k As Integer
-            Dim Nom As String
-            k = 0
+            Dim k As Integer = 0
+            Dim Nom As String = ""
 
-            Nom = ""
             Select Case typeEssai
                 Case EssaiCalib.Resistance
                     Nom = "Resistance"
@@ -1403,16 +1396,14 @@ Namespace GaiaPressCoreV17.Models
                     Nom = "Expansion"
             End Select
 
-            ' Recherche d'une nouvelle référence d'essai qui soit unique dans la liste des EssaisResistanceDb ou des EssaisExpansion
-            Dim listeEssais As New ClasseListeEssaiForage()
+            Dim listeEssais As New ClasseListeEssaiForage(context)
             listeEssais.ListeEssaiForageSession = MyListeEssaiForageSession
 
             Do While Not listeEssais.IsNomEssaiUnique(Nom & " " & k)
                 k += 1
             Loop
 
-            GiveMeANewNomssai = Nom & " " & k
-
+            Return Nom & " " & k
         End Function
 
 

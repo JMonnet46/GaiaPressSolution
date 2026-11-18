@@ -1,0 +1,252 @@
+@page "/NewTest/{RefEssai}"
+@rendermode InteractiveServer
+@implements IDisposable
+@using GaiaPressBlazorWebAPP.Models
+@inject NavigationManager Navigation
+@using GaiaPressBlazorWebAPP.Services
+@inject LocalizationService Loc
+
+<PageTitle>@Loc["PageTitle"] - @test.Reference</PageTitle>
+
+<div class="container-fluid mt-3">
+    <h4>@Loc["DetailEssai"] : @test.Reference</h4>
+
+    <!-- ================= MESSAGES ================= -->
+    @if (!string.IsNullOrEmpty(MessageErreur))
+    {
+        <div class="alert alert-danger">@MessageErreur</div>
+    }
+    @if (!string.IsNullOrEmpty(MessageSucces))
+    {
+        <div class="alert alert-success">@MessageSucces</div>
+    }
+
+    <div class="row">
+        <!-- ================= COLONNE GAUCHE ================= -->
+        <div class="col-md-6">
+
+            <!-- Identification -->
+            <fieldset class="border p-3 mb-3">
+                <legend class="float-none w-auto px-2 fs-6">@Loc["IdentificationEssai"]</legend>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["RefEssaiLabel"]</label>
+                    <div class="col-7">
+                        <input class="form-control" @bind="test.Reference" placeholder="@Loc["RefEssaiPlaceholder"]" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["NomEssaiLabel"]</label>
+                    <div class="col-7">
+                        <input class="form-control" @bind="test.NomEssai" placeholder="@Loc["NomEssaiPlaceholder"]" />
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Réalisation -->
+            <fieldset class="border p-3 mb-3">
+                <legend class="float-none w-auto px-2 fs-6">@Loc["RealisationEssai"]</legend>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["DateEssaiLabel"]</label>
+                    <div class="col-7"><input type="date" class="form-control" @bind="test.DateEssai" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["HeureEssaiLabel"]</label>
+                    <div class="col-7"><input type="time" step="1" class="form-control" @bind="test.HeureEssai" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["DiffPressionLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.DiffPression" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["HauteurControleurLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.HauteurControleur" /></div>
+                </div>
+            </fieldset>
+
+            <!-- Conditions géotechniques -->
+            <fieldset class="border p-3 mb-3">
+                <legend class="float-none w-auto px-2 fs-6">@Loc["ConditionsGeoLabel"]</legend>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["P0Label"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.P0" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["ProfondeurNappeLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.ProfondeurNappe" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["ProfondeurSondeLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.ProfondeurSonde" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PoidsVolumiqueLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PoidsVolumique" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PoidsVolumiqueDejaugeLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PoidsVolumiqueDejauge" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["CoefficientPoissonLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.CoefficientPoisson" /></div>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- ================= COLONNE DROITE ================= -->
+        <div class="col-md-6">
+
+            <!-- Enregistreur / Opérateur -->
+            <fieldset class="border p-3 mb-3">
+                <legend class="float-none w-auto px-2 fs-6">@Loc["EnregistreurOperateurLabel"]</legend>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["EnregistreurLabel"]</label>
+                    <div class="col-7"><input class="form-control" @bind="test.Enregistreur" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["OperateurLabel"]</label>
+                    <div class="col-7"><input class="form-control" @bind="test.Operateur" /></div>
+                </div>
+            </fieldset>
+
+            <!-- Précision -->
+            <fieldset class="border p-3 mb-3">
+                <legend class="float-none w-auto px-2 fs-6">@Loc["PrecisionLabel"]</legend>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["ClassePrecisionLabel"]</label>
+                    <div class="col-7">
+                        <select class="form-select" @bind="test.ClassePrecision">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionLongueurLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionLongueur" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionDiametreLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionDiametre" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionPressionLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionPression" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionEpaisseurLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionEpaisseur" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionVolumeLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionVolume" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionPoidsVolLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionPoidsVol" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionProfondeurLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionProfondeur" /></div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-5 col-form-label">@Loc["PrecisionTempsLabel"]</label>
+                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PrecisionTemps" /></div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <!-- ================= BOUTONS ================= -->
+    <div class="mb-3">
+        <button class="btn btn-danger me-2" @onclick="Supprimer">@Loc["SupprimerButton"]</button>
+        <button class="btn btn-primary me-2" @onclick="Modifier">@Loc["ModifierButton"]</button>
+        <button class="btn btn-success me-2" @onclick="Valider">@Loc["SubmitButton"]</button>
+        <button class="btn btn-secondary" @onclick="Annuler">@Loc["AnnulerButton"]</button>
+    </div>
+
+    <!-- ================= PIED DE PAGE ================= -->
+    <hr />
+    <div class="row">
+        <div class="col-4">@Loc["NomChantierLabel"] : <strong>@RefChantier</strong></div>
+        <div class="col-4">@Loc["NomForageLabel"] : <strong>@NomForage</strong></div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-primary me-2" @onclick="Enregistrer">@Loc["EnregistrerButton"]</button>
+            <button class="btn btn-outline-secondary me-2" @onclick="Imprimer">@Loc["ImprimerButton"]</button>
+            <button class="btn btn-outline-dark" @onclick="Fermer">@Loc["FermerButton"]</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? RefEssai { get; set; }
+    [Parameter] public string? RefChantier { get; set; }
+
+    private TestDetailModel test = new();
+    private string NomForage = "SP1";
+
+    private string? MessageErreur;
+    private string? MessageSucces;
+
+    protected override void OnInitialized()
+    {
+        Loc.LanguageChanged += OnLanguageChanged;
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        if (query.TryGetValue("refChantier", out var rc))
+            RefChantier = rc.ToString();
+
+        // Valeurs proposées, entièrement modifiables
+        test.Reference = RefEssai ?? "RefSP1";
+        test.NomEssai = "SP1_1";
+        test.DateEssai = DateTime.Today;
+        test.HeureEssai = DateTime.Now;
+        test.ClassePrecision = "B";
+    }
+
+    private void OnLanguageChanged() => _ = InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Loc.LanguageChanged -= OnLanguageChanged;
+
+    private void Valider()
+    {
+        Console.WriteLine($"[NewTest] Validation de {test.Reference}");
+        MessageErreur = null;
+        MessageSucces = null;
+
+        try
+        {
+            // 1. Contrôles de saisie
+            if (string.IsNullOrWhiteSpace(test.Reference))
+            {
+                MessageErreur = "La référence de l'essai est obligatoire.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(test.NomEssai))
+            {
+                MessageErreur = "Le nom de l'essai est obligatoire.";
+                return;
+            }
+
+            // 2. Synchronisation avec le paramètre de route
+            RefEssai = test.Reference;
+
+            // 3. Validation effectuée en mémoire, sans écriture en base
+            MessageSucces = $"Essai {test.Reference} validé en mémoire (non sauvegardé).";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("ERREUR Valider : " + ex);
+            MessageErreur = "Erreur lors de la validation : " + ex.Message;
+        }
+    }
+
+    private void Annuler() => Navigation.NavigateTo("/Borehole");
+    private void Modifier() => Console.WriteLine("[NewTest] Mode modification");
+    private void Supprimer() => Console.WriteLine("[NewTest] Suppression demandée");
+    private void Enregistrer() => Console.WriteLine("[NewTest] Enregistrement en BD");
+    private void Imprimer() => Console.WriteLine("[NewTest] Impression");
+    private void Fermer() => Navigation.NavigateTo("/Borehole");
+}

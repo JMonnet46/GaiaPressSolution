@@ -1,20 +1,46 @@
-@* Components/Test/TestForm.razor *@
-<h3>Nouvel Test</h3>
+@page "/TestForm/{RefForage}"
+@using GaiaPressCoreV17.Models
+
+<h3>Nouvel Essai - Forage : @RefForage</h3>
 
 <EditForm Model="@MyTest" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
     <div class="form-group">
         <label>Nom :</label>
         <InputText @bind-Value="MyTest.nomEssai" class="form-control" />
     </div>
+
+    <div class="form-group">
+        <label>Ref Chantier :</label>
+        <InputText @bind-Value="MyTest.RefChantier" class="form-control" readonly="readonly" />
+    </div>
+
+    <div class="form-group">
+        <label>Ref Forage :</label>
+        <InputText @bind-Value="MyTest.RefForage" class="form-control" readonly="readonly" />
+    </div>
+
     <button type="submit" class="btn btn-primary">Valider</button>
+    <button type="button" class="btn btn-secondary" @onclick="Cancel">Annuler</button>
 </EditForm>
 
 @code {
-    [Parameter]
-    public Essai_Forage MyTest { get; set; } = new Essai_Forage();
+    [Parameter] public string RefForage { get; set; } = "";
+    [Parameter] public string RefChantier { get; set; } = "";
+    [Parameter] public Essai_Forage MyTest { get; set; } = new Essai_Forage();
 
-    private void HandleValidSubmit()
+    protected override void OnInitialized()
     {
-        // Logique après validation
+        MyTest.RefForage = RefForage;
+        MyTest.RefChantier = RefChantier;
     }
+
+    private async Task HandleValidSubmit()
+    {
+        await Task.CompletedTask;
+    }
+
+    private void Cancel() { }
 }

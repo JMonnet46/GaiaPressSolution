@@ -60,10 +60,15 @@ public class AuthService
     {
         IsAuthenticated = false;
         CurrentUserName = null;
-
-        await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "auth_user");
-        await _jsRuntime.InvokeVoidAsync("sessionStorage.removeItem", "auth_user");
-
+        try
+        {
+            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "auth_user");
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.removeItem", "auth_user");
+        }
+        catch (InvalidOperationException)
+        {
+            // JS indisponible (prérendu) : on ignore
+        }
         OnAuthStateChanged?.Invoke();
     }
 }

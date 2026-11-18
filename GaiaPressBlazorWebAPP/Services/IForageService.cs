@@ -11,5 +11,6 @@ namespace GaiaPressBlazorWebAPP.Services
         Task SaveForageAsync(ForageModel forage);
 
         Task DeleteForageAsync(string refForage);
+
     }
 }

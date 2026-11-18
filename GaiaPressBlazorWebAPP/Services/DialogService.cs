@@ -24,7 +24,14 @@ namespace GaiaPressBlazorWebAPP.Services
         /// </summary>
         public async Task AlertAsync(string message)
         {
-            await _jsRuntime.InvokeVoidAsync("alert", message);
+            try
+            {
+                await _jsRuntime.InvokeVoidAsync("alert", message);
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine($"[Dialog] {message}");
+            }
         }
 
         /// <summary>

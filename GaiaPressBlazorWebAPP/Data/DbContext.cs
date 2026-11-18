@@ -13,11 +13,17 @@ namespace GaiaPressBlazorWebAPP.Data
 
         public DbSet<ForageEntity> ForageDb { get; set; }
         public DbSet<ConstructionSite> ConstructionSites { get; set; }
+        public DbSet<Essai_Forage> ListeEssaiForageDb { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // RIEN d'autre pour Forage - les attributs gèrent tout
+
+            modelBuilder.Entity<Essai_Forage>(entity =>
+            {
+                entity.ToTable("ListeEssaiForageDb", "dbo");
+                entity.HasKey(e => e.RefEssai);
+            });
         }
     }
 }

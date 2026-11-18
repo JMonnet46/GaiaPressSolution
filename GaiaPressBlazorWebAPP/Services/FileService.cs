@@ -65,11 +65,15 @@ namespace GaiaPressBlazorWebAPP.Services
             IsNewFile = true;
 
             // Nettoyer le localStorage
-            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentFile");
-            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_hasUnsavedChanges");
-            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentChantier");
-            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentForage");
-            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentEssai");
+            try
+            {
+                await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentFile");
+                await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_hasUnsavedChanges");
+                await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentChantier");
+                await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentForage");
+                await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "gaiaPress_currentEssai");
+            }
+            catch (InvalidOperationException) { }
         }
 
         // ============================================

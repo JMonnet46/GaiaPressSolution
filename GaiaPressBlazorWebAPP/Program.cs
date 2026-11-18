@@ -1,10 +1,13 @@
 ﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
+using GaiaPressBlazorWebAPP.Components;
 using GaiaPressBlazorWebAPP.Data;
 using GaiaPressBlazorWebAPP.Services;
 using GaiaPressCoreV17.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +16,7 @@ if (builder.Environment.IsDevelopment())
 {
     try
     {
-        Console.WriteLine("Début AddAzureKeyVault...");
-        builder.Configuration.AddAzureKeyVault(new Uri("https://gaiapress-key-vault.vault.azure.net/"), new AzureCliCredential());
-        Console.WriteLine("Fin AddAzureKeyVault.");
+        builder.Configuration.AddAzureKeyVault(new Uri("https://gaiatech-keyvault.vault.azure.net/"), new AzureCliCredential());
     }
     catch (Exception ex)
     {
@@ -34,6 +35,7 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<LocalizationService>();
 builder.Services.AddLocalization();
 builder.Services.AddScoped<ChantierState>();
+builder.Services.AddScoped<IEssaiService, EssaiService>();
 
 // Au démarrage de l'app - réchauffe la connexion Azure SQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -83,11 +85,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+var supportedCultures = new[] { "fr-FR", "en-GB" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("fr-FR")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseRequestLocalization(localizationOptions);   // ← ici
 app.UseAntiforgery();
-
-app.MapRazorComponents<GaiaPressBlazorWebAPP.Components.App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();
