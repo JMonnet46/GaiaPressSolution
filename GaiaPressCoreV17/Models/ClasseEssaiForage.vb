@@ -82,7 +82,7 @@ Namespace GaiaPressCoreV17.Models
 
         ' === CONSTRUCTEURS ===
         Public Sub New()
-            RefChantier = MyConstructionSite.GetRefChantier
+            RefChantier = MyChantier.GetRefChantier
             RefForage = MyForage.GetRefForage
             MySol = New Sol
             MySonde = New Probe
@@ -153,7 +153,7 @@ Namespace GaiaPressCoreV17.Models
             If MyEssaiForage Is Nothing Then
                 MyEssaiForage = New Essai_Forage
                 'ReDim Preserve MyEssaiForage. ListEssais(i)
-                MyEssaiForage = MyConstructionSite.ListEssaiForages(i)
+                MyEssaiForage = MyChantier.ListEssaiForages(i)
             End If
 
             IsRefUnique = unique
@@ -178,7 +178,7 @@ Namespace GaiaPressCoreV17.Models
             If MyEssaiForage Is Nothing Then
                 MyEssaiForage = New Essai_Forage
                 'ReDim Preserve MyEssaiForage. ListEssais(i)
-                MyEssaiForage = MyConstructionSite.ListEssaiForages(i)
+                MyEssaiForage = MyChantier.ListEssaiForages(i)
             End If
 
             IsNomUnique = unique
@@ -1375,7 +1375,7 @@ Namespace GaiaPressCoreV17.Models
                     ref = "Expansion"
             End Select
 
-            Dim listeEssais As New ClasseListeEssaiForage(context)
+            Dim listeEssais As New ListeEssaiForage(Context)
             listeEssais.ListeEssaiForageSession = MyListeEssaiForageSession
 
             Do While Not listeEssais.IsRefEssaiUnique(ref & " " & k)
@@ -1396,7 +1396,7 @@ Namespace GaiaPressCoreV17.Models
                     Nom = "Expansion"
             End Select
 
-            Dim listeEssais As New ClasseListeEssaiForage(context)
+            Dim listeEssais As New ListeEssaiForage(Context)
             listeEssais.ListeEssaiForageSession = MyListeEssaiForageSession
 
             Do While Not listeEssais.IsNomEssaiUnique(Nom & " " & k)

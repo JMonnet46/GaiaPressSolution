@@ -3,7 +3,7 @@
 @rendermode InteractiveServer
 @using System.ComponentModel.DataAnnotations
 @using GaiaPressCoreV17.Data
-@using ConstructionSiteModel = GaiaPressCoreV17.Models.ConstructionSite
+@using GaiaPressCoreV17.Models
 @using GaiaPressBlazorWebAPP.Services
 @using Microsoft.EntityFrameworkCore
 @inject GaiaPressDbContext Db
@@ -26,7 +26,7 @@
         <div class="new-file-banner">Nouveau ConstructionSite créé</div>
     }
 
-    @if (isOpenMode && currentConstructionSite == null && !isEditing)
+    @if (isOpenMode && currentChantier == null && !isEditing)
     {
         <div class="ConstructionSite-list">
             <div class="section-header">
@@ -63,9 +63,9 @@
                         {
                             <tr @onclick="() => OpenConstructionSite(ConstructionSite.RefChantier)" style="cursor: pointer;">
                                 <td>@ConstructionSite.RefChantier</td>
-                                <td>@ConstructionSite.NameConstructionSite</td>
-                                <td>@ConstructionSite.DescriptionConstructionSite</td>
-                                <td>@ConstructionSite.DateConstructionSite.ToString("dd/MM/yyyy")</td>
+                                <td>@ConstructionSite.NomChantier</td>
+                                <td>@ConstructionSite.DescriptifChantier</td>
+                                <td>@ConstructionSite.DateChantier.ToString("dd/MM/yyyy")</td>
                             </tr>
                         }
                     </tbody>
@@ -73,7 +73,7 @@
             }
         </div>
     }
-    else if (currentConstructionSite == null)
+    else if (currentChantier == null)
     {
         <div class="ConstructionSite-form">
             <h2>@(isEditing ? Loc["EditConstructionSite"] : Loc["NewConstructionSite"])</h2>
@@ -92,17 +92,17 @@
                         <ValidationMessage For="@(() => newConstructionSite.RefConstructionSite)" />
                     </div>
                     <div class="form-group">
-                        <label for="NameConstructionSite">@Loc["SiteName"] <span class="required">*</span></label>
-                        <InputText id="NameConstructionSite" @bind-Value="newConstructionSite.NameConstructionSite" class="form-control" />
-                        <ValidationMessage For="@(() => newConstructionSite.NameConstructionSite)" />
+                        <label for="NomChantier">@Loc["SiteName"] <span class="required">*</span></label>
+                        <InputText id="NomChantier" @bind-Value="newConstructionSite.NomChantier" class="form-control" />
+                        <ValidationMessage For="@(() => newConstructionSite.NomChantier)" />
                     </div>
                     <div class="form-group">
-                        <label for="DescriptionConstructionSite">@Loc["SiteLocation"]</label>
-                        <InputTextArea id="DescriptionConstructionSite" @bind-Value="newConstructionSite.DescriptionConstructionSite" class="form-control" rows="3" />
+                        <label for="DescriptifChantier">@Loc["SiteLocation"]</label>
+                        <InputTextArea id="DescriptifChantier" @bind-Value="newConstructionSite.DescriptifChantier" class="form-control" rows="3" />
                     </div>
                     <div class="form-group">
-                        <label for="DateConstructionSite">Date du ConstructionSite</label>
-                        <InputDate id="DateConstructionSite" @bind-Value="newConstructionSite.DateConstructionSite" class="form-control" />
+                        <label for="DateChantier">Date du ConstructionSite</label>
+                        <InputDate id="DateChantier" @bind-Value="newConstructionSite.DateChantier" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label for="RefClient">Référence client</label>
@@ -141,7 +141,7 @@
     {
         <div class="ConstructionSite-details">
             <div class="details-header">
-                <h2>@currentConstructionSite!.NameConstructionSite</h2>
+                <h2>@currentChantier!.NomChantier </h2>
                 <button type="button" class="btn btn-secondary" @onclick="EditConstructionSite">
                     @Loc["EditConstructionSite"]
                 </button>
@@ -153,24 +153,22 @@
             <div class="detail-section">
                 <h3>@Loc["SiteProperties"]</h3>
                 <div class="detail-grid">
-                    <div class="detail-item"><span class="detail-label">@Loc["SiteReference"]</span><span class="detail-value">@currentConstructionSite.RefChantier</span></div>
-                    <div class="detail-item"><span class="detail-label">@Loc["SiteName"]</span><span class="detail-value">@currentConstructionSite.NameConstructionSite</span></div>
-                    @if (!string.IsNullOrWhiteSpace(currentConstructionSite.DescriptionConstructionSite))
+                    <div class="detail-item"><span class="detail-label">@Loc["SiteReference"]</span><span class="detail-value">@currentChantier.RefChantier</span></div>
+                    <div class="detail-item"><span class="detail-label">@Loc["SiteName"]</span><span class="detail-value">@currentChantier.NomChantier</span></div>
+                    @if (!string.IsNullOrWhiteSpace(currentChantier.DescriptifChantier))
                     {
-                        <div class="detail-item full-width"><span class="detail-label">@Loc["SiteLocation"]</span><span class="detail-value">@currentConstructionSite.DescriptionConstructionSite</span></div>
+                        <div class="detail-item full-width"><span class="detail-label">@Loc["SiteLocation"]</span><span class="detail-value">@currentChantier.DescriptifChantier</span></div>
                     }
-                    <div class="detail-item"><span class="detail-label">Référence client</span><span class="detail-value">@currentConstructionSite.RefClient</span></div>
-                    <div class="detail-item"><span class="detail-label">Entreprise</span><span class="detail-value">@currentConstructionSite.Entreprise</span></div>
+                    <div class="detail-item"><span class="detail-label">Référence client</span><span class="detail-value">@currentChantier.RefClient</span></div>
+                    <div class="detail-item"><span class="detail-label">Entreprise</span><span class="detail-value">@currentChantier.Entreprise</span></div>
                 </div>
             </div>
 
-            <!-- Section Forages (Borehole) -->
-            <!-- DEBUG TEMPORAIRE : retirer apres verification de RefChantier. -->
-            <p class="text-muted">DEBUG RefChantier = [@currentConstructionSite?.RefChantier]</p>
-            @if (currentConstructionSite != null && !string.IsNullOrWhiteSpace(currentConstructionSite.RefChantier))
+            <p class="text-muted">DEBUG RefChantier = [@currentChantier?.RefChantier]</p>
+            @if (currentChantier != null && !string.IsNullOrWhiteSpace(currentChantier.RefChantier))
             {
                 <div class="borehole-section mt-4">
-                    <Borehole RefChantier="@currentConstructionSite.RefChantier" @key="currentConstructionSite.RefChantier" />
+                    <Borehole RefChantier="@currentChantier.RefChantier" @key="currentChantier.RefChantier" />
                 </div>
             }
             else
@@ -193,11 +191,11 @@
     private bool isLoadingConstructionSites;
     private bool isEditing;
     private bool isNewFile;
-    private List<ConstructionSiteModel> ConstructionSites = new();
+    private List<Chantier> ConstructionSites = new();
     private string? errorMessage;
     private ConstructionSiteForm newConstructionSite = new();
-    private ConstructionSiteModel? currentConstructionSite;
-    private ConstructionSiteModel? editingConstructionSite;
+    private Chantier? currentChantier;
+    private Chantier? editingConstructionSite;
     private string? lastProcessedUri;
 
     protected override async Task OnInitializedAsync()
@@ -218,7 +216,7 @@
             && string.Equals(modeValues.ToString(), "ouvrir", StringComparison.OrdinalIgnoreCase);
         isNewFile = !isOpenMode && string.Equals(IsNew, "true", StringComparison.OrdinalIgnoreCase);
         isEditing = false;
-        currentConstructionSite = null;
+        currentChantier = null;
         errorMessage = null;
 
         if (isOpenMode && string.IsNullOrWhiteSpace(ConstructionSiteReference))
@@ -258,7 +256,7 @@
             Console.WriteLine($"Base SQL : {connexion.Database}");
             Console.WriteLine($"Délai de connexion : {connexion.ConnectionTimeout} secondes");
 
-            ConstructionSites = await Db.ConstructionSitesDb.OrderBy(c => c.RefChantier).ToListAsync();
+            ConstructionSites = await Db.ChantiersDb.OrderBy(c => c.RefChantier).ToListAsync();
         }
         catch (Exception ex)
         {
@@ -276,17 +274,17 @@
         try
         {
             ConfigureDatabaseConnection();
-            currentConstructionSite = await Db.ConstructionSitesDb.FirstOrDefaultAsync(c => c.RefChantier == Reference.Trim());
-            if (currentConstructionSite == null)
+            currentChantier = await Db.ChantiersDb.FirstOrDefaultAsync(c => c.RefChantier == Reference.Trim());
+            if (currentChantier == null)
                 errorMessage = "Le ConstructionSite demandé est introuvable dans la base de données.";
             else
-                newConstructionSite.DateConstructionSite = currentConstructionSite.DateConstructionSite;
+                newConstructionSite.DateChantier = currentChantier.DateChantier;
         }
         catch (Exception ex)
         {
             errorMessage = ex.Message + (ex.InnerException == null ? "" : " | InnerException: " + ex.InnerException.Message);
         }
-        ChantierState.SetChantier(currentConstructionSite?.RefChantier);
+        ChantierState.SetChantier(currentChantier?.RefChantier);
         StateHasChanged();
     }
 
@@ -306,49 +304,49 @@
             if (isEditing && editingConstructionSite != null)
             {
                 editingConstructionSite.RefChantier = newConstructionSite.RefConstructionSite;
-                editingConstructionSite.NameConstructionSite = newConstructionSite.NameConstructionSite;
-                editingConstructionSite.DescriptionConstructionSite = newConstructionSite.DescriptionConstructionSite;
-                editingConstructionSite.DateConstructionSite = newConstructionSite.DateConstructionSite;
+                editingConstructionSite.NomChantier = newConstructionSite.NomChantier;
+                editingConstructionSite.DescriptifChantier = newConstructionSite.DescriptifChantier;
+                editingConstructionSite.DateChantier = newConstructionSite.DateChantier;
                 editingConstructionSite.RefClient = newConstructionSite.RefClient;
                 editingConstructionSite.Entreprise = newConstructionSite.Entreprise;
                 editingConstructionSite.Adresse = newConstructionSite.Adresse;
                 editingConstructionSite.Telephone = newConstructionSite.Telephone;
                 editingConstructionSite.Reference = newConstructionSite.Reference;
-                currentConstructionSite = editingConstructionSite;
+                currentChantier = editingConstructionSite;
                 editingConstructionSite = null;
             }
             else
             {
                 // Rechercher d'abord le ConstructionSite pour éviter d'insérer une clé primaire déjà existante.
-                currentConstructionSite = await Db.ConstructionSitesDb
+                currentChantier = await Db.ChantiersDb
                     .FirstOrDefaultAsync(c => c.RefChantier == newConstructionSite.RefConstructionSite);
 
-                if (currentConstructionSite == null)
+                if (currentChantier == null)
                 {
-                    currentConstructionSite = new ConstructionSiteModel
+                    currentChantier = new Chantier
                     {
                         RefChantier = newConstructionSite.RefConstructionSite,
-                        NameConstructionSite = newConstructionSite.NameConstructionSite,
-                        DescriptionConstructionSite = newConstructionSite.DescriptionConstructionSite,
-                        DateConstructionSite = newConstructionSite.DateConstructionSite,
+                        NomChantier = newConstructionSite.NomChantier,
+                        DescriptifChantier = newConstructionSite.DescriptifChantier,
+                        DateChantier = newConstructionSite.DateChantier,
                         RefClient = newConstructionSite.RefClient,
                         Entreprise = newConstructionSite.Entreprise,
                         Adresse = newConstructionSite.Adresse,
                         Telephone = newConstructionSite.Telephone,
                         Reference = newConstructionSite.Reference
                     };
-                    Db.ConstructionSitesDb.Add(currentConstructionSite);
+                    Db.ChantiersDb.Add(currentChantier);
                 }
                 else
                 {
-                    currentConstructionSite.NameConstructionSite = newConstructionSite.NameConstructionSite;
-                    currentConstructionSite.DescriptionConstructionSite = newConstructionSite.DescriptionConstructionSite;
-                    currentConstructionSite.DateConstructionSite = newConstructionSite.DateConstructionSite;
-                    currentConstructionSite.RefClient = newConstructionSite.RefClient;
-                    currentConstructionSite.Entreprise = newConstructionSite.Entreprise;
-                    currentConstructionSite.Adresse = newConstructionSite.Adresse;
-                    currentConstructionSite.Telephone = newConstructionSite.Telephone;
-                    currentConstructionSite.Reference = newConstructionSite.Reference;
+                    currentChantier.NomChantier = newConstructionSite.NomChantier;
+                    currentChantier.DescriptifChantier = newConstructionSite.DescriptifChantier;
+                    currentChantier.DateChantier = newConstructionSite.DateChantier;
+                    currentChantier.RefClient = newConstructionSite.RefClient;
+                    currentChantier.Entreprise = newConstructionSite.Entreprise;
+                    currentChantier.Adresse = newConstructionSite.Adresse;
+                    currentChantier.Telephone = newConstructionSite.Telephone;
+                    currentChantier.Reference = newConstructionSite.Reference;
                 }
             }
 
@@ -361,27 +359,27 @@
         {
             errorMessage = ex.Message + (ex.InnerException == null ? "" : " | InnerException: " + ex.InnerException.Message);
         }
-        ChantierState.SetChantier(currentConstructionSite?.RefChantier);
+        ChantierState.SetChantier(currentChantier?.RefChantier);
     }
 
     private void EditConstructionSite()
     {
-        if (currentConstructionSite == null) return;
+        if (currentChantier == null) return;
         newConstructionSite = new ConstructionSiteForm
         {
-            RefConstructionSite = currentConstructionSite.RefChantier,
-            NameConstructionSite = currentConstructionSite.NameConstructionSite,
-            DescriptionConstructionSite = currentConstructionSite.DescriptionConstructionSite,
-            DateConstructionSite = currentConstructionSite.DateConstructionSite,
-            RefClient = currentConstructionSite.RefClient,
-            Entreprise = currentConstructionSite.Entreprise,
-            Adresse = currentConstructionSite.Adresse,
-            Telephone = currentConstructionSite.Telephone,
-            Reference = currentConstructionSite.Reference
+            RefConstructionSite = currentChantier.RefChantier,
+            NomChantier = currentChantier.NomChantier,
+            DescriptifChantier = currentChantier.DescriptifChantier,
+            DateChantier = currentChantier.DateChantier,
+            RefClient = currentChantier.RefClient,
+            Entreprise = currentChantier.Entreprise,
+            Adresse = currentChantier.Adresse,
+            Telephone = currentChantier.Telephone,
+            Reference = currentChantier.Reference
         };
         isEditing = true;
-        editingConstructionSite = currentConstructionSite;
-        currentConstructionSite = null;
+        editingConstructionSite = currentChantier;
+        currentChantier = null;
     }
 
     private async Task CancelEdit()
@@ -407,7 +405,7 @@
     {
         isOpenMode = false;
         isEditing = false;
-        currentConstructionSite = null;
+        currentChantier = null;
         newConstructionSite = new ConstructionSiteForm();
         Navigation.NavigateTo("/ConstructionSite?new=true");
     }
@@ -440,10 +438,10 @@
         public string RefConstructionSite { get; set; } = "";
         [Required(ErrorMessage = "Le nom du ConstructionSite est obligatoire")]
         [StringLength(200)]
-        public string NameConstructionSite { get; set; } = "";
+        public string NomChantier { get; set; } = "";
         [StringLength(2000)]
-        public string DescriptionConstructionSite { get; set; } = "";
-        public DateTime DateConstructionSite { get; set; } = DateTime.Today;
+        public string DescriptifChantier { get; set; } = "";
+        public DateTime DateChantier { get; set; } = DateTime.Today;
         public string RefClient { get; set; } = "";
         public string Entreprise { get; set; } = "";
         public string Adresse { get; set; } = "";

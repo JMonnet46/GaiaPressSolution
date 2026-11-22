@@ -136,21 +136,21 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         ' ============================================
-        ' MÉTHODES SPÉCIFIQUES AUX ConstructionSite & FORAGES
+        ' MÉTHODES SPÉCIFIQUES AUX Chantier & FORAGES
         ' ============================================
 
         ''' <summary>
-        ''' Récupère tous les ConstructionSite
+        ''' Récupère tous les Chantier
         ''' </summary>
-        Public Function GetAllConstructionSite() As DataTable
-            Return GetAllFromTable("LesConstructionSite")
+        Public Function GetAllChantier() As DataTable
+            Return GetAllFromTable("LesChantier")
         End Function
 
         ''' <summary>
-        ''' Récupère un ConstructionSite par sa référence
+        ''' Récupère un Chantier par sa référence
         ''' </summary>
-        Public Function GetConstructionSiteById(RefChantier As String) As DataRow
-            Return GetByRefId("LesConstructionSite", "RefChantier", RefChantier)
+        Public Function GetChantierById(RefChantier As String) As DataRow
+            Return GetByRefId("LesChantier", "RefChantier", RefChantier)
         End Function
 
         ''' <summary>
@@ -161,10 +161,10 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         ''' <summary>
-        ''' Récupère les forages d'un ConstructionSite
+        ''' Récupère les forages d'un Chantier
         ''' </summary>
-        Public Function GetForagesByConstructionSite(ConstructionSiteId As String) As DataTable
-            Return GetChildrenByParentRef("LesForages", "RefChantier", ConstructionSiteId)
+        Public Function GetForagesByChantier(ChantierId As String) As DataTable
+            Return GetChildrenByParentRef("LesForages", "RefChantier", ChantierId)
         End Function
 
         ' ============================================

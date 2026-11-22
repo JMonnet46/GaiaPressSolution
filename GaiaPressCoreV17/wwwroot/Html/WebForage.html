@@ -232,7 +232,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">GaiaPress - Gestion des ConstructionSite</title>
+    <title id="pageTitle">GaiaPress - Gestion des Chantier</title>
     <!-- Bootstrap pour un design moderne -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jsTree pour l'arborescence -->
@@ -285,13 +285,13 @@
     </script>
 
     <div class="container-fluid">
-        <h1 class="text-center my-4" id="mainTitle">GaiaPress - Gestion des ConstructionSite</h1>
+        <h1 class="text-center my-4" id="mainTitle">GaiaPress - Gestion des Chantier</h1>
 
         <!-- Onglets avec rôles ARIA valides -->
-        <ul class="nav nav-tabs" id="ConstructionSiteTabs" role="tablist">
+        <ul class="nav nav-tabs" id="ChantierTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="iTabConstructionSite" data-bs-toggle="tab" data-bs-target="#iTabConstructionSiteContent" type="button" role="tab" aria-selected="true" aria-controls="iTabConstructionSiteContent">
-                    <span id="tabConstructionSiteText">ConstructionSite</span>
+                <button class="nav-link active" id="iTabChantier" data-bs-toggle="tab" data-bs-target="#iTabChantierContent" type="button" role="tab" aria-selected="true" aria-controls="iTabChantierContent">
+                    <span id="tabChantierText">Chantier</span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -302,20 +302,20 @@
         </ul>
 
         <!-- Contenu des onglets avec rôle tabpanel -->
-        <div class="tab-content" id="ConstructionSiteTabContent">
-            <!-- Onglet ConstructionSite -->
-            <div class="tab-pane fade show active" id="iTabConstructionSiteContent" role="tabpanel" aria-labelledby="iTabConstructionSite">
+        <div class="tab-content" id="ChantierTabContent">
+            <!-- Onglet Chantier -->
+            <div class="tab-pane fade show active" id="iTabChantierContent" role="tabpanel" aria-labelledby="iTabChantier">
                 <div class="form-container">
-                    <h2 id="ConstructionSiteTitle">Propriétés du ConstructionSite</h2>
-                    <form id="ConstructionSiteForm">
+                    <h2 id="ChantierTitle">Propriétés du Chantier</h2>
+                    <form id="ChantierForm">
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="txtRefChantier" class="form-label" id="labelRefChantier">Référence du ConstructionSite :</label>
+                                <label for="txtRefChantier" class="form-label" id="labelRefChantier">Référence du Chantier :</label>
                                 <input type="text" class="form-control" id="txtRefChantier" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="txtNomConstructionSite" class="form-label" id="labelNomConstructionSite">Nom du ConstructionSite :</label>
-                                <input type="text" class="form-control" id="txtNomConstructionSite" readonly>
+                                <label for="txtNomChantier" class="form-label" id="labelNomChantier">Nom du Chantier :</label>
+                                <input type="text" class="form-control" id="txtNomChantier" readonly>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -353,13 +353,13 @@
                     <!-- Boutons -->
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button type="button" class="btn btn-primary btn-action" id="btnModifier" onclick="modifyConstructionSite()">
+                            <button type="button" class="btn btn-primary btn-action" id="btnModifier" onclick="modifyChantier()">
                                 <span id="btnModifierText">Modifier</span>
                             </button>
-                            <button type="button" class="btn btn-success btn-action" id="btnOk" onclick="valiDateConstructionSite()">
+                            <button type="button" class="btn btn-success btn-action" id="btnOk" onclick="valiDateChantier()">
                                 <span id="btnOkText">OK</span>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-action" id="btnAnnuler" onclick="cancelConstructionSite()">
+                            <button type="button" class="btn btn-secondary btn-action" id="btnAnnuler" onclick="cancelChantier()">
                                 <span id="btnAnnulerText">Annuler</span>
                             </button>
                         </div>
@@ -443,11 +443,11 @@
                 0: {
                     pageTitle: "GaiaPress - Site Management",
                     mainTitle: "GaiaPress - Site Management",
-                    tabConstructionSiteText: "Site",
+                    tabChantierText: "Site",
                     tabForagesText: "Boreholes",
-                    ConstructionSiteTitle: "Site Properties",
+                    ChantierTitle: "Site Properties",
                     labelRefChantier: "Site Reference:",
-                    labelNomConstructionSite: "Site Name:",
+                    labelNomChantier: "Site Name:",
                     labelRefClient: "Client Reference:",
                     labelEntreprise: "Company:",
                     labelTelephone: "Phone:",
@@ -472,13 +472,13 @@
                 },
                 // ✅ 1 = Français
                 1: {
-                    pageTitle: "GaiaPress - Gestion des ConstructionSite",
-                    mainTitle: "GaiaPress - Gestion des ConstructionSite",
-                    tabConstructionSiteText: "ConstructionSite",
+                    pageTitle: "GaiaPress - Gestion des Chantier",
+                    mainTitle: "GaiaPress - Gestion des Chantier",
+                    tabChantierText: "Chantier",
                     tabForagesText: "Forages",
-                    ConstructionSiteTitle: "Propriétés du ConstructionSite",
-                    labelRefChantier: "Référence du ConstructionSite :",
-                    labelNomConstructionSite: "Nom du ConstructionSite :",
+                    ChantierTitle: "Propriétés du Chantier",
+                    labelRefChantier: "Référence du Chantier :",
+                    labelNomChantier: "Nom du Chantier :",
                     labelRefClient: "Référence du client :",
                     labelEntreprise: "Entreprise :",
                     labelTelephone: "Téléphone :",
@@ -526,18 +526,18 @@
         }
 
         // ✅ Actions des boutons
-        function modifyConstructionSite() {
-            console.log(currentLang === 1 ? "Modifier le ConstructionSite" : "Modify site");
-            // Logique pour modifier le ConstructionSite
+        function modifyChantier() {
+            console.log(currentLang === 1 ? "Modifier le Chantier" : "Modify site");
+            // Logique pour modifier le Chantier
         }
 
-        function valiDateConstructionSite() {
-            console.log(currentLang === 1 ? "Valider le ConstructionSite" : "Validate site");
-            // Logique pour valider le ConstructionSite
-            alert(currentLang === 1 ? "ConstructionSite validé avec succès !" : "Site validated successfully!");
+        function valiDateChantier() {
+            console.log(currentLang === 1 ? "Valider le Chantier" : "Validate site");
+            // Logique pour valider le Chantier
+            alert(currentLang === 1 ? "Chantier validé avec succès !" : "Site validated successfully!");
         }
 
-        function cancelConstructionSite() {
+        function cancelChantier() {
             console.log(currentLang === 1 ? "Annuler les modifications" : "Cancel modifications");
             // Logique pour annuler les modifications
         }
@@ -562,7 +562,7 @@
             // Initialisation de jsTree avec des libellés traduits
             const treeData = [
                 {
-                    text: currentLang === 1 ? "ConstructionSite 1" : "Site 1",
+                    text: currentLang === 1 ? "Chantier 1" : "Site 1",
                     children: [
                         { text: currentLang === 1 ? "Forage 1" : "Borehole 1" },
                         { text: currentLang === 1 ? "Forage 2" : "Borehole 2" }

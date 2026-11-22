@@ -8,17 +8,17 @@ Imports Microsoft.EntityFrameworkCore
 Namespace GaiaPressCoreV17.Services
 
     ''' <summary>
-    ''' Service de gestion en mémoire des ConstructionSite.
-    ''' Cette classe remplace l'ancien contexte LesSols pour la gestion des ConstructionSite.
+    ''' Service de gestion en mémoire des Chantier.
+    ''' Cette classe remplace l'ancien contexte LesSols pour la gestion des Chantier.
     ''' </summary>
-    Public Class ConstructionSiteService
+    Public Class ChantierService
 
         Private ReadOnly _dataService As DataService ' Injection de DataServices
 
         Private _dbContext As GaiaPressDbContext
 
-        Public Property LesConstructionSite As List(Of ConstructionSite)
-        Public Property FichierListeLesConstructionSite As String
+        Public Property LesChantier As List(Of Chantier)
+        Public Property FichierListeLesChantier As String
         Public Property EventsSuspendus As Boolean
         Public Property IsSaved As Boolean
 
@@ -27,8 +27,8 @@ Namespace GaiaPressCoreV17.Services
         Public Sub New(dataService As DataService, dbContext As GaiaPressDbContext)
             _dataService = dataService
             _dbContext = dbContext
-            LesConstructionSite = New List(Of ConstructionSite)()
-            FichierListeLesConstructionSite = String.Empty
+            LesChantier = New List(Of Chantier)()
+            FichierListeLesChantier = String.Empty
             EventsSuspendus = False
             IsSaved = True
             _dbContext = dbContext
@@ -39,36 +39,36 @@ Namespace GaiaPressCoreV17.Services
         'End Sub
 
         ''' <summary>
-        ''' Ajoute un ConstructionSite à la liste en mémoire.
+        ''' Ajoute un Chantier à la liste en mémoire.
         ''' </summary>
-        Public Sub AddConstructionSite(ConstructionSite As ConstructionSite)
-            If ConstructionSite Is Nothing Then Return
+        Public Sub AddChantier(Chantier As Chantier)
+            If Chantier Is Nothing Then Return
 
-            LesConstructionSite.Add(ConstructionSite)
+            LesChantier.Add(Chantier)
             IHaveBeenModified()
         End Sub
 
         ''' <summary>
-        ''' Recherche un ConstructionSite par sa référence.
+        ''' Recherche un Chantier par sa référence.
         ''' </summary>
-        Public Function GetConstructionSite(RefChantier As String) As ConstructionSite
-            Return _dbContext.ConstructionSitesDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
+        Public Function GetChantier(RefChantier As String) As Chantier
+            Return _dbContext.ChantiersDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
         End Function
 
-        Public Function GetAllConstructionSites() As List(Of ConstructionSite)
-            Return _dataService.GetAllConstructionSite()
+        Public Function GetAllChantiers() As List(Of Chantier)
+            Return _dataService.GetAllChantier()
         End Function
 
 
         ''' <summary>
-        ''' Génère une nouvelle référence de ConstructionSite unique.
+        ''' Génère une nouvelle référence de Chantier unique.
         ''' </summary>
         Public Function GiveMeANewRefChantier() As String
             Dim k As Integer = 1
             Dim nouvelleReference As String
 
             Do
-                nouvelleReference = "ConstructionSite " & k.ToString()
+                nouvelleReference = "Chantier " & k.ToString()
                 k += 1
             Loop Until IsRefChantierUnique(nouvelleReference)
 
@@ -79,68 +79,68 @@ Namespace GaiaPressCoreV17.Services
         ''' Vérifie qu'une référence n'est pas déjà utilisée.
         ''' </summary>
         Public Function IsRefChantierUnique(RefChantier As String) As Boolean
-            Return Not LesConstructionSite.Any(Function(c) c IsNot Nothing AndAlso c.RefChantier = RefChantier)
+            Return Not LesChantier.Any(Function(c) c IsNot Nothing AndAlso c.RefChantier = RefChantier)
         End Function
 
         ''' <summary>
-        ''' Met à jour le ConstructionSite correspondant à la référence fournie.
+        ''' Met à jour le Chantier correspondant à la référence fournie.
         ''' </summary>
-        Public Sub UpDateConstructionSite(ConstructionSite As ConstructionSite)
-            If ConstructionSite Is Nothing Then Return
+        Public Sub UpDateChantier(Chantier As Chantier)
+            If Chantier Is Nothing Then Return
 
-            Dim ConstructionSiteExistant As ConstructionSite = GetConstructionSite(ConstructionSite.RefChantier)
-            If ConstructionSiteExistant Is Nothing Then
-                LesConstructionSite.Add(ConstructionSite)
+            Dim ChantierExistant As Chantier = GetChantier(Chantier.RefChantier)
+            If ChantierExistant Is Nothing Then
+                LesChantier.Add(Chantier)
             Else
-                Dim index As Integer = LesConstructionSite.IndexOf(ConstructionSiteExistant)
-                LesConstructionSite(index) = ConstructionSite
+                Dim index As Integer = LesChantier.IndexOf(ChantierExistant)
+                LesChantier(index) = Chantier
             End If
 
             IHaveBeenModified()
         End Sub
 
         ''' <summary>
-        ''' Supprime un ConstructionSite de la liste en mémoire.
+        ''' Supprime un Chantier de la liste en mémoire.
         ''' </summary>
-        Public Sub SupprimeConstructionSite(ConstructionSite As ConstructionSite)
-            If ConstructionSite Is Nothing Then Return
+        Public Sub SupprimeChantier(Chantier As Chantier)
+            If Chantier Is Nothing Then Return
 
-            If LesConstructionSite.Remove(ConstructionSite) Then
+            If LesChantier.Remove(Chantier) Then
                 IHaveBeenModified()
             End If
         End Sub
 
-        Public Sub SaveConstructionSite(ConstructionSite As ConstructionSite)
-            _dbContext.ConstructionSitesDb.Update(ConstructionSite)
+        Public Sub SaveChantier(Chantier As Chantier)
+            _dbContext.ChantiersDb.Update(Chantier)
             _dbContext.SaveChanges()
         End Sub
 
 
 
         ''' <summary>
-        ''' Recharge les ConstructionSite depuis la base de données.
+        ''' Recharge les Chantier depuis la base de données.
         ''' </summary>
         Public Sub ChargerDepuisBase()
             If _dataService Is Nothing Then Return
 
-            Dim ConstructionSite As List(Of ConstructionSite) = _dataService.GetAllConstructionSite()
-            If ConstructionSite Is Nothing Then
-                LesConstructionSite = New List(Of ConstructionSite)()
+            Dim Chantier As List(Of Chantier) = _dataService.GetAllChantier()
+            If Chantier Is Nothing Then
+                LesChantier = New List(Of Chantier)()
             Else
-                LesConstructionSite = New List(Of ConstructionSite)(ConstructionSite)
+                LesChantier = New List(Of Chantier)(Chantier)
             End If
 
             IsSaved = True
         End Sub
 
         ''' <summary>
-        ''' Enregistre les ConstructionSite dans la base de données.
+        ''' Enregistre les Chantier dans la base de données.
         ''' </summary>
-        'Public Function EnregistreLesConstructionSite() As Boolean
+        'Public Function EnregistreLesChantier() As Boolean
         '    If _dataService Is Nothing Then Return False
 
         '    Try
-        '        _dataService.SaveAllConstructionSites(ListeConstructionSite)
+        '        _dataService.SaveAllChantiers(ListeChantier)
         '        IsSaved = True
         '        Return True
         '    Catch ex As Exception
@@ -149,10 +149,10 @@ Namespace GaiaPressCoreV17.Services
         '        Return False
         '    End Try
         'End Function
-        ' --- Méthode pour sauvegarder un ConstructionSite ---
-        Public Function EnregistreLesConstructionSite(myConstructionSite As ConstructionSite) As Boolean
+        ' --- Méthode pour sauvegarder un Chantier ---
+        Public Function EnregistreLesChantier(myChantier As Chantier) As Boolean
             Try
-                _dataService.SaveAllConstructionSites()
+                _dataService.SaveAllChantiers()
                 Return True
             Catch ex As Exception
                 ' Journaliser l'erreur si nécessaire
@@ -161,11 +161,11 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         ''' <summary>
-        ''' Retourne le nom du fichier associé à la liste des ConstructionSite.
+        ''' Retourne le nom du fichier associé à la liste des Chantier.
         ''' </summary>
         Public Function GetFichierName() As String
-            If String.IsNullOrWhiteSpace(FichierListeLesConstructionSite) Then Return String.Empty
-            Return Path.GetFileName(FichierListeLesConstructionSite)
+            If String.IsNullOrWhiteSpace(FichierListeLesChantier) Then Return String.Empty
+            Return Path.GetFileName(FichierListeLesChantier)
         End Function
 
         ''' <summary>
@@ -194,12 +194,12 @@ Namespace GaiaPressCoreV17.Services
 
         ' Si ces méthodes ne sont pas encore présentes dans DataService, les ajouter :
         ' -------------------------------------------------------------------------
-        ' Public Function GetAllConstructionSite() As List(Of ConstructionSite)
+        ' Public Function GetAllChantier() As List(Of Chantier)
         '     Return _context.ConstructionsSitesDbs.ToList()
         ' End Function
         '
-        ' Public Sub SaveConstructionSite(ConstructionSite As List(Of ConstructionSite))
-        '     _context.ConstructionsSitesDbs.UpdateRange(ConstructionSite)
+        ' Public Sub SaveChantier(Chantier As List(Of Chantier))
+        '     _context.ConstructionsSitesDbs.UpdateRange(Chantier)
         '     _context.SaveChanges()
         ' End Sub
         ' -------------------------------------------------------------------------

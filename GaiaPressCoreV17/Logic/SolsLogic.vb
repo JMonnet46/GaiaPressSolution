@@ -56,16 +56,16 @@ Namespace GaiaPressCoreV17.Logic
         End Function
 
         '''' <summary>
-        '''' Récupère les sols par référence de ConstructionSite avec une logique métier spécifique.
+        '''' Récupère les sols par référence de Chantier avec une logique métier spécifique.
         '''' </summary>
-        '''' <param name="refSol">Référence du ConstructionSite.</param>
-        '''' <returns>Liste des sols pour le ConstructionSite spécifié.</returns>
+        '''' <param name="refSol">Référence du Chantier.</param>
+        '''' <returns>Liste des sols pour le Chantier spécifié.</returns>
         'Public Async Function GetSolsByrefSol(refSol As String) As Task(Of IActionResult)
         '    Try
         '        Dim sols = Await _solService.GetSolByRefSol(refSol)
         '        Return Ok(sols)
         '    Catch ex As Exception
-        '        Return BadRequest(New With {Key .Message = $"Erreur lors de la récupération des sols pour le ConstructionSite {refSol} : {ex.Message}"})
+        '        Return BadRequest(New With {Key .Message = $"Erreur lors de la récupération des sols pour le Chantier {refSol} : {ex.Message}"})
         '    End Try
         'End Function
 
@@ -141,19 +141,19 @@ Namespace GaiaPressCoreV17.Logic
         End Function
 
         ''' <summary>
-        ''' Supprime tous les sols associés à un ConstructionSite avec une logique métier spécifique.
+        ''' Supprime tous les sols associés à un Chantier avec une logique métier spécifique.
         ''' </summary>
-        ''' <param name="refSol">Référence du ConstructionSite.</param>
+        ''' <param name="refSol">Référence du Chantier.</param>
         ''' <returns>Ok si la suppression a réussi, NotFound sinon.</returns>
         Public Async Function DeleteSolsByrefSol(refSol As String) As Task(Of IActionResult)
             Try
                 Dim success = Await _solService.DeleteSolsByrefSol(refSol)
                 If Not success Then
-                    Return NotFound(New With {Key .Message = $"Aucun sol trouvé pour le ConstructionSite {refSol}."})
+                    Return NotFound(New With {Key .Message = $"Aucun sol trouvé pour le Chantier {refSol}."})
                 End If
-                Return Ok(New With {Key .Message = $"Sols du ConstructionSite {refSol} supprimés avec succès."})
+                Return Ok(New With {Key .Message = $"Sols du Chantier {refSol} supprimés avec succès."})
             Catch ex As Exception
-                Return BadRequest(New With {Key .Message = $"Erreur lors de la suppression des sols du ConstructionSite : {ex.Message}"})
+                Return BadRequest(New With {Key .Message = $"Erreur lors de la suppression des sols du Chantier : {ex.Message}"})
             End Try
         End Function
     End Class

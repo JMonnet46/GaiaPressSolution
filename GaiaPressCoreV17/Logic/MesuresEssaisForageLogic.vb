@@ -202,7 +202,7 @@ Namespace GaiaPressCoreV17.Logic
             End If
 
             ' Récupérer l'essai associé
-            Dim essai = Await _context.ListeEssaiForageDb.FirstOrDefaultAsync(Function(e) e.refEssai = mesure.RefEssai, CancellationToken.None)
+            Dim essai = Await _context.ListeEssaiForageDb.FirstOrDefaultAsync(Function(e) e.RefEssai = mesure.RefEssai, CancellationToken.None)
 
             'Dim essaiNom As String = If(essai IsNot Nothing, essai. nomEssai, "Inconnu")
             Dim essaiNom As String = If(essai IsNot Nothing, essai.nomEssai, "Inconnu")

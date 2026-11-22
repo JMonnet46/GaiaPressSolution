@@ -12,13 +12,13 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "LesConstructionSitesDb",
+                name: "LesChantiersDb",
                 columns: table => new
                 {
                     RefConstructionSite = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     NameConstructionSite = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DescriptifConstructionSite = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateConstructionSite = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateChantier = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RefClient = table.Column<int>(type: "int", nullable: true),
                     Entreprise = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Adresse = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -31,7 +31,7 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LesConstructionSitesDb", x => x.RefConstructionSite);
+                    table.PrimaryKey("PK_LesChantiersDb", x => x.RefConstructionSite);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,9 +45,9 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                 {
                     table.PrimaryKey("PK_Forages", x => x.RefForage);
                     table.ForeignKey(
-                        name: "FK_Forages_LesConstructionSitesDb_ConstructionSiteRefConstructionSite",
+                        name: "FK_Forages_LesChantiersDb_ConstructionSiteRefConstructionSite",
                         column: x => x.ConstructionSiteRefConstructionSite,
-                        principalTable: "LesConstructionSitesDb",
+                        principalTable: "LesChantiersDb",
                         principalColumn: "RefConstructionSite");
                 });
 
@@ -78,9 +78,9 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                 {
                     table.PrimaryKey("PK_ListeSolDb", x => x.RefSol);
                     table.ForeignKey(
-                        name: "FK_ListeSolDb_LesConstructionSitesDb_ConstructionSiteRefConstructionSite",
+                        name: "FK_ListeSolDb_LesChantiersDb_ConstructionSiteRefConstructionSite",
                         column: x => x.ConstructionSiteRefConstructionSite,
-                        principalTable: "LesConstructionSitesDb",
+                        principalTable: "LesChantiersDb",
                         principalColumn: "RefConstructionSite");
                 });
 
@@ -96,9 +96,9 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                 {
                     table.PrimaryKey("PK_ListeSondeDb", x => x.RefSonde);
                     table.ForeignKey(
-                        name: "FK_ListeSondeDb_LesConstructionSitesDb_ConstructionSiteRefConstructionSite",
+                        name: "FK_ListeSondeDb_LesChantiersDb_ConstructionSiteRefConstructionSite",
                         column: x => x.ConstructionSiteRefConstructionSite,
-                        principalTable: "LesConstructionSitesDb",
+                        principalTable: "LesChantiersDb",
                         principalColumn: "RefConstructionSite");
                 });
 
@@ -258,9 +258,9 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                         principalTable: "Forages",
                         principalColumn: "RefForage");
                     table.ForeignKey(
-                        name: "FK_ListeTestForageDb_LesConstructionSitesDb_ConstructionSiteRefConstructionSite",
+                        name: "FK_ListeTestForageDb_LesChantiersDb_ConstructionSiteRefConstructionSite",
                         column: x => x.ConstructionSiteRefConstructionSite,
-                        principalTable: "LesConstructionSitesDb",
+                        principalTable: "LesChantiersDb",
                         principalColumn: "RefConstructionSite");
                     table.ForeignKey(
                         name: "FK_ListeTestForageDb_ListeTestExpansionsDb_MaExpansionRefTest",
@@ -344,9 +344,9 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                 {
                     table.PrimaryKey("PK_ListeMesureTestForageDb", x => x.Ind);
                     table.ForeignKey(
-                        name: "FK_ListeMesureTestForageDb_LesConstructionSitesDb_ConstructionSiteRefConstructionSite",
+                        name: "FK_ListeMesureTestForageDb_LesChantiersDb_ConstructionSiteRefConstructionSite",
                         column: x => x.ConstructionSiteRefConstructionSite,
-                        principalTable: "LesConstructionSitesDb",
+                        principalTable: "LesChantiersDb",
                         principalColumn: "RefConstructionSite");
                     table.ForeignKey(
                         name: "FK_ListeMesureTestForageDb_ListeTestForageDb_RefTest",
@@ -478,7 +478,7 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                 name: "ListeSondeDb");
 
             migrationBuilder.DropTable(
-                name: "LesConstructionSitesDb");
+                name: "LesChantiersDb");
         }
     }
 }

@@ -24,7 +24,7 @@ Namespace GaiaPressCoreV17.Models
         Public Property RefChantier As String
 
         ' Propriété de navigation vers le chantier
-        Public Property ConstructionSite As ConstructionSite
+        Public Property Chantier As Chantier
 
         ' Propriétés du forage
         Public Property numeroForage As Integer
@@ -46,7 +46,7 @@ Namespace GaiaPressCoreV17.Models
         Public Property IsSaved As Boolean
 
         <NotMapped>
-        Public Property FichierConstructionSite As String
+        Public Property FichierChantier As String
 
         Public Event HasBeenModified()
 
@@ -115,11 +115,11 @@ Namespace GaiaPressCoreV17.Models
         End Function
 
         Public Function GetForageParRef(refForage As String) As Forage
-            If Me.ConstructionSite Is Nothing Then
+            If Me.Chantier Is Nothing Then
                 Return Nothing
             End If
 
-            Return Me.ConstructionSite.GetForageParRef(refForage)
+            Return Me.Chantier.GetForageParRef(refForage)
         End Function
 
         Public Sub SetNomForage(ByVal nom As String)
@@ -225,9 +225,9 @@ Namespace GaiaPressCoreV17.Models
 
             '    MsgBox "NewEssai"
             If NewTable Then  ' On ajoute un Essai à MonFichier.Tables("LesEssaiForage") seulement si Table est vrai
-                If MonConstructionSite.Tables("LesEssaiForage") Is Nothing Then
-                    MonConstructionSite.Tables.Add("LesEssaiForage")
-                    With MonConstructionSite.Tables("LesEssaiForage")
+                If MonChantier.Tables("LesEssaiForage") Is Nothing Then
+                    MonChantier.Tables.Add("LesEssaiForage")
+                    With MonChantier.Tables("LesEssaiForage")
                         .Columns.Add("RefChantier", GetType(String))
                         .Columns.Add("refForage", GetType(String))
 
@@ -277,7 +277,7 @@ Namespace GaiaPressCoreV17.Models
 
                     End With
                 Else
-                    MonConstructionSite.Tables("LesEssaiForage").NewRow()
+                    MonChantier.Tables("LesEssaiForage").NewRow()
                 End If
             End If
 

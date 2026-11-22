@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Données d'exemple pour l'arborescence
     const data = [
         {
-            text: "ConstructionSite 1",
-            id: "ConstructionSite1",
+            text: "Chantier 1",
+            id: "Chantier1",
             children: [
                 {
                     text: "Forage 1",
@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
             ]
         },
         {
-            text: "ConstructionSite 2",
-            id: "ConstructionSite2"
+            text: "Chantier 2",
+            id: "Chantier2"
         }
     ];
 

@@ -96,7 +96,7 @@ Namespace GaiaPressCoreV17.Models
 
         'Public Sub AddResistance(EssaiResistance As EssaiResistance)
         '    Me.ListResistance.Add(EssaiResistance)
-        '    ' Logique pour lier au ConstructionSite si nécessaire
+        '    ' Logique pour lier au Chantier si nécessaire
         '    EssaiResistance.SetRefEssaiResistance(EssaiResistance.GetRefEssai)
         'End Sub
 
@@ -191,7 +191,7 @@ Namespace GaiaPressCoreV17.Models
         '        If Index >= 0 Then Call MyListResistance.SetSol(MySol, Index)
         '    End If
 
-        '    ' Enregistrement de la référence du ConstructionSite auprès de sa feuille
+        '    ' Enregistrement de la référence du Chantier auprès de sa feuille
         '    ' Call MyListeSonde.SetSonde(MySonde, Index)
         '    ' -----------------------------------------------------
 
@@ -332,7 +332,7 @@ Namespace GaiaPressCoreV17.Models
         '    If NewSoil Then
 
         '        ' Ajout d'une ligne à la Table "LesEssaiForage"
-        '        'ObjetDataRow = MonConstructionSite.Tables("LeResistance").NewRow()
+        '        'ObjetDataRow = MonChantier.Tables("LeResistance").NewRow()
 
         '        'ObjetDataRow("refSol") = MyListResistance.GiveMeANewRefSol
         '        If MyListResistance.GetSolParIndex(SolCount - 1) IsNot (Nothing) Then

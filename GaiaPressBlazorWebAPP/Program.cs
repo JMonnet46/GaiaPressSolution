@@ -56,7 +56,7 @@ if (!string.IsNullOrEmpty(connectionString))
 }
 
 // Ajout du contexte de base de données (avec logs EF)
-builder.Services.AddDbContext<GaiaPressDbContext>(options =>
+Action<DbContextOptionsBuilder> gaiaPressOptions = options =>
 {
     options
         .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
@@ -72,7 +72,9 @@ builder.Services.AddDbContext<GaiaPressDbContext>(options =>
                 maxRetryDelay: TimeSpan.FromSeconds(30),
                 errorNumbersToAdd: null); // retry sur timeout aussi
         });
-});
+};
+
+builder.Services.AddDbContextFactory<ClasseGaiaPressDbContext>(gaiaPressOptions);
 
 builder.Services.AddScoped<IForageService, ForageService>();
 

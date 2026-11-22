@@ -202,8 +202,8 @@ Namespace GaiaPressCoreV17.Logic
                                                                            ' Espacement
                                                                            column.Item().PaddingVertical(5)
 
-                                                                           ' ConstructionSite associé
-                                                                           column.Item().Text("ConstructionSite : " & forage. RefChantier).
+                                                                           ' Chantier associé
+                                                                           column.Item().Text("Chantier : " & forage. RefChantier).
                                                                                FontSize(12)
 
                                                                            ' Espacement

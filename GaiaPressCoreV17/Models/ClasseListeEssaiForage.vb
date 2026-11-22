@@ -6,7 +6,13 @@ Imports Microsoft.EntityFrameworkCore
 
 Namespace GaiaPressCoreV17.Models
 
-    Public Class ClasseListeEssaiForage
+    Public Class ListeEssaiForage
+
+        ' Autres propriétés existantes...
+        Public Property RefForage As String
+        Public Property RefEssai As String
+        Public Property NomEssai As String
+
 
         ' Contexte de données fourni de l'extérieur (Core ne connaît pas le projet Blazor)
         Private ReadOnly _context As GaiaPressDbContext
@@ -56,7 +62,6 @@ Namespace GaiaPressCoreV17.Models
                 Return False
             End Try
         End Function
-
         Public Function GetEssaiForageByRef(refEssai As String) As Essai_Forage
             Return _context.ListeEssaiForageDb.FirstOrDefault(Function(e) e.RefEssai = refEssai)
         End Function

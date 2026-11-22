@@ -94,12 +94,12 @@
     <Compile Remove="Program.vb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="wwwroot\WebConstructionSite.vb" />
+    <Content Remove="wwwroot\WebChantier.vb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ClasseGaiaPressDbContext.vb" />
     <Compile Include="Data\DesignTimeDbContextFactory.vb" />
-    <Compile Include="Data\GaiaPressDbContext.vb" />
-    <Compile Include="Models\ClasseConstructionSite.vb" />
+    <Compile Include="Models\ClasseChantier.vb" />
     <Compile Include="Models\ClasseEssaiExpansion.vb" />
     <Compile Include="Models\ClasseEssaiForage.vb" />
     <Compile Include="Models\ClasseEssaiResistance.vb" />

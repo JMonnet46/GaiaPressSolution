@@ -32,7 +32,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Sub AddExpansion(EssaiExpansion As EssaiExpansion)
             Me.ListeExpansion.Add(EssaiExpansion)
-            ' Lier le forage au ConstructionSite (si nécessaire)
+            ' Lier le forage au Chantier (si nécessaire)
             'EssaiExpansion.SetRefEssaiExpansion(EssaiExpansion.GetRefEssai)
         End Sub
 
@@ -77,12 +77,12 @@ Namespace GaiaPressCoreV17.Models
         Public Sub CloseListeExpansion()
 
             ' fermeture de la Liste des Sondes (fermeture de sa fenêtre)
-            'Call MyListeSonde.CloseConstructionSite()
+            'Call MyListeSonde.CloseChantier()
 
-            ' Extinction des menus liés au ConstructionSite
+            ' Extinction des menus liés au Chantier
             'Call ActivationMenus(False)
 
-            ' Effacement de la référence vers le ConstructionSite
+            ' Effacement de la référence vers le Chantier
             MyListeEssaiExpansionSession = Nothing
 
             ' Nettoyage de l'arborescence

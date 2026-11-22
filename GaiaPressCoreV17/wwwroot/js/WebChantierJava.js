@@ -1,12 +1,12 @@
 // Variables globales
-let currentConstructionSite = null;
+let currentChantier = null;
 let currentForageIndex = null;
 let lang = 1; // 1 = Français, 0 = Anglais (à adapter selon votre besoin)
 
 // Initialisation au chargement de la page
 document.addEventListener("DOMContentLoaded", function () {
-    // Charger les données du ConstructionSite
-    loadConstructionSite();
+    // Charger les données du Chantier
+    loadChantier();
 
     // Initialiser les événements
     initEventListeners();
@@ -27,34 +27,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Charger les données du ConstructionSite
-function loadConstructionSite() {
-    // Récupérer l'ID du ConstructionSite depuis l'URL ou une variable globale
-    const ConstructionSiteId = getConstructionSiteIdFromUrl(); // À implémenter selon votre besoin
+// Charger les données du Chantier
+function loadChantier() {
+    // Récupérer l'ID du Chantier depuis l'URL ou une variable globale
+    const ChantierId = getChantierIdFromUrl(); // À implémenter selon votre besoin
 
-    fetch(`/api/ConstructionSite/${ConstructionSiteId}`)
+    fetch(`/api/Chantier/${ChantierId}`)
         .then(response => response.json())
         .then(data => {
-            currentConstructionSite = data;
-            renderConstructionSite(data);
+            currentChantier = data;
+            renderChantier(data);
             loadArborescence(data.RefChantier);
             loadForages(data.RefChantier);
         })
         .catch(error => {
-            console.error("Erreur lors du chargement du ConstructionSite :", error);
-            alert("Erreur lors du chargement du ConstructionSite.");
+            console.error("Erreur lors du chargement du Chantier :", error);
+            alert("Erreur lors du chargement du Chantier.");
         });
 }
 
-// Rendre les données du ConstructionSite dans le formulaire
-function renderConstructionSite(ConstructionSite) {
-    document.getElementById("txtRefChantier").value = ConstructionSite.RefChantier || "";
-    document.getElementById("txtNomConstructionSite").value = ConstructionSite.NomConstructionSite || "";
-    document.getElementById("txtRefClient").value = ConstructionSite.RefClient || "";
-    document.getElementById("txtEntreprise").value = ConstructionSite.Entreprise || "";
-    document.getElementById("txtTelephone").value = ConstructionSite.Telephone || "";
-    document.getElementById("txtAdresse").value = ConstructionSite.Adresse || "";
-    document.getElementById("txtDescription").value = ConstructionSite.DescriptifConstructionSite || "";
+// Rendre les données du Chantier dans le formulaire
+function renderChantier(Chantier) {
+    document.getElementById("txtRefChantier").value = Chantier.RefChantier || "";
+    document.getElementById("txtNomChantier").value = Chantier.NomChantier || "";
+    document.getElementById("txtRefClient").value = Chantier.RefClient || "";
+    document.getElementById("txtEntreprise").value = Chantier.Entreprise || "";
+    document.getElementById("txtTelephone").value = Chantier.Telephone || "";
+    document.getElementById("txtAdresse").value = Chantier.Adresse || "";
+    document.getElementById("txtDescription").value = Chantier.DescriptifChantier || "";
 
     // Verrouiller les champs par défaut
     verrouilleChamps();
@@ -62,7 +62,7 @@ function renderConstructionSite(ConstructionSite) {
 
 // Charger l'arborescence
 function loadArborescence(RefChantier) {
-    fetch(`/api/ConstructionSite/${RefChantier}/arborescence`)
+    fetch(`/api/Chantier/${RefChantier}/arborescence`)
         .then(response => response.json())
         .then(data => {
             $('#tvArborescence').jstree({
@@ -81,7 +81,7 @@ function loadArborescence(RefChantier) {
 
 // Charger les forages dans le DataTable
 function loadForages(RefChantier) {
-    fetch(`/api/ConstructionSite/${RefChantier}/forages`)
+    fetch(`/api/Chantier/${RefChantier}/forages`)
         .then(response => response.json())
         .then(forages => {
             const table = $('#dataGridForages').DataTable();
@@ -101,13 +101,13 @@ function initEventListeners() {
 
     // Bouton OK
     document.getElementById("btnOk").addEventListener("click", function () {
-        saveConstructionSite();
+        saveChantier();
     });
 
     // Bouton Annuler
     document.getElementById("btnAnnuler").addEventListener("click", function () {
         if (confirm("Voulez-vous annuler vos modifications ?")) {
-            loadConstructionSite(); // Recharger les données
+            loadChantier(); // Recharger les données
             verrouilleChamps();
         }
     });
@@ -160,12 +160,12 @@ function initEventListeners() {
 
 // Initialiser les onglets
 function initTabs() {
-    const tabEl = document.querySelectorAll('#ConstructionSiteTabs button');
+    const tabEl = document.querySelectorAll('#ChantierTabs button');
     tabEl.forEach(tab => {
         tab.addEventListener('shown.bs.tab', event => {
             // Recharger les données si nécessaire
             if (event.target.id === 'tabForages') {
-                loadForages(currentConstructionSite.RefChantier);
+                loadForages(currentChantier.RefChantier);
             }
         });
     });
@@ -174,7 +174,7 @@ function initTabs() {
 // Verrouiller les champs (équivalent de VerrouilleChamps)
 function verrouilleChamps() {
     const fields = [
-        "txtRefChantier", "txtNomConstructionSite", "txtRefClient",
+        "txtRefChantier", "txtNomChantier", "txtRefClient",
         "txtEntreprise", "txtTelephone", "txtAdresse", "txtDescription"
     ];
 
@@ -195,7 +195,7 @@ function verrouilleChamps() {
 // Libérer les champs (équivalent de LibereChamps)
 function libereChamps() {
     const fields = [
-        "txtNomConstructionSite", "txtRefClient", "txtEntreprise",
+        "txtNomChantier", "txtRefClient", "txtEntreprise",
         "txtTelephone", "txtAdresse", "txtDescription"
     ];
 
@@ -213,33 +213,33 @@ function libereChamps() {
     document.getElementById("btnModifier").disabled = true;
 }
 
-// Sauvegarder le ConstructionSite (équivalent de CmdOk_Click)
-function saveConstructionSite() {
-    const ConstructionSite = {
+// Sauvegarder le Chantier (équivalent de CmdOk_Click)
+function saveChantier() {
+    const Chantier = {
         RefChantier: document.getElementById("txtRefChantier").value,
-        NomConstructionSite: document.getElementById("txtNomConstructionSite").value,
+        NomChantier: document.getElementById("txtNomChantier").value,
         RefClient: document.getElementById("txtRefClient").value,
         Entreprise: document.getElementById("txtEntreprise").value,
         Telephone: document.getElementById("txtTelephone").value,
         Adresse: document.getElementById("txtAdresse").value,
-        DescriptifConstructionSite: document.getElementById("txtDescription").value
+        DescriptifChantier: document.getElementById("txtDescription").value
     };
 
-    fetch('/api/ConstructionSite', {
+    fetch('/api/Chantier', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ConstructionSite)
+        body: JSON.stringify(Chantier)
     })
         .then(response => response.json())
         .then(data => {
-            alert("ConstructionSite sauvegardé avec succès !");
+            alert("Chantier sauvegardé avec succès !");
             verrouilleChamps();
             // Recharger les données si nécessaire
-            loadConstructionSite();
+            loadChantier();
         })
         .catch(error => {
             console.error("Erreur lors de la sauvegarde :", error);
-            alert("Erreur lors de la sauvegarde du ConstructionSite.");
+            alert("Erreur lors de la sauvegarde du Chantier.");
         });
 }
 
@@ -249,13 +249,13 @@ function saveConstructionSite() {
     window.print();
 
     // Option 2 : Générer un PDF côté serveur et le télécharger
-    // fetch(`/api/ConstructionSite/${currentConstructionSite.RefChantier}/pdf`)
+    // fetch(`/api/Chantier/${currentChantier.RefChantier}/pdf`)
     //     .then(response => response.blob())
     //     .then(blob => {
     //         const url = window.URL.createObjectURL(blob);
     //         const a = document.createElement('a');
     //         a.href = url;
-    //         a.download = `Chantie ${currentConstructionSite.RefChantier}.pdf`;
+    //         a.download = `Chantie ${currentChantier.RefChantier}.pdf`;
     //         a.click();
     //         window.URL.revokeObjectURL(url);
     //     });
@@ -265,12 +265,12 @@ function saveConstructionSite() {
 function ajouterForage() {
     // Ouvrir une nouvelle fenêtre ou une modale pour ajouter un forage
     // Exemple : Rediriger vers une page de création de forage
-    window.location.href = `/forage.html?ConstructionSiteId=${currentConstructionSite.RefChantier}`;
+    window.location.href = `/forage.html?ChantierId=${currentChantier.RefChantier}`;
 }
 
 // Ouvrir un forage (équivalent de CmdOuvri Click)
 function ouvrirForage(refForage) {
-    window.location.href = `/forage.html?ConstructionSiteId=${currentConstructionSite.RefChantier}&forageId=${refForage}`;
+    window.location.href = `/forage.html?ChantierId=${currentChantier.RefChantier}&forageId=${refForage}`;
 }
 
 // Supprimer un forage (équivalent de CmdSupprime Click)
@@ -282,13 +282,13 @@ function supprimerForage(refForage) {
     confirmModal.show();
 
     document.getElementById("confirmModalYes").onclick = function () {
-        fetch(`/api/ConstructionSite/${currentConstructionSite.RefChantier}/forage/${refForage}`, {
+        fetch(`/api/Chantier/${currentChantier.RefChantier}/forage/${refForage}`, {
             method: 'DELETE'
         })
             .then(response => response.json())
             .then(data => {
                 confirmModal.hide();
-                loadForages(currentConstructionSite.RefChantier); // Recharger les forages
+                loadForages(currentChantier.RefChantier); // Recharger les forages
                 alert("Forage supprimé avec succès !");
             })
             .catch(error => {
@@ -298,8 +298,8 @@ function supprimerForage(refForage) {
     };
 }
 
-// Récupérer l'ID du ConstructionSite depuis l'URL
-function getConstructionSiteIdFromUrl() {
+// Récupérer l'ID du Chantier depuis l'URL
+function getChantierIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('ConstructionSiteId') || 'default'; // À adapter selon votre besoin
+    return params.get('ChantierId') || 'default'; // À adapter selon votre besoin
 }

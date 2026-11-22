@@ -26,8 +26,8 @@ Namespace GaiaPressCoreV17.Logic
         Public Property MonEssaiForage As Essai_Forage
         Public Property MyEssaiForage As Essai_Forage
 
-        ' Propriété pour stocker le ConstructionSite associé
-        'Public Property MonConstructionSite As LesConstructionSite
+        ' Propriété pour stocker le Chantier associé
+        'Public Property MonChantier As LesChantier
 
         ''' <summary>
         ''' Définit l'essai de forage actuel.
@@ -37,10 +37,10 @@ Namespace GaiaPressCoreV17.Logic
         End Sub
 
         ''' <summary>
-        ''' Définit le ConstructionSite associé.
+        ''' Définit le Chantier associé.
         ''' </summary>
-        'Public Sub SetMonConstructionSite(ConstructionSite As LesConstructionSite)
-        '    MonConstructionSite = ConstructionSite
+        'Public Sub SetMonChantier(Chantier As LesChantier)
+        '    MonChantier = Chantier
         'End Sub
 
         ''' <summary>
@@ -192,7 +192,7 @@ Namespace GaiaPressCoreV17.Logic
                                                                 PaddingVertical(20).
                                                                 Column(Sub(column)
                                                                            ' Titre
-                                                                           column.Item().Text("Rapport pour l'essai : " & essai. NomEssai).
+                                                                           column.Item().Text("Rapport pour l'essai : " & essai.nomEssai).
                                                                                FontSize(20).
                                                                                Bold()
 
@@ -200,28 +200,28 @@ Namespace GaiaPressCoreV17.Logic
                                                                            column.Item().PaddingVertical(10)
 
                                                                            ' Référence
-                                                                           column.Item().Text("Référence : " & essai. RefEssai).
+                                                                           column.Item().Text("Référence : " & essai.RefEssai).
                                                                                FontSize(14)
 
                                                                            ' Espacement
                                                                            column.Item().PaddingVertical(5)
 
                                                                            ' Forage associé
-                                                                           column.Item().Text("Forage : " & essai. RefForage).
+                                                                           column.Item().Text("Forage : " & essai.RefForage).
                                                                                FontSize(12)
 
                                                                            ' Espacement
                                                                            column.Item().PaddingVertical(5)
 
-                                                                           ' ConstructionSite associé
-                                                                           column.Item().Text("ConstructionSite : " & essai. RefChantier).
+                                                                           ' Chantier associé
+                                                                           column.Item().Text("Chantier : " & essai.RefChantier).
                                                                                FontSize(12)
 
                                                                            ' Espacement
                                                                            column.Item().PaddingVertical(5)
 
                                                                            ' Date
-                                                                           column.Item().Text("Date : " & essai. dateEssai.ToString("dd/MM/yyyy")).
+                                                                           column.Item().Text("Date : " & essai.dateEssai.ToString("dd/MM/yyyy")).
                                                                                FontSize(12)
 
                                                                            ' Espacement
@@ -234,7 +234,7 @@ Namespace GaiaPressCoreV17.Logic
 
                                                                            ' Liste des mesures
                                                                            For Each mesure In mesures
-                                                                               column.Item().Text($"- Indice {mesure.indiceMesure}: {mesure.ToString()}").
+                                                                               column.Item().Text($"- Indice {mesure.IndiceMesure}: {mesure.ToString()}").
                                                                                    FontSize(12)
                                                                            Next
                                                                        End Sub)

@@ -11,15 +11,15 @@ Imports System
 Namespace GaiaPressCoreV17.Controllers
     <ApiController>
     <Route("api/[controller]")>
-    Public Class ConstructionSiteController
+    Public Class ChantierController
         Inherits ControllerBase
 
         ' Déclaration des dépendances avec injection de dépendances
         Private ReadOnly _context As GaiaPressDbContext
-        Private ReadOnly _ConstructionSiteLogic As ConstructionSiteLogic
+        Private ReadOnly _ChantierLogic As ChantierLogic
 
         ' Constructeur avec injection de dépendances
-        Private ReadOnly _ConstructionSiteService As ConstructionSiteService
+        Private ReadOnly _ChantierService As ChantierService
 
         Private ReadOnly _dataService As DataService  ' Ajoutez cette ligne
         Private ReadOnly _pdfService As PdfService  ' ✅ Déclaration
@@ -27,52 +27,52 @@ Namespace GaiaPressCoreV17.Controllers
         Public Sub New(context As GaiaPressDbContext)
             _context = context
             _dataService = New DataService(_context)  ' ✅ Passez _context à DataService
-            _ConstructionSiteService = New ConstructionSiteService(_dataService, _context)
+            _ChantierService = New ChantierService(_dataService, _context)
         End Sub
 
-        ' Récupérer la liste des ConstructionSites
+        ' Récupérer la liste des Chantiers
         <HttpGet>
-        Public Function GetConstructionSites() As IActionResult
+        Public Function GetChantiers() As IActionResult
             Try
-                Dim ConstructionSites As List(Of ConstructionSite) = _ConstructionSiteService.GetAllConstructionSites()  ' ✅ Utilise l'instance
-                If ConstructionSites Is Nothing Then
-                    Return NotFound("Aucun ConstructionSite trouvé.")
+                Dim Chantiers As List(Of Chantier) = _ChantierService.GetAllChantiers()  ' ✅ Utilise l'instance
+                If Chantiers Is Nothing Then
+                    Return NotFound("Aucun Chantier trouvé.")
                 End If
-                Return Ok(ConstructionSites)
+                Return Ok(Chantiers)
             Catch ex As Exception
-                Return StatusCode(500, $"Erreur lors de la récupération des ConstructionSites: {ex.Message}")
+                Return StatusCode(500, $"Erreur lors de la récupération des Chantiers: {ex.Message}")
             End Try
         End Function
 
-        ' Récupérer un ConstructionSite par son ID
+        ' Récupérer un Chantier par son ID
         '<HttpGet("{id}")>
-        'Public Function GetConstructionSiteById(RefChantier As String) As IActionResult
+        'Public Function GetChantierById(RefChantier As String) As IActionResult
         '    Try
-        '        Dim ConstructionSite As ConstructionSite = _ConstructionSiteService.GetById(Integer.Parse(c))  ' ✅ Utilisez le paramètre `c` et la méthode `GetById`
-        '        If ConstructionSite Is Nothing Then
-        '            Return NotFound($"Le ConstructionSite avec l'ID {id} n'existe pas.")
+        '        Dim Chantier As Chantier = _ChantierService.GetById(Integer.Parse(c))  ' ✅ Utilisez le paramètre `c` et la méthode `GetById`
+        '        If Chantier Is Nothing Then
+        '            Return NotFound($"Le Chantier avec l'ID {id} n'existe pas.")
         '        End If
-        '        Return Ok(ConstructionSite)
+        '        Return Ok(Chantier)
         '    Catch ex As Exception
-        '        Return StatusCode(500, $"Erreur lors de la récupération du ConstructionSite: {ex.Message}")
+        '        Return StatusCode(500, $"Erreur lors de la récupération du Chantier: {ex.Message}")
         '    End Try
         'End Function
 
-        ' Générer un PDF pour un ConstructionSite
+        ' Générer un PDF pour un Chantier
         <HttpGet("{id}/pdf")>
         Public Function GeneratePDF(RefChantier As String) As IActionResult
             Try
-                Dim ConstructionSite As ConstructionSite = _ConstructionSiteService.GetConstructionSite(RefChantier)
-                If ConstructionSite Is Nothing Then
-                    Return NotFound($"Le ConstructionSite avec l'ID {RefChantier} n'existe pas.")
+                Dim Chantier As Chantier = _ChantierService.GetChantier(RefChantier)
+                If Chantier Is Nothing Then
+                    Return NotFound($"Le Chantier avec l'ID {RefChantier} n'existe pas.")
                 End If
 
-                Dim pdfBytes As Byte() = PdfService.GenerateConstructionSitePDF(ConstructionSite)
+                Dim pdfBytes As Byte() = PdfService.GenerateChantierPDF(Chantier)
                 If pdfBytes Is Nothing OrElse pdfBytes.Length = 0 Then
                     Return BadRequest("Impossible de générer le PDF.")
                 End If
 
-                Return File(pdfBytes, "application/pdf", $"ConstructionSite_{RefChantier}.pdf")
+                Return File(pdfBytes, "application/pdf", $"Chantier_{RefChantier}.pdf")
             Catch ex As Exception
                 Return StatusCode(500, $"Erreur lors de la génération du PDF: {ex.Message}")
             End Try

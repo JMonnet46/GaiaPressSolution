@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
 {
-    [DbContext(typeof(GaiaPressDbContext))]
+    [DbContext(typeof(ClasseGaiaPressDbContext))]
     [Migration("20261105035128_InitialCreate")]
     partial class InitialCreate
     {
@@ -33,7 +33,7 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                     b.Property<string>("Adresse")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateConstructionSite")
+                    b.Property<DateTime>("DateChantier")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescriptifConstructionSite")
@@ -68,7 +68,7 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
 
                     b.HasKey("RefConstructionSite");
 
-                    b.ToTable("LesConstructionSitesDb");
+                    b.ToTable("LesChantiersDb");
                 });
 
             modelBuilder.Entity("GaiaPressCoreV17.Models.TestExpansion", b =>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GaiaPress - Gestion des ConstructionSite</title>
+    <title>GaiaPress - Gestion des Chantier</title>
     <!-- Bootstrap pour un design moderne -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jsTree pour l'arborescence -->
@@ -34,12 +34,12 @@
 </head>
 <body>
     <div class="container-fluid">
-        <h1 class="text-center my-4">GaiaPress - Gestion des ConstructionSite</h1>
+        <h1 class="text-center my-4">GaiaPress - Gestion des Chantier</h1>
 
-        <!-- Onglets (remplace TabConstructionSite) -->
-        <ul class="nav nav-tabs" id="ConstructionSiteTabs" role="tablist">
+        <!-- Onglets (remplace TabChantier) -->
+        <ul class="nav nav-tabs" id="ChantierTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="tabConstructionSite" data-bs-toggle="tab" data-bs-target="#tabConstructionSiteContent" type="button" role="tab">ConstructionSite</button>
+                <button class="nav-link active" id="tabChantier" data-bs-toggle="tab" data-bs-target="#tabChantierContent" type="button" role="tab">Chantier</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="tabForages" data-bs-toggle="tab" data-bs-target="#tabForagesContent" type="button" role="tab">Forages</button>
@@ -47,20 +47,20 @@
         </ul>
 
         <!-- Contenu des onglets -->
-        <div class="tab-content" id="ConstructionSiteTabsContent">
-            <!-- Onglet ConstructionSite -->
-            <div class="tab-pane fade show active" id="tabConstructionSiteContent" role="tabpanel">
+        <div class="tab-content" id="ChantierTabsContent">
+            <!-- Onglet Chantier -->
+            <div class="tab-pane fade show active" id="tabChantierContent" role="tabpanel">
                 <div class="form-container">
-                    <h2>Propriétés du ConstructionSite</h2>
-                    <form id="ConstructionSiteForm">
+                    <h2>Propriétés du Chantier</h2>
+                    <form id="ChantierForm">
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="txtRefChantier" class="form-label">Référence du ConstructionSite :</label>
+                                <label for="txtRefChantier" class="form-label">Référence du Chantier :</label>
                                 <input type="text" class="form-control" id="txtRefChantier" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="txtNomConstructionSite" class="form-label">Nom du ConstructionSite :</label>
-                                <input type="text" class="form-control" id="txtNomConstructionSite" readonly>
+                                <label for="txtNomChantier" class="form-label">Nom du Chantier :</label>
+                                <input type="text" class="form-control" id="txtNomChantier" readonly>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -158,6 +158,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="/js/ConstructionSite.js"></script>
+    <script src="/js/Chantier.js"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
 {
-    [DbContext(typeof(GaiaPressDbContext))]
+    [DbContext(typeof(ClasseGaiaPressDbContext))]
     partial class GaiaPressDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -30,7 +30,7 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
                     b.Property<string>("Adresse")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateConstructionSite")
+                    b.Property<DateTime>("DateChantier")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescriptifConstructionSite")
@@ -65,7 +65,7 @@ namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
 
                     b.HasKey("RefConstructionSite");
 
-                    b.ToTable("LesConstructionSitesDb");
+                    b.ToTable("LesChantiersDb");
                 });
 
             modelBuilder.Entity("GaiaPressCoreV17.Models.TestExpansion", b =>

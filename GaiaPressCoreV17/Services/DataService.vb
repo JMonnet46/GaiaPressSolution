@@ -37,56 +37,56 @@ Namespace GaiaPressCoreV17.Services
 
 
         ' ============================================================
-        ' MÉTHODES ConstructionSite
+        ' MÉTHODES Chantier
         ' ============================================================
 
         ''' <summary>
-        ''' Récupère tous les ConstructionSites depuis la base de données.
+        ''' Récupère tous les Chantiers depuis la base de données.
         ''' </summary>
-        Public Function GetAllConstructionSite() As List(Of ConstructionSite)
-            Return _dbContext.ConstructionSitesDb.ToList()
+        Public Function GetAllChantier() As List(Of Chantier)
+            Return _dbContext.ChantiersDb.ToList()
         End Function
 
         ''' <summary>
-        ''' Récupère un ConstructionSite par sa référence.
+        ''' Récupère un Chantier par sa référence.
         ''' </summary>
-        Public Function GetConstructionSiteByRef(RefChantier As String) As ConstructionSite
-            Return _dbContext.ConstructionSitesDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
+        Public Function GetChantierByRef(RefChantier As String) As Chantier
+            Return _dbContext.ChantiersDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
         End Function
 
         ''' <summary>
-        ''' Ajoute un nouveau ConstructionSite.
+        ''' Ajoute un nouveau Chantier.
         ''' </summary>
-        Public Sub AddConstructionSite(ConstructionSite As ConstructionSite)
-            If ConstructionSite Is Nothing Then Return
-            _dbContext.ConstructionSitesDb.Add(ConstructionSite)
+        Public Sub AddChantier(Chantier As Chantier)
+            If Chantier Is Nothing Then Return
+            _dbContext.ChantiersDb.Add(Chantier)
             _dbContext.SaveChanges()
         End Sub
 
         ''' <summary>
-        ''' Met à jour un ConstructionSite existant.
+        ''' Met à jour un Chantier existant.
         ''' </summary>
-        Public Sub UpDateConstructionSite(ConstructionSite As ConstructionSite)
-            If ConstructionSite Is Nothing Then Return
-            _dbContext.ConstructionSitesDb.Update(ConstructionSite)
+        Public Sub UpDateChantier(Chantier As Chantier)
+            If Chantier Is Nothing Then Return
+            _dbContext.ChantiersDb.Update(Chantier)
             _dbContext.SaveChanges()
         End Sub
 
         ''' <summary>
-        ''' Supprime un ConstructionSite.
+        ''' Supprime un Chantier.
         ''' </summary>
-        Public Sub DeleteConstructionSite(RefChantier As String)
-            Dim ConstructionSite = GetConstructionSiteByRef(RefChantier)
-            If ConstructionSite IsNot Nothing Then
-                _dbContext.ConstructionSitesDb.Remove(ConstructionSite)
+        Public Sub DeleteChantier(RefChantier As String)
+            Dim Chantier = GetChantierByRef(RefChantier)
+            If Chantier IsNot Nothing Then
+                _dbContext.ChantiersDb.Remove(Chantier)
                 _dbContext.SaveChanges()
             End If
         End Sub
 
         ''' <summary>
-        ''' Sauvegarde tous les ConstructionSites.
+        ''' Sauvegarde tous les Chantiers.
         ''' </summary>
-        Public Function SaveAllConstructionSites() As Boolean
+        Public Function SaveAllChantiers() As Boolean
             Try
                 _dbContext.SaveChanges()
                 Return True
@@ -103,9 +103,9 @@ Namespace GaiaPressCoreV17.Services
             Return _dbContext.ListeForageDb.ToList()
         End Function
 
-        Public Function GetForagesByConstructionSite(ConstructionSiteId As String) As List(Of Forage)
+        Public Function GetForagesByChantier(ChantierId As String) As List(Of Forage)
             Return _dbContext.ListeForageDb _
-                .Where(Function(f) f.RefChantier = ConstructionSiteId) _
+                .Where(Function(f) f.RefChantier = ChantierId) _
                 .ToList()
         End Function
 
@@ -138,7 +138,7 @@ Namespace GaiaPressCoreV17.Services
         ''' <summary>
         ''' Charge les données depuis la base de données (pour initialisation)
         ''' </summary>
-        Public Sub LoadDataFromDatabase(ConstructionSiteId As String)
+        Public Sub LoadDataFromDatabase(ChantierId As String)
             ' Les données sont accessibles via _dbContext directement
             ' Cette méthode peut rester vide si on utilise EF Core partout
         End Sub

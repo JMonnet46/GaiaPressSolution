@@ -1,13 +1,14 @@
 ﻿@page "/Borehole"
 @page "/Borehole/{RefChantier?}"
 
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@rendermode InteractiveServer
 
 @using GaiaPressCoreV17.Services
 @using GaiaPressCoreV17.Models
 @using GaiaPressBlazorWebAPP.Components.Borehole
 @using GaiaPressBlazorWebAPP.Services
 @using ForageModel = GaiaPressCoreV17.Models.Forage
+@using GaiaPressBlazorWebAPP.Components.Test
 @implements IDisposable
 
 @inject NavigationManager Navigation
@@ -15,7 +16,6 @@
 @inject IForageService ForageService
 @inject ChantierState ChantierState
 @inject IJSRuntime JS
-@inject NavigationManager NavigationManager
 
 <PageTitle>@Loc["Borehole"]</PageTitle>
 
@@ -104,7 +104,6 @@
             }
         }
     }
-
     else
     {
         <h3>@Loc["Borehole"]: @selectedBorehole.RefForage</h3>
@@ -126,24 +125,34 @@
             {
                 <div class="alert alert-info">
                     <strong>Détails du forage :</strong> @selectedBorehole.RefForage - @selectedBorehole.NomForage
-                    <!-- Composant BoreholeDetails à venir -->
                 </div>
             }
             else if (activeTab == "Test")
             {
-                <button type="button" class="btn btn-primary mb-3" @onclick="AddNewTest">@Loc["NewTest"]</button>
-                <div class="alert alert-info">@Loc["TestListComing"] @selectedBorehole.RefForage</div>
-                <!-- Composant TestList à venir -->
+                @if (ouvrirNouvelEssai)  // ✅ Affiche NewTest quand ouvrirNouvelEssai = true
+                {
+                    <NewTest
+                        RefChantier="@RefChantier"
+                        RefForage="@selectedBorehole.RefForage"
+                        OnClose="CloseNewTest" />
+                }
+                else  // ✅ Affiche le bouton quand ouvrirNouvelEssai = false
+                {
+                    <button type="button" class="btn btn-primary mb-3" @onclick="AddNewTest">@Loc["NewTest"]</button>
+                    <div class="alert alert-info">@Loc["TestListComing"] @selectedBorehole.RefForage</div>
+                }
+
+
+
+
             }
             else if (activeTab == "Probe")
             {
-                <div class="alert alert-info">Liste des sols à venir (Ref: @selectedBorehole.RefForage)</div>
-                <!-- Composant SoilList à venir -->
+                <div class="alert alert-info">Liste des sondes à venir (Ref: @selectedBorehole.RefForage)</div>
             }
             else if (activeTab == "Soil")
             {
                 <div class="alert alert-info">Liste des sols à venir (Ref: @selectedBorehole.RefForage)</div>
-                <!-- Composant SoilList à venir -->
             }
         </div>
 
@@ -159,8 +168,9 @@
 </div>
 
 @code {
-    [Parameter]
-    public string? RefChantier { get; set; }
+    [Parameter] public string RefChantier { get; set; } = "";
+    private string RefForage { get; set; } = "";
+    private string? RefEssai { get; set; }
 
     private ForageModel? selectedBorehole;
     private List<ForageModel> forages = new();
@@ -168,27 +178,28 @@
     private bool isCreating;
     private bool isInitializing = true;
     private bool isLoadingForages;
+    private bool ouvrirNouvelEssai = false;
     private string activeTab = "Borehole";
     private bool isError;
     private string message = "";
 
-    private void AddNewTest()
+    // Ouvre le formulaire NewTest dans l'onglet Test
+    private async Task AddNewTest()
     {
-        if (selectedBorehole != null && !string.IsNullOrWhiteSpace(RefChantier))
-        {
-            Navigation.NavigateTo($"/NewTest/{selectedBorehole.RefForage}?refChantier={Uri.EscapeDataString(RefChantier)}");
-        }
+        ouvrirNouvelEssai = true;
+        Console.WriteLine("[Borehole] ouvrirNouvelEssai = true");
+        await InvokeAsync(StateHasChanged);
+        Console.WriteLine("[Borehole] StateHasChanged invoqué");
+        Console.WriteLine($"[Borehole] Paramètres passés à NewTest : RefChantier={RefChantier}, RefForage={selectedBorehole.RefForage}, RefEssai={RefEssai}");
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Console.WriteLine($"RefChantier = {ChantierState.RefChantier}");
-
-    //     {
-    //         // SUPPRIMER tout le contenu ici (surtout les appels JS)
-    //         ChantierState.OnChange += StateHasChanged;
-    //     }
-    // }
+    // Appelé par NewTest (OnClose) pour revenir à la liste des essais
+    private void CloseNewTest()
+    {
+        Console.WriteLine("[Borehole] CloseNewTest appelé");
+        ouvrirNouvelEssai = false;
+        StateHasChanged();
+    }
 
     private async Task LoadForages()
     {
@@ -209,11 +220,21 @@
         finally { isLoadingForages = false; }
     }
 
-    private void SelectForage(ForageModel forage)
+    private async Task SelectForage(ForageModel forage)
     {
         selectedBorehole = forage;
         activeTab = "Borehole";
-        _ = JS.InvokeVoidAsync("localStorage.setItem", "selectedBorehole", System.Text.Json.JsonSerializer.Serialize(forage));
+        ouvrirNouvelEssai = false;
+        await JS.InvokeVoidAsync("localStorage.setItem", "selectedBorehole",
+            System.Text.Json.JsonSerializer.Serialize(forage));
+    }
+
+    private async Task BackToList()
+    {
+        selectedBorehole = null;
+        ouvrirNouvelEssai = false;
+        await JS.InvokeVoidAsync("localStorage.removeItem", "selectedBorehole");
+        await LoadForages();
     }
 
     protected override void OnInitialized()
@@ -289,6 +310,7 @@
         _ = InvokeAsync(async () =>
         {
             selectedBorehole = null;
+            ouvrirNouvelEssai = false;
             await LoadForages();
             StateHasChanged();
         });
@@ -319,13 +341,6 @@
     {
         isCreating = false;
         refForage = null;
-    }
-
-    private void BackToList()
-    {
-        selectedBorehole = null;
-        _ = JS.InvokeVoidAsync("localStorage.removeItem", "selectedBorehole");
-        _ = LoadForages();
     }
 
     private async Task DeleteForage(string refForage)

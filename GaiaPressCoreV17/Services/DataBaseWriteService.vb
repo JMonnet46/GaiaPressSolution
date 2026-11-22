@@ -134,51 +134,51 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         ' ============================================
-        ' MÉTHODES SPÉCIFIQUES - ConstructionSite
+        ' MÉTHODES SPÉCIFIQUES - Chantier
         ' ============================================
 
         ''' <summary>
-        ''' Ajoute un nouveau ConstructionSite
+        ''' Ajoute un nouveau Chantier
         ''' </summary>
-        Public Function InsertConstructionSite(RefChantier As String, NomConstructionSite As String, DescriptifConstructionSite As String,
+        Public Function InsertChantier(RefChantier As String, NomChantier As String, DescriptifChantier As String,
                                        RefClient As String, Entreprise As String, Adresse As String,
                                        Telephone As String, Reference As String) As Boolean
             Dim values As New Dictionary(Of String, Object) From {
                 {"RefChantier", RefChantier},
-                {"NomConstructionSite", NomConstructionSite},
-                {"DescriptifConstructionSite", DescriptifConstructionSite},
+                {"NomChantier", NomChantier},
+                {"DescriptifChantier", DescriptifChantier},
                 {"RefClient", RefClient},
                 {"Entreprise", Entreprise},
                 {"Adresse", Adresse},
                 {"Telephone", Telephone},
                 {"Reference", Reference}
             }
-            Return InsertRow("LesConstructionSite", values)
+            Return InsertRow("LesChantier", values)
         End Function
 
         ''' <summary>
-        ''' Met à jour un ConstructionSite
+        ''' Met à jour un Chantier
         ''' </summary>
-        Public Function UpDateConstructionSite(RefChantier As String, NomConstructionSite As String, DescriptifConstructionSite As String,
+        Public Function UpDateChantier(RefChantier As String, NomChantier As String, DescriptifChantier As String,
                                        RefClient As String, Entreprise As String, Adresse As String,
                                        Telephone As String, Reference As String) As Boolean
             Dim values As New Dictionary(Of String, Object) From {
-                {"NomConstructionSite", NomConstructionSite},
-                {"DescriptifConstructionSite", DescriptifConstructionSite},
+                {"NomChantier", NomChantier},
+                {"DescriptifChantier", DescriptifChantier},
                 {"RefClient", RefClient},
                 {"Entreprise", Entreprise},
                 {"Adresse", Adresse},
                 {"Telephone", Telephone},
                 {"Reference", Reference}
             }
-            Return UpdateRowByRef("LesConstructionSite", "RefChantier", RefChantier, values)
+            Return UpdateRowByRef("LesChantier", "RefChantier", RefChantier, values)
         End Function
 
         ''' <summary>
-        ''' Supprime un ConstructionSite
+        ''' Supprime un Chantier
         ''' </summary>
-        Public Function DeleteConstructionSite(RefChantier As String) As Boolean
-            Return DeleteRowByRef("LesConstructionSite", "RefChantier", RefChantier)
+        Public Function DeleteChantier(RefChantier As String) As Boolean
+            Return DeleteRowByRef("LesChantier", "RefChantier", RefChantier)
         End Function
 
         ' ============================================

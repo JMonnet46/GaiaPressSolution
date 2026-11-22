@@ -48,7 +48,7 @@ Imports GaiaPressCoreV17.Logic
 'End Sub
 
 
-'    Public Function LectureEssaiExcelGaiaPress(ByVal FichierConstructionSite As String, ByRef Essai As Essai_Forage, ByRef MyForage As Forage) As Boolean
+'    Public Function LectureEssaiExcelGaiaPress(ByVal FichierChantier As String, ByRef Essai As Essai_Forage, ByRef MyForage As Forage) As Boolean
 '        Dim wkbObj As Excel.Workbook ' Déclare un objet variable.
 '        Dim XlApp As Excel.Application
 
@@ -79,7 +79,7 @@ Imports GaiaPressCoreV17.Logic
 '        XlApp.Visible = True  ' Rendre visible l'application
 
 '        ' Ouvrir le fichier Excel et affectation; Erreur 0x080010105
-'        wkbObj = XlApp.Workbooks.Open(FichierConstructionSite)
+'        wkbObj = XlApp.Workbooks.Open(FichierChantier)
 
 '        ' Affectation à un workbook
 '        ''wkbObj = xlApp.Workbooks
@@ -191,13 +191,13 @@ Imports GaiaPressCoreV17.Logic
 '            Call Essai.SetMySonde(MySonde)
 
 '            ' Fermeture du fichier Excel
-'            'wkbObj.Close(SaveChanges:=False, Filename:=FichierConstructionSite)
+'            'wkbObj.Close(SaveChanges:=False, Filename:=FichierChantier)
 
 '            wkbObj.Close(SaveChanges:=False)
 
-'            ''wkbObj(FichierConstructionSite).close(savechanges:=False)
+'            ''wkbObj(FichierChantier).close(savechanges:=False)
 '            ' Suppression des objets
-'            wkbObj.Close(FichierConstructionSite)
+'            wkbObj.Close(FichierChantier)
 '            wkbObj = Nothing
 
 '            XlApp.Visible = False
@@ -224,7 +224,7 @@ Imports GaiaPressCoreV17.Logic
 '        End If
 '    End Function
 
-'    Public Function LectureEssaiExcelApageo(ByVal FichierConstructionSite As String, ByRef Essai As Essai_Forage, ByRef MyForage As Forage) As Boolean
+'    Public Function LectureEssaiExcelApageo(ByVal FichierChantier As String, ByRef Essai As Essai_Forage, ByRef MyForage As Forage) As Boolean
 '        Dim wkbObj As Excel.Workbook ' Déclare un objet variable.
 '        Dim XlApp As Excel.Application
 
@@ -247,7 +247,7 @@ Imports GaiaPressCoreV17.Logic
 '        XlApp.Visible = True  ' Rendre visible l'application
 
 '        ' Ouvrir le fichier Excel et affectation; Erreur 0x080010105
-'        wkbObj = XlApp.Workbooks.Open(FichierConstructionSite)
+'        wkbObj = XlApp.Workbooks.Open(FichierChantier)
 
 '        ' Affectation à un workbook
 '        ''wkbObj = xlApp.Workbooks
@@ -285,7 +285,7 @@ Imports GaiaPressCoreV17.Logic
 '                End If
 '            Loop ' Fin du Do While (wkbObj.Worksheets(1).Range("A" & i).value) <> "     NOM FICHIER                   :"
 
-'            ' On a trouvé le nom du ConstructionSite
+'            ' On a trouvé le nom du Chantier
 '            Do While i < 46
 
 '                With Essai
@@ -296,9 +296,9 @@ Imports GaiaPressCoreV17.Logic
 
 '                    Select Case i
 '                        Case 2
-'                            'Call .RefChantier(wkbObj.Worksheets(Tab).Range("AJ" & i).Value)    ' Enregistrement de la Ref du ConstructionSite
+'                            'Call .RefChantier(wkbObj.Worksheets(Tab).Range("AJ" & i).Value)    ' Enregistrement de la Ref du Chantier
 '                        Case 4
-'                            'Call .RefChantier(wkbObj.Worksheets(Tab).Range("AJ" & i).Value)    ' Enregistrement du nom du ConstructionSite
+'                            'Call .RefChantier(wkbObj.Worksheets(Tab).Range("AJ" & i).Value)    ' Enregistrement du nom du Chantier
 '                        Case 6
 '                            'Call .RefForage(wkbObj.Worksheets(Tab).Range("AJ" & i).Value)    ' Enregistrement de la Ref du Forage
 '                        Case 8
@@ -358,13 +358,13 @@ Imports GaiaPressCoreV17.Logic
 '        Call Essai.SetMySonde(MySonde)
 
 '        ' Fermeture du fichier Excel
-'        'wkbObj.Close(SaveChanges:=False, Filename:=FichierConstructionSite)
+'        'wkbObj.Close(SaveChanges:=False, Filename:=FichierChantier)
 
 '        'wkbObj.Close(SaveChanges:=False)
 
-'        ''wkbObj(FichierConstructionSite).close(savechanges:=False)
+'        ''wkbObj(FichierChantier).close(savechanges:=False)
 '        ' Suppression des objets
-'        wkbObj.Close(FichierConstructionSite)
+'        wkbObj.Close(FichierChantier)
 '        wkbObj = Nothing
 
 '        XlApp.Visible = False
@@ -402,7 +402,7 @@ Imports GaiaPressCoreV17.Logic
 '        End If
 '    End Function
 
-'    Public Function LectureEssaiExcelFondaSol(ByVal FichierConstructionSite As String, ByRef Essai As Essai_Forage, ByRef MyForage As Forage) As Boolean
+'    Public Function LectureEssaiExcelFondaSol(ByVal FichierChantier As String, ByRef Essai As Essai_Forage, ByRef MyForage As Forage) As Boolean
 '        Dim wkbObj As Excel.Workbook ' Déclare un objet variable.
 '        Dim XlApp As Excel.Application
 
@@ -425,7 +425,7 @@ Imports GaiaPressCoreV17.Logic
 '        XlApp.Visible = True  ' Rendre visible l'application
 
 '        ' Ouvrir le fichier Excel et affectation; Erreur 0x080010105
-'        wkbObj = XlApp.Workbooks.Open(FichierConstructionSite)
+'        wkbObj = XlApp.Workbooks.Open(FichierChantier)
 
 '        ' Affectation à un workbook
 '        ''wkbObj = xlApp.Workbooks
@@ -434,7 +434,7 @@ Imports GaiaPressCoreV17.Logic
 '        k = 0
 
 '        ' Récupération du nombre de Mesures dans la Table "LesMesuresForage"
-'        l = MonConstructionSite.Tables("LesMesuresForage").Rows.Count
+'        l = MonChantier.Tables("LesMesuresForage").Rows.Count
 
 '        ' Mémorisation des onglets du fichier lu
 '        NbTab = wkbObj.Worksheets.Count
@@ -516,13 +516,13 @@ Imports GaiaPressCoreV17.Logic
 '        Call Essai.SetMySonde(MySonde)
 
 '        ' Fermeture du fichier Excel
-'        'wkbObj.Close(SaveChanges:=False, Filename:=FichierConstructionSite)
+'        'wkbObj.Close(SaveChanges:=False, Filename:=FichierChantier)
 
 '        'wkbObj.Close(SaveChanges:=False)
 
-'        ''wkbObj(FichierConstructionSite).close(savechanges:=False)
+'        ''wkbObj(FichierChantier).close(savechanges:=False)
 '        ' Suppression des objets
-'        wkbObj.Close(FichierConstructionSite)
+'        wkbObj.Close(FichierChantier)
 '        wkbObj = Nothing
 
 '        XlApp.Visible = False

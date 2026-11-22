@@ -26,7 +26,7 @@ Namespace GaiaPressCoreV17.Models
         Public Property EventsSuspendus As Boolean
         Public Property IsSaved As Boolean
 
-        Public Property FichierConstructionSite As String
+        Public Property FichierChantier As String
 
     End Class
 

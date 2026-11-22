@@ -40,10 +40,10 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         '''' <summary>
-        '''' Récupère les sols par référence de ConstructionSite.
+        '''' Récupère les sols par référence de Chantier.
         '''' </summary>
-        '''' <param name="RefChantier">Référence du ConstructionSite.</param>
-        '''' <returns>Liste des sols pour le ConstructionSite spécifié.</returns>
+        '''' <param name="RefChantier">Référence du Chantier.</param>
+        '''' <returns>Liste des sols pour le Chantier spécifié.</returns>
         'Public Async Function GetSolsByrefSol(refSol As String) As Task(Of List(Of Sol))
         '    Return Await _dbContext.ListeSolDb.Where(Function(s) s.RefSol = refSol).ToListAsync()
         'End Function
@@ -105,9 +105,9 @@ Namespace GaiaPressCoreV17.Services
         End Function
 
         ''' <summary>
-        ''' Supprime tous les sols associés à un ConstructionSite.
+        ''' Supprime tous les sols associés à un Chantier.
         ''' </summary>
-        ''' <param name="RefChantier">Référence du ConstructionSite.</param>
+        ''' <param name="RefChantier">Référence du Chantier.</param>
         ''' <returns>True si la suppression a réussi, False sinon.</returns>
         Public Async Function DeleteSolsByrefSol(refSol As String) As Task(Of Boolean)
             Dim solsToDelete = Await _dbContext.ListeSolDb.Where(Function(s) s.RefSol = refSol).ToListAsync()

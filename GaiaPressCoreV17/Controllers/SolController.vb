@@ -21,13 +21,13 @@ Namespace GaiaPressCoreV17.Controllers
 
         ' ✅ Déclarer les dépendances
         PUBLIC ReadOnly _context As GaiaPressDbContext
-        Public ReadOnly _ConstructionSiteService As ConstructionSiteService
+        Public ReadOnly _ChantierService As ChantierService
 
         ''' <summary>
         ''' Constructeur avec injection de dépendances.
-        Public Sub New(context As GaiaPressDbContext, ConstructionSiteService As ConstructionSiteService)
+        Public Sub New(context As GaiaPressDbContext, ChantierService As ChantierService)
             _context = context
-            _ConstructionSiteService = ConstructionSiteService
+            _ChantierService = ChantierService
         End Sub
 
 
@@ -129,26 +129,26 @@ Namespace GaiaPressCoreV17.Controllers
         End Function
 
         ' ======================
-        ' GET: api/Sol/ByConstructionSite/{ConstructionSiteId}
+        ' GET: api/Sol/ByChantier/{ChantierId}
         ' ======================
         ''' <summary>
-        ''' Récupère tous les sols associés à un ConstructionSite.
+        ''' Récupère tous les sols associés à un Chantier.
         ''' </summary>
-        <HttpGet("ByConstructionSite/{ConstructionSiteId}")>
-        Public Async Function GetSolsByConstructionSite(ConstructionSiteId As String) As Task(Of IActionResult)
+        <HttpGet("ByChantier/{ChantierId}")>
+        Public Async Function GetSolsByChantier(ChantierId As String) As Task(Of IActionResult)
             Try
                 ' ✅ Syntaxe correcte pour votre modèle ( ListSols,  RefChantier)
-                Dim ConstructionSite = Await _context.ConstructionSitesDb _
+                Dim Chantier = Await _context.ChantiersDb _
                 .Include(Function(c) c.ListSols) _
-                .FirstOrDefaultAsync(Function(c) c.RefChantier = ConstructionSiteId)
+                .FirstOrDefaultAsync(Function(c) c.RefChantier = ChantierId)
 
-                If ConstructionSite Is Nothing Then
-                    Return NotFound($"Le ConstructionSite avec l'ID {ConstructionSiteId} n'existe pas.")
+                If Chantier Is Nothing Then
+                    Return NotFound($"Le Chantier avec l'ID {ChantierId} n'existe pas.")
                 End If
 
-                Return Ok(ConstructionSite. ListSols)
+                Return Ok(Chantier. ListSols)
             Catch ex As Exception
-                Return StatusCode(500, $"Erreur lors de la récupération des sols du ConstructionSite: {ex.Message}")
+                Return StatusCode(500, $"Erreur lors de la récupération des sols du Chantier: {ex.Message}")
             End Try
         End Function
 

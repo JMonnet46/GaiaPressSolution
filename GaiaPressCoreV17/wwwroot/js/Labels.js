@@ -22,11 +22,11 @@ const labels = {
 
         // Libellés pour WebForage.html
         mainTitleWebForage: "GaiaPress - Site Management",
-        tabConstructionSiteText: "Site",
+        tabChantierText: "Site",
         tabForagesText: "Boreholes",
-        ConstructionSiteTitle: "Site Properties",
+        ChantierTitle: "Site Properties",
         labelRefChantier: "Site Reference:",
-        labelNomConstructionSite: "Site Name:",
+        labelNomChantier: "Site Name:",
         labelRefClient: "Client Reference:",
         labelEntreprise: "Company:",
         labelTelephone: "Phone:",
@@ -65,12 +65,12 @@ const labels = {
         btnPrintText: "Imprimer",
 
         // Libellés pour WebForage.html
-        mainTitleWebForage: "GaiaPress - Gestion des ConstructionSite",
-        tabConstructionSiteText: "ConstructionSite",
+        mainTitleWebForage: "GaiaPress - Gestion des Chantier",
+        tabChantierText: "Chantier",
         tabForagesText: "Forages",
-        ConstructionSiteTitle: "Propriétés du ConstructionSite",
-        labelRefChantier: "Référence du ConstructionSite :",
-        labelNomConstructionSite: "Nom du ConstructionSite :",
+        ChantierTitle: "Propriétés du Chantier",
+        labelRefChantier: "Référence du Chantier :",
+        labelNomChantier: "Nom du Chantier :",
         labelRefClient: "Référence du client :",
         labelEntreprise: "Entreprise :",
         labelTelephone: "Téléphone :",

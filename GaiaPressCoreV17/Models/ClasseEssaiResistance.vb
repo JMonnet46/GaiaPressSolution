@@ -215,9 +215,9 @@ Namespace GaiaPressCoreV17.Models
         '    setResistanceNouvelleMesure(0, 0, 0)
 
         '    If Table Then ' On ajoute un essai à MonFichier.Tables("LesEssaisResistanceDbPropre") seulement si Table est vrai
-        '        If MonConstructionSite.Tables("LesEssaisResistanceDbPropre") Is Nothing Then
-        '            MonConstructionSite.Tables.Add("LesEssaisResistanceDbPropre")
-        '            With MonConstructionSite.Tables("LesEssaisResistanceDbPropre")
+        '        If MonChantier.Tables("LesEssaisResistanceDbPropre") Is Nothing Then
+        '            MonChantier.Tables.Add("LesEssaisResistanceDbPropre")
+        '            With MonChantier.Tables("LesEssaisResistanceDbPropre")
         '                .Columns.Add("refEssai", GetType(String))
         '                .Columns.Add("refSonde", GetType(String))
         '                .Columns.Add("nomEssai", GetType(String))
@@ -241,7 +241,7 @@ Namespace GaiaPressCoreV17.Models
         '            MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Add(ObjetDataRow)
 
 
-        '            'MonConstructionSite.Tables("LesEssaisResistanceDbPropre").Rows.Add()
+        '            'MonChantier.Tables("LesEssaisResistanceDbPropre").Rows.Add()
         '        End If
         '    End If
 
@@ -328,7 +328,7 @@ Namespace GaiaPressCoreV17.Models
             'Reference = MySonde.GiveMeANewRefEssai(EssaiCalib.Resistance)
             Reference = MyResistance.RefEssai
             MaListeSonde.Tables("LesMesuresResistanceDbPropre").Rows.Add(Reference, Indice, 0, 0)
-            'MonConstructionSite.Tables("LesMesuresResistanceDbPropre").Rows.Add()
+            'MonChantier.Tables("LesMesuresResistanceDbPropre").Rows.Add()
 
             ' Remplissage des nouvelles Valeurss
             With MaListeSonde.Tables("LesMesuresResistanceDbPropre")

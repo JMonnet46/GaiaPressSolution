@@ -135,10 +135,10 @@ Namespace GaiaPressCoreV17.Logic
         End Function
 
         ''' <summary>
-        ''' Récupère les essais d'Resistance par référence de ConstructionSite avec une logique métier spécifique.
+        ''' Récupère les essais d'Resistance par référence de Chantier avec une logique métier spécifique.
         ''' </summary>
-        ''' <param name="RefChantier">Référence du ConstructionSite.</param>
-        ''' <returns>Liste des essais d'Resistance pour le ConstructionSite spécifié.</returns>
+        ''' <param name="RefChantier">Référence du Chantier.</param>
+        ''' <returns>Liste des essais d'Resistance pour le Chantier spécifié.</returns>
         Public Async Function GetEssaisResistanceDbByrefSonde(refSonde As String) As Task(Of IActionResult)
             Try
                 Dim essais = Await _EssaisResistanceDbService.GetEssaisResistanceDbByRefSonde(refSonde)

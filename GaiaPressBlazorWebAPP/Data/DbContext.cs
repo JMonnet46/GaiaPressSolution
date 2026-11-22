@@ -12,7 +12,7 @@ namespace GaiaPressBlazorWebAPP.Data
         }
 
         public DbSet<ForageEntity> ForageDb { get; set; }
-        public DbSet<ConstructionSite> ConstructionSites { get; set; }
+        public DbSet<Chantier> ChantiersDb { get; set; }
         public DbSet<Essai_Forage> ListeEssaiForageDb { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

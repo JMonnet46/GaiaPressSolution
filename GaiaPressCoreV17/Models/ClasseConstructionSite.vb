@@ -7,26 +7,26 @@ Imports Microsoft.EntityFrameworkCore
 
 Namespace GaiaPressCoreV17.Models
 
-    Public Class ConstructionSite
+    Public Class Chantier
 
         ' Propriétés métiers (avec préfixe  )
         <Key>       ' Column("RefChantier")
         Public Property RefChantier As String
 
-        ' Column("NomConstructionSite")
-        Public Property NameConstructionSite As String
+        ' Column("NomChantier")
+        Public Property NameChantier As String
 
-        ' Column("DescriptionConstructionSite")
-        Public Property DescriptionConstructionSite As String
-        Public Property DateConstructionSite As DateTime
+        ' Column("DescriptionChantier")
+        Public Property DescriptionChantier As String
+        Public Property DateChantier As DateTime
         Public Property RefClient As String
         Public Property Entreprise As String
         Public Property Adresse As String
         Public Property Telephone As String
         Public Property Reference As String
 
-        Public FichierConstructionSite As String
-        Public MyFenetreConstructionSite As ConstructionSiteLogic
+        Public FichierChantier As String
+        Public MyFenetreChantier As ChantierLogic
         Public MyFile As String
         Public MyFileTitle As String
         Public DataSetName As String
@@ -46,7 +46,7 @@ Namespace GaiaPressCoreV17.Models
         Public Property EventsSupendus As Boolean
 
         Public Sub IHaveBeenModified()
-            ' Génère un événement indiquant que des modifications du ConstructionSite ont eu lieu
+            ' Génère un événement indiquant que des modifications du Chantier ont eu lieu
             If Not EventsSupendus Then
                 RaiseEvent HasBeenModified()
                 IsSaved = False
@@ -59,7 +59,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Sub AddForage(forage As Forage)
             Me.ListForages.Add(forage)
-            ' Lier le forage au ConstructionSite (si nécessaire)
+            ' Lier le forage au Chantier (si nécessaire)
             forage.RefChantier = Me.RefChantier
         End Sub
 
@@ -121,7 +121,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Sub AddEssaiForage(essai As Essai_Forage)
             Me.ListEssaiForages.Add(essai)
-            ' Lier le forage au ConstructionSite (si nécessaire)
+            ' Lier le forage au Chantier (si nécessaire)
             essai.RefChantier = Me.RefChantier
         End Sub
 
@@ -207,7 +207,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Sub AddMesureEssaiForage(essai As Essai_Forage)
             Me.ListEssaiForages.Add(essai)
-            ' Lier le forage au ConstructionSite (si nécessaire)
+            ' Lier le forage au Chantier (si nécessaire)
             essai.RefChantier = Me.RefChantier
         End Sub
 
@@ -233,7 +233,7 @@ Namespace GaiaPressCoreV17.Models
         ''' </summary>
         Public Sub UpdateMesureEssaiForage(MesureModifiee As MesureEssaiForage)
             ' Get la mesure dans la liste (ex:  ListMesuresForage ou ObjetDataMesures)
-            ' Exemple pour une liste dans un ConstructionSite :
+            ' Exemple pour une liste dans un Chantier :
             Dim mesure As MesureEssaiForage = ListMesuresForage.FirstOrDefault(
         Function(m) m.RefEssai = MesureModifiee.RefEssai AndAlso m.IndiceMesure = MesureModifiee.IndiceMesure
     )
@@ -388,7 +388,7 @@ Namespace GaiaPressCoreV17.Models
 
         Public Event HasBeenModified()
 
-        ' Constructeur de ConstructionSite
+        ' Constructeur de Chantier
         Public Sub New()
             ' Initialisation des collections avec List(Of T)
             ListForages = New List(Of Forage)
@@ -398,10 +398,10 @@ Namespace GaiaPressCoreV17.Models
             ListSondes = New List(Of Probe)
 
             ' Initialisation des propriétés par défaut
-            FichierConstructionSite = "à remplir"
+            FichierChantier = "à remplir"
             RefChantier = "à remplir"
-            NameConstructionSite = "Nouveau ConstructionSite"
-            DescriptionConstructionSite = "à remplir"
+            NameChantier = "Nouveau Chantier"
+            DescriptionChantier = "à remplir"
             RefClient = "à remplir"
             Entreprise = "à remplir"
             Adresse = "à remplir"
@@ -415,13 +415,13 @@ Namespace GaiaPressCoreV17.Models
             EventsSupendus = True
 
             ' ❌ Supprimez cette ligne (référence à Windows Forms)
-            '  MyNodeConstructionSite = New TreeNode
+            '  MyNodeChantier = New TreeNode
         End Sub
 
         '        ' *******************************************************************************
-        '        ' Lecture des ConstructionSite
+        '        ' Lecture des Chantier
         '        ' ************************************************************************
-        '        Public Sub ChargeAvecBD(ByVal FichierConstructionSite As String)
+        '        Public Sub ChargeAvecBD(ByVal FichierChantier As String)
         '            Dim RowNumber, i, j, k, kMax, kRef, l, m, n, IndSonde, IndEssai, Ind, IndMesures, IndexForage As Integer
         '            Dim Pres, V15, V30, V60, SigR, SigV, Defo, Pnf, Vnf, Qi, Pi, Qp, Pp, PressionNF, VolumeNF As Single
         '            Dim Requete, RefForage, RefEssai, RefChantier As String
@@ -440,15 +440,15 @@ Namespace GaiaPressCoreV17.Models
 
         '            On Error GoTo errFind   ' En cas d'erreur, aller à la section errFind (en fin de fonction)
 
-        '            If MyConstructionSite Is Nothing Then MyConstructionSite = New ConstructionSite
+        '            If MyChantier Is Nothing Then MyChantier = New Chantier
         '            If MyForage Is Nothing Then MyForage = New Forage
 
         '            ' Appel de la procédure de connection à la base de données
 
-        '            If Not (ChargeConstructionSite) Then
+        '            If Not (ChargeChantier) Then
 
-        '                ' Netoyage de l'AdaptateurConstructionSite
-        '                ' AdaptateurConstructionSite.clear()
+        '                ' Netoyage de l'AdaptateurChantier
+        '                ' AdaptateurChantier.clear()
 
         '                ' Création d'une connection avec la base de données de type Access 2000
 
@@ -457,44 +457,44 @@ Namespace GaiaPressCoreV17.Models
         '                ' Ouverture de la connection avec la BD
 
         '                ' *********************************************************************
-        '                ' Lecture de la Table "ConstructionSite"
+        '                ' Lecture de la Table "Chantier"
         '                ' *********************************************************************
 
         '                'ma requete
-        '                'Requete = "SELECT RefChantier AS  RefChantier, NomConstructionSite AS  NomConstructionSite, DescriptifConstructionSite AS  DescriptifConstructionSite, " _
-        '                '    & "RefClient AS  RefClient, Entreprise AS  Entreprise, Adresse AS  Adresse, Telephone AS  Telephone, Reference AS  Reference FROM ConstructionSite"
-        '                Requete = "SELECT RefChantier , NomConstructionSite , DescriptifConstructionSite , " &
-        '                          "RefClient , Entreprise , Adresse , Telephone , Reference  FROM ConstructionSite"
+        '                'Requete = "SELECT RefChantier AS  RefChantier, NomChantier AS  NomChantier, DescriptifChantier AS  DescriptifChantier, " _
+        '                '    & "RefClient AS  RefClient, Entreprise AS  Entreprise, Adresse AS  Adresse, Telephone AS  Telephone, Reference AS  Reference FROM Chantier"
+        '                Requete = "SELECT RefChantier , NomChantier , DescriptifChantier , " &
+        '                          "RefClient , Entreprise , Adresse , Telephone , Reference  FROM Chantier"
 
-        '                'Requete = "SELECT * FROM ConstructionSite"
+        '                'Requete = "SELECT * FROM Chantier"
 
         '                'definition de la commande
 
-        '                ' Définition de l'AdaptateurConstructionSite
+        '                ' Définition de l'AdaptateurChantier
 
-        '                ' Nettoyage de MonConstructionSite avant le chargement
-        '                MonConstructionSite.Tables("ConstructionSite")?.Clear()
+        '                ' Nettoyage de MonChantier avant le chargement
+        '                MonChantier.Tables("Chantier")?.Clear()
 
-        '                ' rempli le dataset depuis la BD vers la Table "ConstructionSite" de MonDataSet
+        '                ' rempli le dataset depuis la BD vers la Table "Chantier" de MonDataSet
 
-        '                ' On remplit les ObjetTables avec les Tables de MonConstructionSite
-        '                ObjetDataConstructionsSitesDb = MonConstructionSite.Tables("ConstructionSite")
+        '                ' On remplit les ObjetTables avec les Tables de MonChantier
+        '                ObjetDataConstructionsSitesDb = MonChantier.Tables("Chantier")
 
         '                ' Mise à jour du compteur d'enregistrements
 
-        '                'Me. ConstructionSite.Count = MonConstructionSite.Tables("ConstructionSite").Rows.Count
+        '                'Me. Chantier.Count = MonChantier.Tables("Chantier").Rows.Count
 
         '                Select Case Lang
         '                    Case 0
-        '                        MsgBox("Reading of the Table 'ConstructionSite' suceeded")
+        '                        MsgBox("Reading of the Table 'Chantier' suceeded")
         '                    Case 1
-        '                        MsgBox("Lecture de la Table 'ConstructionSite' réussie")
+        '                        MsgBox("Lecture de la Table 'Chantier' réussie")
         '                End Select
         '                Select Case Lang
         '                    Case 0
-        '                        MsgBox("Reading of the Table 'ConstructionSite' suceeded")
+        '                        MsgBox("Reading of the Table 'Chantier' suceeded")
         '                    Case 1
-        '                        MsgBox("Lecture de la Table 'ConstructionSite' réussie")
+        '                        MsgBox("Lecture de la Table 'Chantier' réussie")
         '                End Select
 
         '                ' *********************************************************************
@@ -505,27 +505,27 @@ Namespace GaiaPressCoreV17.Models
 
         '                'definition de la commande
 
-        '                ' Définition de l'AdaptateurConstructionSite
+        '                ' Définition de l'AdaptateurChantier
 
-        '                ' Nettoyage de MonConstructionSite avant le chargement
-        '                MonConstructionSite.Tables("LesForages")?.Clear()
+        '                ' Nettoyage de MonChantier avant le chargement
+        '                MonChantier.Tables("LesForages")?.Clear()
 
         '                ' rempli le dataset depuis la BD vers la Table "LesForages" de MonDataSet
-        '                ObjetDataLesForages = MonConstructionSite.Tables("LesForages")
+        '                ObjetDataLesForages = MonChantier.Tables("LesForages")
 
-        '                ' La Table "LesForages" est chargée dans MonConstructionSite
+        '                ' La Table "LesForages" est chargée dans MonChantier
 
         '                ' Mise à jour du compteur d'enregistrements
-        '                ' ListForages.Count = MonConstructionSite.Tables("LesForages").Rows.Count
-        '                ' ForageInitCount = MonConstructionSite.Tables("LesForages").Rows.Count
-        '                'With MonConstructionSite.Tables("ConstructionSite").Rows(0)
+        '                ' ListForages.Count = MonChantier.Tables("LesForages").Rows.Count
+        '                ' ForageInitCount = MonChantier.Tables("LesForages").Rows.Count
+        '                'With MonChantier.Tables("Chantier").Rows(0)
         '                '     RefChantier = .Item("RefChantier").ToString
-        '                '     NomConstructionSite = .Item("NomConstructionSite").ToString
+        '                '     NomChantier = .Item("NomChantier").ToString
         '                'End With
 
-        '                ' refForage = MonConstructionSite.Tables("LesForages").Rows(0).Item("refForage")
+        '                ' refForage = MonChantier.Tables("LesForages").Rows(0).Item("refForage")
 
-        '                ' refForage = MonConstructionSite.Tables("LesForages").Rows(0).Item("refForage")
+        '                ' refForage = MonChantier.Tables("LesForages").Rows(0).Item("refForage")
 
         '                Select Case Lang
         '                    Case 0
@@ -538,7 +538,7 @@ Namespace GaiaPressCoreV17.Models
         '                ' Lecture de la Table "LesEssaiForage"
         '                ' *********************************************************************
         '                'ma requete
-        '                If Not (AncienConstructionSite) Then
+        '                If Not (AncienChantier) Then
         '                    'Requete = "SELECT  RefChantier,  refForage, refEssai, refSonde, refEssaiResistancePropre, refEssaiExpansionPropre, refEssaiPerteDeCharge, refSol, Enregistreur, Operateur, VolSonde, PrecisVolSonde, nomEssai, dateEssai, heureEssai,difPresEauAir, hauteurCpv, " _
         '                    '   & "presP0, presFluage, presLimite, presLimiteNf, poidsVol, poidsVolDejauge, coefPoisson, modPressio, modPressioNf, modElastique, modElastiqueNf, cohesion, frottement, frottementintergranulaire, " _
         '                    '   & "U0, profNappe, profSonde, coteZeroGeomeca FROM LesEssaiForage"
@@ -567,51 +567,51 @@ Namespace GaiaPressCoreV17.Models
 
         '            'definition de la commande
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
         '            ' On crée la Table "LesEssaiForage"
-        '            'If Not MonConstructionSite.Tables.Contains("LesEssaiForage") Then
+        '            'If Not MonChantier.Tables.Contains("LesEssaiForage") Then
         '            '    ' Dim table As New DataTable("LesEssaiForage")
-        '            '    ' MonConstructionSite.Tables.Add(table)
-        '            '    Result = CreerTableLesEssaiForage(MonConstructionSite, ConnConstructionSite)
+        '            '    ' MonChantier.Tables.Add(table)
+        '            '    Result = CreerTableLesEssaiForage(MonChantier, ConnChantier)
         '            '    If Not (Result) Then Exit Sub
         '            'End If
 
         '            ' Mise à jour du compteur d'enregistrements
-        '            ' ListForages.Count = MonConstructionSite.Tables("LesForages").Rows.Count
+        '            ' ListForages.Count = MonChantier.Tables("LesForages").Rows.Count
 
-        '            ' Nettoyage de MonConstructionSite avant le chargement
-        '            MonConstructionSite.Tables("LesEssaiForage")?.Clear()
-
-        '            ' rempli le dataset depuis la BD vers la Table "LesEssaiForage" de MonDataSet
+        '            ' Nettoyage de MonChantier avant le chargement
+        '            MonChantier.Tables("LesEssaiForage")?.Clear()
 
         '            ' rempli le dataset depuis la BD vers la Table "LesEssaiForage" de MonDataSet
 
-        '            ' AdaptateurConstructionSite.FillSchema(MonConstructionSite.Tables("LesEssaiForage"), SchemaType.Source)
+        '            ' rempli le dataset depuis la BD vers la Table "LesEssaiForage" de MonDataSet
+
+        '            ' AdaptateurChantier.FillSchema(MonChantier.Tables("LesEssaiForage"), SchemaType.Source)
 
         '            ' rempli le dataset depuis la BD vers la Table "LesEssaiForage" de MonDataSet
-        '            ' AdaptateurConstructionSite.Fill(MonConstructionSite.Tables("LesEssaiForage"))
+        '            ' AdaptateurChantier.Fill(MonChantier.Tables("LesEssaiForage"))
 
-        '            ' AdaptateurConstructionSite.FillSchema(MonConstructionSite, SchemaType.Source, "LesEssaiForage")
-        '            'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesEssaiForage")
-        '            ObjetDataEssai = MonConstructionSite.Tables("LesEssaiForage")
+        '            ' AdaptateurChantier.FillSchema(MonChantier, SchemaType.Source, "LesEssaiForage")
+        '            'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
+        '            ObjetDataEssai = MonChantier.Tables("LesEssaiForage")
 
-        '            ' AdaptateurConstructionSite.FillSchema(MonConstructionSite, SchemaType.Source, "LesEssaiForage")
-        '            'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesEssaiForage")
-        '            ObjetDataEssai = MonConstructionSite.Tables("LesEssaiForage")
+        '            ' AdaptateurChantier.FillSchema(MonChantier, SchemaType.Source, "LesEssaiForage")
+        '            'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
+        '            ObjetDataEssai = MonChantier.Tables("LesEssaiForage")
 
         '            ' Mise à jour du compteur d'enregistrements
-        '            ' EssaiCount = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
-        '            ' EssaiInitCount = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
+        '            ' EssaiCount = MonChantier.Tables("LesEssaiForage").Rows.Count
+        '            ' EssaiInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '            ' Mise à jour du compteur d'enregistrements
-        '            ' EssaiCount = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
-        '            ' EssaiInitCount = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
+        '            ' EssaiCount = MonChantier.Tables("LesEssaiForage").Rows.Count
+        '            ' EssaiInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '            'Vérificatio de la Table 
         '            For i = 0 To  ListEssaiForages.Count - 1
-        '                'Debug.WriteLine("MonConstructionSite.Tables(LesEssaiForage).Rows(" & i.ToString & "(RefForage)=" & MonConstructionSite.Tables("LesEssaiForage").Rows(i).Item("refForage").ToString)
-        '                'Debug.WriteLine("MonConstructionSite.Tables(LesEssaiForage).Rows(" & i.ToString & "(RefEssai)=" & MonConstructionSite.Tables("LesEssaiForage").Rows(i).Item("refEssai").ToString)
+        '                'Debug.WriteLine("MonChantier.Tables(LesEssaiForage).Rows(" & i.ToString & "(RefForage)=" & MonChantier.Tables("LesEssaiForage").Rows(i).Item("refForage").ToString)
+        '                'Debug.WriteLine("MonChantier.Tables(LesEssaiForage).Rows(" & i.ToString & "(RefEssai)=" & MonChantier.Tables("LesEssaiForage").Rows(i).Item("refEssai").ToString)
         '            Next i
 
         '            Select Case Lang
@@ -640,21 +640,21 @@ Namespace GaiaPressCoreV17.Models
 
         '            'definition du DataAdapter
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
-        '            ' Nettoyage de MonConstructionSite avant le chargement
-        '            MonConstructionSite.Tables("LesMesuresForage")?.Clear()
+        '            ' Nettoyage de MonChantier avant le chargement
+        '            MonChantier.Tables("LesMesuresForage")?.Clear()
 
-        '            ' Nettoyage de MonConstructionSite avant le chargement
-        '            MonConstructionSite.Tables("LesMesuresForage")?.Clear()
+        '            ' Nettoyage de MonChantier avant le chargement
+        '            MonChantier.Tables("LesMesuresForage")?.Clear()
 
         '            ' rempli le dataset depuis la BD vers la Table "LesForages" de MonDataSet
 
-        '            ObjetDataMesures = MonConstructionSite.Tables("LesMesuresForage")
+        '            ObjetDataMesures = MonChantier.Tables("LesMesuresForage")
 
         '            '' Mise à jour du compteur d'enregistrements
-        '            '  Mesures.count = MonConstructionSite.Tables("LesMesuresForage").Rows.Count
-        '            ' MesureInitCount = MonConstructionSite.Tables("LesMesuresForage").Rows.Count
+        '            '  Mesures.count = MonChantier.Tables("LesMesuresForage").Rows.Count
+        '            ' MesureInitCount = MonChantier.Tables("LesMesuresForage").Rows.Count
 
         '            Select Case Lang
 
@@ -664,50 +664,50 @@ Namespace GaiaPressCoreV17.Models
         '                    MsgBox("Lecture de la Table 'LesMesuresForage' réussie")
         '            End Select
 
-        '            MyConstructionSite = New ConstructionSite
+        '            MyChantier = New Chantier
 
         '            '' **************************************************************************************
-        '            '' Rangement dans MyConstructionSite des objets de la Tables("ConstructionSite") de MonConstructionSite
+        '            '' Rangement dans MyChantier des objets de la Tables("Chantier") de MonChantier
         '            '' **************************************************************************************
-        '            '' i est le numéro du ConstructionSite
-        '            ''For Each ConstructionSiteRow As DataRow In MonConstructionSite.Tables("ConstructionSite").Rows
+        '            '' i est le numéro du Chantier
+        '            ''For Each ChantierRow As DataRow In MonChantier.Tables("Chantier").Rows
 
-        '            '' Nouveau ConstructionSite
-        '            'MyConstructionSite = New ConstructionSite
+        '            '' Nouveau Chantier
+        '            'MyChantier = New Chantier
 
-        '            '    MyConstructionSite. RefChantier = ConstructionSiteRow("RefChantier").ToString()
-        '            '    MyConstructionSite. NomConstructionSite = ConstructionSiteRow("NomConstructionSite").ToString()
-        '            '    MyConstructionSite. DescriptifConstructionSite = ConstructionSiteRow("DescriptifConstructionSite").ToString
-        '            '    MyConstructionSite. RefClient = ConstructionSiteRow("RefClient").ToString
-        '            '    MyConstructionSite. Entreprise = ConstructionSiteRow("Entreprise").ToString
-        '            '    MyConstructionSite. Adresse = ConstructionSiteRow("Adresse").ToString
-        '            '    MyConstructionSite. Telephone = ConstructionSiteRow("Telephone").ToString
+        '            '    MyChantier. RefChantier = ChantierRow("RefChantier").ToString()
+        '            '    MyChantier. NomChantier = ChantierRow("NomChantier").ToString()
+        '            '    MyChantier. DescriptifChantier = ChantierRow("DescriptifChantier").ToString
+        '            '    MyChantier. RefClient = ChantierRow("RefClient").ToString
+        '            '    MyChantier. Entreprise = ChantierRow("Entreprise").ToString
+        '            '    MyChantier. Adresse = ChantierRow("Adresse").ToString
+        '            '    MyChantier. Telephone = ChantierRow("Telephone").ToString
 
-        '            '    'With MonConstructionSite.Tables("ConstructionSite").Rows(i)
-        '            '    '    MyConstructionSite. RefChantier = .Item("RefChantier").ToString
-        '            '    '    MyConstructionSite. NomConstructionSite = .Item("NomConstructionSite").ToString
-        '            '    '    MyConstructionSite. DescriptifConstructionSite = .Item("DescriptifConstructionSite").ToString
-        '            '    '    MyConstructionSite. RefClient = .Item("RefClient").ToString
-        '            '    '    MyConstructionSite. Entreprise = .Item("Entreprise").ToString
-        '            '    '    MyConstructionSite. Adresse = .Item("Adresse").ToString
-        '            '    '    MyConstructionSite. Telephone = .Item("Telephone").ToString
+        '            '    'With MonChantier.Tables("Chantier").Rows(i)
+        '            '    '    MyChantier. RefChantier = .Item("RefChantier").ToString
+        '            '    '    MyChantier. NomChantier = .Item("NomChantier").ToString
+        '            '    '    MyChantier. DescriptifChantier = .Item("DescriptifChantier").ToString
+        '            '    '    MyChantier. RefClient = .Item("RefClient").ToString
+        '            '    '    MyChantier. Entreprise = .Item("Entreprise").ToString
+        '            '    '    MyChantier. Adresse = .Item("Adresse").ToString
+        '            '    '    MyChantier. Telephone = .Item("Telephone").ToString
         '            '    'End With
 
         '            '    ' **************************************************************************************
-        '            '    ' Rangement dans  ListForages des objets de la Tables("LesForages") de MonConstructionSite
+        '            '    ' Rangement dans  ListForages des objets de la Tables("LesForages") de MonChantier
         '            '    ' **************************************************************************************
 
         '            '    ' j est le numéro du Forage
         '            '    Dim forageIndex As Integer = 1
 
-        '            '    For Each forageRow As DataRow In MonConstructionSite.Tables("LesForages").Rows
+        '            '    For Each forageRow As DataRow In MonChantier.Tables("LesForages").Rows
 
         '            '        Dim new_Forage As New Forage
 
         '            '        If forageRow("RefChantier") Is Nothing Then Exit For
         '            '        ' Nouveau Forage
         '            '        MyForage = New Forage
-        '            '        'MyForage = MyConstructionSite. ListForages(forageIndex - 1)
+        '            '        'MyForage = MyChantier. ListForages(forageIndex - 1)
 
         '            '        new_Forage. RefChantier = forageRow("RefChantier").ToString()
         '            '        new_Forage. RefForage = forageRow("refForage").ToString()
@@ -723,19 +723,19 @@ Namespace GaiaPressCoreV17.Models
 
         '            '        ' Redimensionner le tableau et Add le nouveau forage
         '            '        MyForage = new_Forage
-        '            '        'MyForage = MyConstructionSite. ListForages(forageIndex - 1)
+        '            '        'MyForage = MyChantier. ListForages(forageIndex - 1)
         '            '        forageIndex += 1
 
         '            '        ' **************************************************************************************
-        '            '        ' Rangement dans MyForage des objets de la Tables("LesEssaiForage") de MonConstructionSite
+        '            '        ' Rangement dans MyForage des objets de la Tables("LesEssaiForage") de MonChantier
         '            '        ' **************************************************************************************
 
         '            '        ' k est le numéro de l'EssaiForage
-        '            '        kMax = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
+        '            '        kMax = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '            '        Dim EssaiIndex As Integer = 1
 
-        '            '        For Each essaiRow As DataRow In MonConstructionSite.Tables("LesEssaiForage").Rows
+        '            '        For Each essaiRow As DataRow In MonChantier.Tables("LesEssaiForage").Rows
 
         '            '            If essaiRow("refForage").ToString() = new_Forage. RefForage Then
         '            '                Dim new_Essai As New Essai_Forage(False)
@@ -745,7 +745,7 @@ Namespace GaiaPressCoreV17.Models
         '            '                new_Essai. RefChantier = essaiRow("RefChantier").ToString
         '            '                new_Essai. RefForage = essaiRow("refForage").ToString
         '            '                new_Essai. RefEssai = essaiRow("refEssai").ToString
-        '            '                'Accu = "MonConstructionSite.Tables(LesEssaiForage).Rows(" & k.ToString & ")=" & essaiRow("refEssai").ToString
+        '            '                'Accu = "MonChantier.Tables(LesEssaiForage).Rows(" & k.ToString & ")=" & essaiRow("refEssai").ToString
         '            '                'Debug.WriteLine(Accu)
         '            '                new_Essai. refSonde = essaiRow("refSonde").ToString
         '            '                'new_Essai.Sonde = essaiRow("nomSonde").ToString
@@ -826,37 +826,37 @@ Namespace GaiaPressCoreV17.Models
 
         '            '                'End If ' Fin de If essaiRow("refForage").ToString() = NewForage.RefForage Then
 
-        '            '                'ReDim Preserve MyConstructionSite. ListEssaiForages(k)
-        '            '                'MyConstructionSite. ListEssaiForages(k) = MyForage. ListEssais(l - 1)
+        '            '                'ReDim Preserve MyChantier. ListEssaiForages(k)
+        '            '                'MyChantier. ListEssaiForages(k) = MyForage. ListEssais(l - 1)
 
         '            '                ' **************************************************************************************
-        '            '                ' Rangement dans MyEssaiForage des objets de la Tables("LesMesuresForage") de MonConstructionSite
+        '            '                ' Rangement dans MyEssaiForage des objets de la Tables("LesMesuresForage") de MonChantier
         '            '                ' **************************************************************************************
 
-        '            '                '' Affectation de la Liste des Sondes à MyConstructionSite
+        '            '                '' Affectation de la Liste des Sondes à MyChantier
         '            '                '    RowSonde = New Probe
         '            '                '    RowSonde = MyListeSonde.ListeSonde(i)
-        '            '                '    If MyConstructionSite. ListeSonde.Count - 1 <= i Then
-        '            '                '        ReDim Preserve MyConstructionSite. ListeSonde(i)
-        '            '                '        MyConstructionSite. ListeSonde(i) = New Probe
+        '            '                '    If MyChantier. ListeSonde.Count - 1 <= i Then
+        '            '                '        ReDim Preserve MyChantier. ListeSonde(i)
+        '            '                '        MyChantier. ListeSonde(i) = New Probe
         '            '                '    End If
-        '            '                '    MyConstructionSite. ListeSonde(i) = RowSonde
+        '            '                '    MyChantier. ListeSonde(i) = RowSonde
         '            '                'Next i
 
-        '            '                '' Affectation de la Liste des Sondes à MyConstructionSite
+        '            '                '' Affectation de la Liste des Sondes à MyChantier
         '            '                '    RowSonde = New Probe
         '            '                '    RowSonde = MyListeSonde.ListeSonde(i)
-        '            '                '    If MyConstructionSite. ListeSonde.Count - 1 <= i Then
-        '            '                '        ReDim Preserve MyConstructionSite. ListeSonde(i)
-        '            '                '        MyConstructionSite. ListeSonde(i) = New Probe
+        '            '                '    If MyChantier. ListeSonde.Count - 1 <= i Then
+        '            '                '        ReDim Preserve MyChantier. ListeSonde(i)
+        '            '                '        MyChantier. ListeSonde(i) = New Probe
         '            '                '    End If
-        '            '                '    MyConstructionSite. ListeSonde(i) = RowSonde
+        '            '                '    MyChantier. ListeSonde(i) = RowSonde
         '            '                'Next i
 
 
         '            '                ' m est le numéro des MesuresForage
         '            '                m = 0
-        '            '                For Each mesureRow As DataRow In MonConstructionSite.Tables("LesMesuresForage").Rows
+        '            '                For Each mesureRow As DataRow In MonChantier.Tables("LesMesuresForage").Rows
 
         '            '                    If mesureRow("refEssai").ToString() = new_Essai. RefEssai Then
 
@@ -878,10 +878,10 @@ Namespace GaiaPressCoreV17.Models
         '            '                            new_Mesure.Deformation = mesureRow("deformation").ToString
         '            '                            new_Mesure.PNF = mesureRow("PNF").ToString
         '            '                            new_Mesure.VNF = mesureRow("VNF").ToString
-        '            '                            PressionNF = MonConstructionSite.Tables("LesMesuresForage").Rows(m)("PNF")
-        '            '                            VolumeNF = MonConstructionSite.Tables("LesMesuresForage").Rows(m)("VNF")
-        '            '                            'Debug.WriteLine("MonConstructionSite.Tables(LesMesuresForage).Rows(" & m.ToString() & ").PNF= " & PressionNF.ToString())
-        '            '                            'Debug.WriteLine("MonConstructionSite.Tables(LesMesuresForage).Rows(" & m.ToString() & ").VNF= " & VolumeNF.ToString())
+        '            '                            PressionNF = MonChantier.Tables("LesMesuresForage").Rows(m)("PNF")
+        '            '                            VolumeNF = MonChantier.Tables("LesMesuresForage").Rows(m)("VNF")
+        '            '                            'Debug.WriteLine("MonChantier.Tables(LesMesuresForage).Rows(" & m.ToString() & ").PNF= " & PressionNF.ToString())
+        '            '                            'Debug.WriteLine("MonChantier.Tables(LesMesuresForage).Rows(" & m.ToString() & ").VNF= " & VolumeNF.ToString())
         '            '                            Qi = 0
         '            '                            Pi = 0
         '            '                            Qp = 0
@@ -896,22 +896,22 @@ Namespace GaiaPressCoreV17.Models
         '            '                        'IndMesures = IndMesures + 1
         '            '                    End If ' fin du If mesureRow("refEssai").ToString() = new_Essai. RefEssai Then
 
-        '            '                Next mesureRow ' Fin de For m = 0 To MonConstructionSite.Tables("LesMesuresForage").Rows().Count - 1
+        '            '                Next mesureRow ' Fin de For m = 0 To MonChantier.Tables("LesMesuresForage").Rows().Count - 1
         '            '            End If ' fin du If essaiRow("refForage").ToString() = new_Forage.RefForage Then
         '            '        Next essaiRow
         '            '        ' --------------------------------------------
         '            '        ' MyEssaiForage. MesureEssaiForage est juste à ce niveau
         '            '        ' --------------------------------------------
-        '            '    Next forageRow ' Fin du For Each forageRow As DataRow In MonConstructionSite.Tables("LesForages").Rows
-        '            'Next ConstructionSiteRow ' Fin du For Each row As DataRow In MonConstructionSite.Tables("ConstructionSite").Rows
+        '            '    Next forageRow ' Fin du For Each forageRow As DataRow In MonChantier.Tables("LesForages").Rows
+        '            'Next ChantierRow ' Fin du For Each row As DataRow In MonChantier.Tables("Chantier").Rows
 
-        '            ChargeConstructionSite = True
+        '            ChargeChantier = True
 
-        '            'End If ' Fin de If Not (ChargeConstructionSite) Then
+        '            'End If ' Fin de If Not (ChargeChantier) Then
 
 
         '            ' Sauvegarde du nom de fichier pour une future utilisation
-        '            MyConstructionSite. MyFile = FichierConstructionSite
+        '            MyChantier. MyFile = FichierChantier
 
         '            ' Extraction du nom de fichier 
 
@@ -928,22 +928,22 @@ Namespace GaiaPressCoreV17.Models
         '            '    End If
         '            'Next i
 
-        '            ' Le ConstructionSite est considéré comme déjà sauvé
+        '            ' Le Chantier est considéré comme déjà sauvé
         '             IsSaved = True
         '            Exit Sub
 
         '            ' Traitement des erreurs lors du chargement de la base de données:
         'errFind:
         '            ' Fermeture de la connection
-        '            ' ConnConstructionSite = Nothing
+        '            ' ConnChantier = Nothing
 
         '            ' Chargement de l'objet d'erreur
         '            Select Case Lang
         '                Case 0
-        '                    MsgBox(" Error during loading of building site " & FichierConstructionSite & " ", Information.Err.Description)
+        '                    MsgBox(" Error during loading of building site " & FichierChantier & " ", Information.Err.Description)
         '                Case 1
-        '                    MsgBox(" Erreur lors de l'ouverture du ConstructionSite référencé " & FichierConstructionSite)
-        '                    MsgBox(" Erreur lors de l'ouverture du ConstructionSite référencé " & FichierConstructionSite & " ", Err.Description)
+        '                    MsgBox(" Erreur lors de l'ouverture du Chantier référencé " & FichierChantier)
+        '                    MsgBox(" Erreur lors de l'ouverture du Chantier référencé " & FichierChantier & " ", Err.Description)
         '            End Select
         '            End
         '            Resume Next
@@ -952,13 +952,13 @@ Namespace GaiaPressCoreV17.Models
             GetRefChantier = RefChantier
         End Function
 
-        Public Function GetNomConstructionSite()
-            GetNomConstructionSite = NameConstructionSite
+        Public Function GetNomChantier()
+            GetNomChantier = NameChantier
         End Function
 
 
-        Public Function GetDescriptifConstructionSite()
-            GetDescriptifConstructionSite = DescriptionConstructionSite
+        Public Function GetDescriptifChantier()
+            GetDescriptifChantier = DescriptionChantier
         End Function
 
         Public Function GetRefClient()
@@ -986,12 +986,12 @@ Namespace GaiaPressCoreV17.Models
         End Sub
 
 
-        Public Sub SetNomConstructionSite(ByVal nom As String)
-            NameConstructionSite = nom
+        Public Sub SetNomChantier(ByVal nom As String)
+            NameChantier = nom
         End Sub
 
-        Public Sub SetDescriptifConstructionSite(ByVal descriptif As String)
-            DescriptionConstructionSite = descriptif
+        Public Sub SetDescriptifChantier(ByVal descriptif As String)
+            DescriptionChantier = descriptif
         End Sub
 
         Public Sub SetRefClient(ByVal ref As String)
@@ -1021,35 +1021,35 @@ Namespace GaiaPressCoreV17.Models
         End Sub
 
 
-        ' Affichage du nouveau ConstructionSite dans l'arborescence des ConstructionSite
+        ' Affichage du nouveau Chantier dans l'arborescence des Chantier
         'Public Sub AfficheDansArbo(ByRef Arbo As TreeView)
         '    MsgBox "AfficheDansArbo"
 
         ' Vidage de l'arborescence
         'Arbo.Nodes.Clear()
-        '' NomConstructionSite = MyConstructionSite.GetNomConstructionSite
-        ' NomConstructionSite = MyConstructionSite. NomConstructionSite
+        '' NomChantier = MyChantier.GetNomChantier
+        ' NomChantier = MyChantier. NomChantier
 
         '' Ajout du noeud racine
-        'TreeViewArboRoot = New TreeNode( NomConstructionSite)
-        'TreeViewArboRoot.Name =  NomConstructionSite
+        'TreeViewArboRoot = New TreeNode( NomChantier)
+        'TreeViewArboRoot.Name =  NomChantier
         'Arbo.Nodes.Add(TreeViewArboRoot)
 
-        '' Affichage du ConstructionSite
+        '' Affichage du Chantier
         'Dim element As Integer
         ''  ReDim Preserve  MyListeForageDb( ListForages.Count)
-        '  ListForages.Count = MyConstructionSite.  ListForages.Count
+        '  ListForages.Count = MyChantier.  ListForages.Count
         'If   ListForages.Count > 0 Then
-        '    For element = 0 To (MyConstructionSite.  ListForages.Count - 1)
+        '    For element = 0 To (MyChantier.  ListForages.Count - 1)
         '        MyForage = New Forage(True)
-        '        MyForage = MyConstructionSite.  ListForages(element)
+        '        MyForage = MyChantier.  ListForages(element)
         '        ' Ajout du noeud Parent Forage
-        '        TreeViewArboParent = New TreeNode(MyConstructionSite.  ListForages(element).NomForage)
-        '        TreeViewArboParent.Name = MyConstructionSite.  ListForages(element).NomForage
+        '        TreeViewArboParent = New TreeNode(MyChantier.  ListForages(element).NomForage)
+        '        TreeViewArboParent.Name = MyChantier.  ListForages(element).NomForage
         '        TreeViewArboRoot.Nodes.Add(TreeViewArboParent)
-        '        MyForage.RefForage = MyConstructionSite.  ListForages(element).RefForage
-        '        MyForage.NomForage = MyConstructionSite.  ListForages(element).NomForage
-        '        MyForage.RefChantier = MyConstructionSite. RefChantier
+        '        MyForage.RefForage = MyChantier.  ListForages(element).RefForage
+        '        MyForage.NomForage = MyChantier.  ListForages(element).NomForage
+        '        MyForage.RefChantier = MyChantier. RefChantier
         '        Call   ListForages(element).AfficheDansArbo(Arbo, TreeViewArboParent)
         '    Next
 
@@ -1059,41 +1059,41 @@ Namespace GaiaPressCoreV17.Models
         ' Vidage de l'arborescence
         'Arbo.Nodes.Clear()
 
-        '' Vérifiez que MyConstructionSite n'est pas Nothing
-        'If MyConstructionSite Is Nothing Then
+        '' Vérifiez que MyChantier n'est pas Nothing
+        'If MyChantier Is Nothing Then
         '        Exit Sub
         '    End If
 
-        '    ' Récupération du nom du ConstructionSite
-        '     NomConstructionSite = MyConstructionSite.NomConstructionSite
+        '    ' Récupération du nom du Chantier
+        '     NomChantier = MyChantier.NomChantier
 
         '    ' Ajout du noeud racine
-        '    TreeViewArboRoot = New TreeNode( NomConstructionSite)
-        '    TreeViewArboRoot.Name =  NomConstructionSite
+        '    TreeViewArboRoot = New TreeNode( NomChantier)
+        '    TreeViewArboRoot.Name =  NomChantier
         '    Arbo.Nodes.Add(TreeViewArboRoot)
 
-        '    ' Affichage du ConstructionSite
-        '     ListForages.Count = MyConstructionSite. ListForages.Count
+        '    ' Affichage du Chantier
+        '     ListForages.Count = MyChantier. ListForages.Count
 
         '    If  ListForages.Count > 0 Then
         '        For element As Integer = 0 To  ListForages.Count - 1
-        '            ' Vérifiez que MyConstructionSite.  ListForages(element) n'est pas Nothing
-        '            If MyConstructionSite. ListForages(element) IsNot Nothing Then
+        '            ' Vérifiez que MyChantier.  ListForages(element) n'est pas Nothing
+        '            If MyChantier. ListForages(element) IsNot Nothing Then
         '                ' Ajout du noeud Parent Forage
-        '                Dim TreeViewArboParent As TreeNode = New TreeNode(MyConstructionSite. ListForages(element).NomForage)
+        '                Dim TreeViewArboParent As TreeNode = New TreeNode(MyChantier. ListForages(element).NomForage)
         '                MyForage = New Forage(True)
-        '                MyForage = MyConstructionSite. ListForages(element)
+        '                MyForage = MyChantier. ListForages(element)
         '                ' Ajout du noeud Parent Forage
-        '                TreeViewArboParent = New TreeNode(MyConstructionSite. ListForages(element).NomForage)
-        '                TreeViewArboParent.Name = MyConstructionSite. ListForages(element).NomForage
+        '                TreeViewArboParent = New TreeNode(MyChantier. ListForages(element).NomForage)
+        '                TreeViewArboParent.Name = MyChantier. ListForages(element).NomForage
         '                TreeViewArboRoot.Nodes.Add(TreeViewArboParent)
-        '                MyForage.RefForage = MyConstructionSite. ListForages(element).RefForage
-        '                MyForage.NomForage = MyConstructionSite. ListForages(element).NomForage
-        '                MyForage. RefChantier = MyConstructionSite. RefChantier
+        '                MyForage.RefForage = MyChantier. ListForages(element).RefForage
+        '                MyForage.NomForage = MyChantier. ListForages(element).NomForage
+        '                MyForage. RefChantier = MyChantier. RefChantier
         '                'Call   ListForages(element).AfficheDansArbo(Arbo, TreeViewArboParent)
 
         '                ' Appeler la méthode AfficheDansArbo de l'objet Forage
-        '                MyConstructionSite. ListForages(element).AfficheDansArbo(Arbo, TreeViewArboParent)
+        '                MyChantier. ListForages(element).AfficheDansArbo(Arbo, TreeViewArboParent)
         '            End If
         '        Next
         '    End If
@@ -1103,8 +1103,8 @@ Namespace GaiaPressCoreV17.Models
         'End Sub
 
         ' Affiche les modifications dans la DataGrid)
-        ' Public Sub AfficheDansTab(ByRef Table As DataGridView, ByVal FichierConstructionSite As String)
-        '        Public Sub AfficheDansTab(ByRef DataGrid As DataGridView, ByRef BindingData As BindingSource, ByVal FichierConstructionSite As String)
+        ' Public Sub AfficheDansTab(ByRef Table As DataGridView, ByVal FichierChantier As String)
+        '        Public Sub AfficheDansTab(ByRef DataGrid As DataGridView, ByRef BindingData As BindingSource, ByVal FichierChantier As String)
         '            Dim i As Integer
         '            'Dim fonts As New MyFontList()
         '            Dim ForageList As MyForageList
@@ -1113,7 +1113,7 @@ Namespace GaiaPressCoreV17.Models
 
         '            ' affectation de la bindingdata à la Listbox
         '            With DataGrid
-        '                .DataSource = MonConstructionSite.Tables("LesForages")
+        '                .DataSource = MonChantier.Tables("LesForages")
         '            End With
 
         '            Exit Sub
@@ -1130,17 +1130,17 @@ Namespace GaiaPressCoreV17.Models
         '        End Sub
 
         'Public Sub Show()
-        '    MyFenetreConstructionSite.Show()
+        '    MyFenetreChantier.Show()
         'End Sub
 
-        'Public Sub MaskConstructionSite()
-        '    'Unload(MyFenetreConstructionSite)
-        '    MyFenetreConstructionSite?.Close()
+        'Public Sub MaskChantier()
+        '    'Unload(MyFenetreChantier)
+        '    MyFenetreChantier?.Close()
         'End Sub
 
-        Public Sub CloseConstructionSite()
+        Public Sub CloseChantier()
 
-            'Call MaskConstructionSite()
+            'Call MaskChantier()
             Dim i As Integer
             If ListForages IsNot Nothing Then
                 For i = 0 To ListForages.Count - 1
@@ -1160,25 +1160,25 @@ Namespace GaiaPressCoreV17.Models
 
         '    If NouvForage Then
         '        ' Incrémentation du compteur de forages
-        '        MyConstructionSite. ListForages.Count = MyConstructionSite. ListForages.Count + 1
+        '        MyChantier. ListForages.Count = MyChantier. ListForages.Count + 1
         '    End If
 
-        '    If MonConstructionSite.Tables("LesForages") Is Nothing Then
+        '    If MonChantier.Tables("LesForages") Is Nothing Then
         '        NewTable = True
         '    End If
 
         '    ' Redimensionnement du tableau dynamique de forages
-        '    'ReDim Preserve MyConstructionSite.  ListForages(  ListForages.Count - 1)
+        '    'ReDim Preserve MyChantier.  ListForages(  ListForages.Count - 1)
 
-        '    ' On ajoute un Nouveau Forage à la Liste des Forages de MyConstructionSite
+        '    ' On ajoute un Nouveau Forage à la Liste des Forages de MyChantier
         '    Dim nouveauForage As New Forage
-        '    MyConstructionSite.AddForage(nouveauForage,  ListForages.Count)
+        '    MyChantier.AddForage(nouveauForage,  ListForages.Count)
         '    ' Instanciation du nouveau forage
         '    If NewForage Is Nothing Then
 
         '        ' NewForage = nouveauForage
-        '        If MyConstructionSite. ListForages.Count > 0 And (MyConstructionSite. ListForages( ListForages.Count - 1) IsNot Nothing) Then
-        '            NewForage = MyConstructionSite. ListForages( ListForages.Count - 1)
+        '        If MyChantier. ListForages.Count > 0 And (MyChantier. ListForages( ListForages.Count - 1) IsNot Nothing) Then
+        '            NewForage = MyChantier. ListForages( ListForages.Count - 1)
         '        Else
         '            NewForage = nouveauForage
         '            ' ListForages.Count =  ListForages.Count + 1
@@ -1186,12 +1186,12 @@ Namespace GaiaPressCoreV17.Models
         '    End If
 
         '    ' Enregistrement du nouveau forage dans le tableau de forage
-        '    MyConstructionSite. ListForages( ListForages.Count - 1) = NewForage
+        '    MyChantier. ListForages( ListForages.Count - 1) = NewForage
 
         '    If NewTable Then  ' On ajoute un Forage à MonFichier.Tables("LesForage") seulement si Table est vrai
-        '        If MonConstructionSite.Tables("LesForages") Is Nothing Then
-        '            MonConstructionSite.Tables.Add("LesForages")
-        '            With MonConstructionSite.Tables("LesForages")
+        '        If MonChantier.Tables("LesForages") Is Nothing Then
+        '            MonChantier.Tables.Add("LesForages")
+        '            With MonChantier.Tables("LesForages")
 
         '                Dim columns() As DataColumn
         '                ReDim columns(12)
@@ -1213,11 +1213,11 @@ Namespace GaiaPressCoreV17.Models
 
         '            End With
         '        Else
-        '            MonConstructionSite.Tables("LesForages").NewRow()
+        '            MonChantier.Tables("LesForages").NewRow()
         '        End If
         '    End If
 
-        '    'MyConstructionSite. ListFyorages(  ListForages.Count - 1) = NewForage
+        '    'MyChantier. ListFyorages(  ListForages.Count - 1) = NewForage
         '    ' Attribution d'une référence au nouveau forage
         '    NewForage.SetRefForage(GiveMeANewRefForage)
 
@@ -1257,8 +1257,8 @@ Namespace GaiaPressCoreV17.Models
             ' ListForages.Count =  ListForages.Count - 1
 
             ' Nouveau tableau à afficher
-            'MyFenetreConstructionSite.Close()
-            'MyFenetreConstructionSite.Show()
+            'MyFenetreChantier.Close()
+            'MyFenetreChantier.Show()
 
             ' Appel de la procédure indiquant que des modifications ont eu lieu
             Call IHaveBeenModified()
@@ -1272,7 +1272,7 @@ Namespace GaiaPressCoreV17.Models
             GetIndexNomForage = 0
             '    MsgBox "GetIndexForage"
             If Nom = "" Then Exit Function
-            Do While ((i < (MyConstructionSite.ListForages.Count) - 1) And (MyConstructionSite.ListForages(i).NomForage <> Nom))
+            Do While ((i < (MyChantier.ListForages.Count) - 1) And (MyChantier.ListForages(i).NomForage <> Nom))
                 i = i + 1
             Loop
             GetIndexNomForage = i
@@ -1285,8 +1285,8 @@ Namespace GaiaPressCoreV17.Models
             GetIndexRefForage = 0
             '    MsgBox "GetIndexForage"
             If ref = "" Then Exit Function
-            Do While ((i < MyConstructionSite.ListForages.Count) And (ListForages(i).GetRefForage <> ref))
-                'Do While (i <   ListForages.Count) And (MyConstructionSite.GetForage(i).GetRefForage <> ref)
+            Do While ((i < MyChantier.ListForages.Count) And (ListForages(i).GetRefForage <> ref))
+                'Do While (i <   ListForages.Count) And (MyChantier.GetForage(i).GetRefForage <> ref)
                 i = i + 1
             Loop
             GetIndexRefForage = i
@@ -1317,7 +1317,7 @@ Namespace GaiaPressCoreV17.Models
 
         'Public Sub ShowForage(ByVal i As Integer)
         '    MyForage =  ListForages(i)
-        '    MyConstructionSite.refForage = MyForage. RefForage
+        '    MyChantier.refForage = MyForage. RefForage
         '     ListForages(i).Show(MyForage)
         '    'FrmForage.Show()
         'End Sub
@@ -1335,28 +1335,28 @@ Namespace GaiaPressCoreV17.Models
             EventsSupendus = False
         End Sub
 
-        ' Création d'un nouveau fichier à partir de MyConstructionSite
-        Public Function NouveauFichier(FichierConstructionSite As String) As Boolean
+        ' Création d'un nouveau fichier à partir de MyChantier
+        Public Function NouveauFichier(FichierChantier As String) As Boolean
             Dim NomFichierInitial As String
             Dim Racine As String
             NouveauFichier = False
             Racine = AppDomain.CurrentDomain.BaseDirectory
             Racine = System.IO.Path.GetFullPath(System.IO.Path.Combine(Racine, "..\..\..\.."))
-            FichierConstructionSite = Racine & "\ConstructionSite\" & FichierConstructionSite & ".mdb"
-            'NomFichierInitial = FichierConstructionSiteousDossier(FichierConstructionSite, "ConstructionSite", "Ressources", ".mdb")
+            FichierChantier = Racine & "\Chantier\" & FichierChantier & ".mdb"
+            'NomFichierInitial = FichierChantierousDossier(FichierChantier, "Chantier", "Ressources", ".mdb")
             Racine = AppDomain.CurrentDomain.BaseDirectory
             Racine = System.IO.Path.GetFullPath(System.IO.Path.Combine(Racine, "..\..\..\.."))
-            NomFichierInitial = Racine & "\Ressources\ConstructionSite.mdb"
-            Call FileCopy(NomFichierInitial, FichierConstructionSite)
+            NomFichierInitial = Racine & "\Ressources\Chantier.mdb"
+            Call FileCopy(NomFichierInitial, FichierChantier)
             NouveauFichier = True
         End Function
 
-        '        Public Function EnregistreConstructionSite(FichierConstructionSite As String, ByVal Nouveau As Boolean) As Boolean
+        '        Public Function EnregistreChantier(FichierChantier As String, ByVal Nouveau As Boolean) As Boolean
         '            On Error GoTo errFind
 
         '            Dim RowNumber As Integer
         '            Dim Requete, refForage As String
-        '            Dim MonModifConstructionSite As DataSet
+        '            Dim MonModifChantier As DataSet
         '            Dim i, jMax, kMax, NbAcces, NbTable, iTable As Integer
         '            Dim Essai As Essai_Forage
         '            Dim row As DataRow
@@ -1376,66 +1376,66 @@ Namespace GaiaPressCoreV17.Models
         '            ' Ouverture de la connection avec la BD
 
         '            ' *********************************************************************
-        '            ' Enregistrement de la Table "ConstructionSite"
+        '            ' Enregistrement de la Table "Chantier"
         '            ' *********************************************************************
 
         '            ''ma requete
         '            ' exemple plasserre.developpez.com/cours/vb-net : strSql = "SELECT FICHEPATIENT.* FROM FICHEPATIENT"
-        '            'Requete = "SELECT RefChantier AS  RefChantier, NomConstructionSite AS  NomConstructionSite, DescriptifConstructionSite as  DescriptifConstructionSite, RefClient as  RefClient, Entreprise as  Entreprise, Adresse as  Adresse , Telephone as  Telephone, Reference as  Reference FROM ConstructionSite"
-        '            Requete = "SELECT RefChantier , NomConstructionSite , DescriptifConstructionSite , RefClient , Entreprise , Adresse , Telephone , Reference FROM ConstructionSite"
+        '            'Requete = "SELECT RefChantier AS  RefChantier, NomChantier AS  NomChantier, DescriptifChantier as  DescriptifChantier, RefClient as  RefClient, Entreprise as  Entreprise, Adresse as  Adresse , Telephone as  Telephone, Reference as  Reference FROM Chantier"
+        '            Requete = "SELECT RefChantier , NomChantier , DescriptifChantier , RefClient , Entreprise , Adresse , Telephone , Reference FROM Chantier"
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
         '            iTable = 0
 
         '            ' definition de la commande
 
         '            iTable = 0
-        '            ObjetDataConstructionsSitesDb = MonConstructionSite.Tables("ConstructionSite")
+        '            ObjetDataConstructionsSitesDb = MonChantier.Tables("Chantier")
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
         '            'Pour modifier les valeurs changées dans le DataAdapter
 
-        '            columns(0) = MonConstructionSite.Tables("ConstructionSite").Columns("RefChantier")
-        '            MonConstructionSite.Tables("ConstructionSite").PrimaryKey = columns
+        '            columns(0) = MonChantier.Tables("Chantier").Columns("RefChantier")
+        '            MonChantier.Tables("Chantier").PrimaryKey = columns
 
         '            iTable = 0
-        '            ObjetDataConstructionsSitesDb = MonConstructionSite.Tables("ConstructionSite")
+        '            ObjetDataConstructionsSitesDb = MonChantier.Tables("Chantier")
 
-        '            ' ConstructionSiteCount = MonConstructionSite.Tables("ConstructionSite").Rows.Count
-        '            'If  ConstructionSiteInitCount <  ConstructionSiteCount Then
+        '            ' ChantierCount = MonChantier.Tables("Chantier").Rows.Count
+        '            'If  ChantierInitCount <  ChantierCount Then
         '            '    ' On ajoute un enregistrement à la Table
         '            'End If
 
-        '            ' Définition de la clef primaire de la Table "ConstructionSite"
+        '            ' Définition de la clef primaire de la Table "Chantier"
         '            Dim columns() As DataColumn
         '            ReDim columns(7)
 
-        '            columns(0) = MonConstructionSite.Tables("ConstructionSite").Columns("RefChantier")
-        '            MonConstructionSite.Tables("Leantiers").PrimaryKey = columns
+        '            columns(0) = MonChantier.Tables("Chantier").Columns("RefChantier")
+        '            MonChantier.Tables("Leantiers").PrimaryKey = columns
 
-        '            If MonConstructionSite.Tables("ConstructionSite") IsNot Nothing Then
-        '                'AdaptateurConstructionSite.Update(MonConstructionSite, "ConstructionSite")
-        '                'ConstructionSiteInitCount = MonConstructionSite.Tables("ConstructionSite").Rows.Count
+        '            If MonChantier.Tables("Chantier") IsNot Nothing Then
+        '                'AdaptateurChantier.Update(MonChantier, "Chantier")
+        '                'ChantierInitCount = MonChantier.Tables("Chantier").Rows.Count
 
         '                '' On vide la Table et on la remplit à nouveau
-        '                'MonConstructionSite.Tables("ConstructionSite").Clear()
-        '                'AdaptateurConstructionSite.Fill(MonConstructionSite, "ConstructionSite")
+        '                'MonChantier.Tables("Chantier").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "Chantier")
 
-        '                ' Mise à jour de MyConstructionSite
-        '                If MonConstructionSite.Tables("ConstructionSite").Rows.Count > 0 Then
+        '                ' Mise à jour de MyChantier
+        '                If MonChantier.Tables("Chantier").Rows.Count > 0 Then
 
-        '                    MyConstructionSite. RefChantier = MonConstructionSite.Tables("ConstructionSite").Rows(0).Item("RefChantier").ToString
+        '                    MyChantier. RefChantier = MonChantier.Tables("Chantier").Rows(0).Item("RefChantier").ToString
 
-        '                    'AdaptateurConstructionSite.Update(MonConstructionSite, "ConstructionSite")
+        '                    'AdaptateurChantier.Update(MonChantier, "Chantier")
 
         '                    '' On vide la Table et on la remplit à nouveau
-        '                    'MonConstructionSite.Tables("ConstructionSite").Clear()
-        '                    'AdaptateurConstructionSite.Fill(MonConstructionSite, "ConstructionSite")
+        '                    'MonChantier.Tables("Chantier").Clear()
+        '                    'AdaptateurChantier.Fill(MonChantier, "Chantier")
         '                End If
 
-        '                MsgBox("Update -ConstructionSite- successful")
+        '                MsgBox("Update -Chantier- successful")
         '            End If
         '            ' *********************************************************************
         '            ' Enregistrement de la Table "LesForages"
@@ -1452,58 +1452,58 @@ Namespace GaiaPressCoreV17.Models
         '            iTable = 1
         '            'definition de la commande
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
         '            ' Définition de la clef primaire de la Table "LesForages"
         '            ReDim columns(0)
 
-        '            columns(0) = MonConstructionSite.Tables("LesForages").Columns("refForage")
-        '            MonConstructionSite.Tables("LesForages").PrimaryKey = columns
+        '            columns(0) = MonChantier.Tables("LesForages").Columns("refForage")
+        '            MonChantier.Tables("LesForages").PrimaryKey = columns
 
         '            '' Remise à jour de la Table "LesForages"
-        '            'FrmForage.UpDateLesForages(MyConstructionSite.refForage)
+        '            'FrmForage.UpDateLesForages(MyChantier.refForage)
 
         '            'Pour modifier les valeurs changées dans le DataAdapter
 
         '            ' Adaptation du fichier Accès à la dimension de la Table
-        '            NbAcces = MonConstructionSite.Tables("LesForages").Rows.Count
+        '            NbAcces = MonChantier.Tables("LesForages").Rows.Count
 
 
         '            ' Mise à jour de la Base de données Access 
         '            iTable = 1
-        '            ObjetDataLesForages = MonConstructionSite.Tables("LesForages")
+        '            ObjetDataLesForages = MonChantier.Tables("LesForages")
 
-        '            For Each row In MonConstructionSite.Tables("LesForages").Rows
+        '            For Each row In MonChantier.Tables("LesForages").Rows
         '                Debug.WriteLine("Row State: " & row.RowState.ToString())
         '            Next
 
-        '            If MonConstructionSite.Tables("LesForages") IsNot Nothing Then
-        '                ' ListForages.Count = MonConstructionSite.Tables("LesForages").Rows.Count
+        '            If MonChantier.Tables("LesForages") IsNot Nothing Then
+        '                ' ListForages.Count = MonChantier.Tables("LesForages").Rows.Count
         '                'If  ForageInitCount <  ListForages.Count Then
         '                ' On ajoute un enregistrement à la Table
         '                'End If
 
         '                '' Définition de la clef primaire de la Table "LesForages"
         '                'columns(0) = New DataColumn
-        '                'columns(0) = MonConstructionSite.Tables("LesForages").Columns("refForage")
-        '                'MonConstructionSite.Tables("LesForages").PrimaryKey = columns
+        '                'columns(0) = MonChantier.Tables("LesForages").Columns("refForage")
+        '                'MonChantier.Tables("LesForages").PrimaryKey = columns
 
         '                ' Mettre à jour la base de données
-        '                'AdaptateurConstructionSite.Update(MonConstructionSite, "LesForages")
+        '                'AdaptateurChantier.Update(MonChantier, "LesForages")
         '                'MsgBox("Update -LesForages- successful")
 
         '                '' Recharger la table après la mise à jour
-        '                'MonConstructionSite.Tables("LesForages").Clear()
-        '                'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesForages")
+        '                'MonChantier.Tables("LesForages").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "LesForages")
         '            End If
 
         '            ' *********************************************************************
         '            ' Enregistrement de la Table "LesEssaiForage"
         '            ' *********************************************************************
         '            iTable = 2
-        '            ObjetDataEssai = MonConstructionSite.Tables("LesEssaiForage")
+        '            ObjetDataEssai = MonChantier.Tables("LesEssaiForage")
 
         '            ' Mise à jour de la Table "LesEssaiForage"
         '            ''ma requete
@@ -1517,10 +1517,10 @@ Namespace GaiaPressCoreV17.Models
 
         '            iTable = 2
         '            ' Vérification de la Table
-        '            With MonConstructionSite.Tables("LesEssaiForage")
+        '            With MonChantier.Tables("LesEssaiForage")
         '                For i = 0 To .Rows.Count - 1
 
-        '                    row = MonConstructionSite.Tables("LesEssaiForage").Rows(i)
+        '                    row = MonChantier.Tables("LesEssaiForage").Rows(i)
         '                    'Debug.WriteLine("refEssai = " & row("refEssai").ToString)
         '                    'Debug.WriteLine("RefChantier = " & row("RefChantier").ToString)
         '                    'Debug.WriteLine("refForage = " & row("refForage").ToString)
@@ -1563,58 +1563,58 @@ Namespace GaiaPressCoreV17.Models
 
         '            'definition de la commande
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
         '            'definition de la commande
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
         '            ' Définition de la clef primaire de la Table "LesEssaiForage"
         '            ReDim columns(11)
         '            columns(0) = New DataColumn
-        '            columns(0) = MonConstructionSite.Tables("LesEssaiForage").Columns(2)
-        '            MonConstructionSite.Tables("LesEssaiForage").PrimaryKey = columns
+        '            columns(0) = MonChantier.Tables("LesEssaiForage").Columns(2)
+        '            MonChantier.Tables("LesEssaiForage").PrimaryKey = columns
 
         '            '' Remise à jour de la Table "LesEssaiForage"
-        '            'FrmForage.UpDateLesForages(MyConstructionSite.refForage)
+        '            'FrmForage.UpDateLesForages(MyChantier.refForage)
 
         '            'Pour modifier les valeurs changées dans le DataAdapter
 
         '            ' Adaptation du fichier Accès à la dimension de la Table
-        '            NbAcces = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
+        '            NbAcces = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '            MsgBox("Update -LesEssaiForage- successful")
-        '            ' EssaiInitCount = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
+        '            ' EssaiInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
 
 
         '            ' Mise à jour de la Base de données Access 
         '            iTable = 1
-        '            ObjetDataLesForages = MonConstructionSite.Tables("LesEssaiForage")
+        '            ObjetDataLesForages = MonChantier.Tables("LesEssaiForage")
 
-        '            If MonConstructionSite.Tables("LesEssaiForage") IsNot Nothing Then
-        '                ' ListForages.Count = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
+        '            If MonChantier.Tables("LesEssaiForage") IsNot Nothing Then
+        '                ' ListForages.Count = MonChantier.Tables("LesEssaiForage").Rows.Count
         '                'If  ForageInitCount <  ListForages.Count Then
         '                '    ' On ajoute un enregistrement à la Table
         '                'End If
 
         '                ' Définition de la clef primaire de la Table "LesEssaiForage"
         '                columns(0) = New DataColumn
-        '                columns(0) = MonConstructionSite.Tables("LesEssaiForage").Columns("refEssai")
-        '                MonConstructionSite.Tables("LesEssaiForage").PrimaryKey = columns
+        '                columns(0) = MonChantier.Tables("LesEssaiForage").Columns("refEssai")
+        '                MonChantier.Tables("LesEssaiForage").PrimaryKey = columns
 
         '                '' On vide la Table et on la remplit à nouveau
-        '                'MonConstructionSite.Tables("LesEssaiForage").Clear()
-        '                'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesEssaiForage")
+        '                'MonChantier.Tables("LesEssaiForage").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
 
-        '                'AdaptateurConstructionSite.Update(MonConstructionSite, "LesEssaiForage")
+        '                'AdaptateurChantier.Update(MonChantier, "LesEssaiForage")
         '                'MsgBox("Update -LesEssaiForage- successful")
-        '                'ForageInitCount = MonConstructionSite.Tables("LesEssaiForage").Rows.Count
+        '                'ForageInitCount = MonChantier.Tables("LesEssaiForage").Rows.Count
 
         '                '' On vide la Table et on la remplit à nouveau
-        '                'MonConstructionSite.Tables("LesEssaiForage").Clear()
-        '                'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesEssaiForage")
+        '                'MonChantier.Tables("LesEssaiForage").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "LesEssaiForage")
         '            End If
 
 
@@ -1622,10 +1622,10 @@ Namespace GaiaPressCoreV17.Models
         '            ' Enregistrement de la Table "LesMesuresForage"
         '            ' *********************************************************************
 
-        '            With MonConstructionSite.Tables("LesMesuresForage")
+        '            With MonChantier.Tables("LesMesuresForage")
         '                For i = 0 To .Rows.Count - 1
 
-        '                    row = MonConstructionSite.Tables("LesMesuresForage").Rows(i)
+        '                    row = MonChantier.Tables("LesMesuresForage").Rows(i)
         '                    'Debug.WriteLine("refEssai = " & row("refEssai").ToString)
         '                    'Debug.WriteLine("indiceMesure = " & row("indiceMesure").ToString)
         '                    'Debug.WriteLine("pression = " & row("pression").ToString)
@@ -1646,9 +1646,9 @@ Namespace GaiaPressCoreV17.Models
 
         '            iTable = 3
         '            'definition de la commande
-        '            'AdaptateurConstructionSite.SelectCommand = Commande
+        '            'AdaptateurChantier.SelectCommand = Commande
 
-        '            ' Définition de l'AdaptateurConstructionSite
+        '            ' Définition de l'AdaptateurChantier
 
         '            '' Remise à jour de la Table "LesMesuresForage"
         '            'FrmEssai.UpDateLesMesuresForages(MyEssaiForage.RefEssai)
@@ -1657,58 +1657,58 @@ Namespace GaiaPressCoreV17.Models
         '            ReDim columns(35)
         '            columns(0) = New DataColumn
 
-        '            columns(0) = MonConstructionSite.Tables("LesMesuresForage").Columns("Ind") ' Exemple : colonne "Ind" comme clé primaire
-        '            MonConstructionSite.Tables("LesMesuresForage").PrimaryKey = columns
+        '            columns(0) = MonChantier.Tables("LesMesuresForage").Columns("Ind") ' Exemple : colonne "Ind" comme clé primaire
+        '            MonChantier.Tables("LesMesuresForage").PrimaryKey = columns
 
         '            ''Pour modifier les valeurs changées dans le DataAdapter
 
         '            ' 2. Créer l'OleDbCommandBuilder et l'adaptateur
 
-        '            If MonConstructionSite.Tables("LesMesuresForage") IsNot Nothing Then
+        '            If MonChantier.Tables("LesMesuresForage") IsNot Nothing Then
 
         '                ' Adaptation du fichier Accès à la dimension de la Table
-        '                NbAcces = MonConstructionSite.Tables("LesMesuresForage").Rows.Count
+        '                NbAcces = MonChantier.Tables("LesMesuresForage").Rows.Count
 
-        '                'AdaptateurConstructionSite.AcceptChangesDuringUpdate = True
+        '                'AdaptateurChantier.AcceptChangesDuringUpdate = True
 
         '                '' Mise à jour de la Base de données Access 
         '                'iTable = 3
-        '                'ObjetDataMesures = MonConstructionSite.Tables("LesMesuresForage")
+        '                'ObjetDataMesures = MonChantier.Tables("LesMesuresForage")
 
         '                '' 3. Mettre à jour la base de données AVANT de vider ou recharger
-        '                'AdaptateurConstructionSite.Update(MonConstructionSite, "LesMesuresForage")
+        '                'AdaptateurChantier.Update(MonChantier, "LesMesuresForage")
 
-        '                ' Mesures.count = MonConstructionSite.Tables("LesMesuresForage").Rows.Count
+        '                ' Mesures.count = MonChantier.Tables("LesMesuresForage").Rows.Count
         '                'If  MesureInitCount <   Mesures.count Then
         '                '    ' On ajoute un enregistrement à la Table
         '                'End If
 
 
-        '                'AdaptateurConstructionSite.Update(MonConstructionSite, "LesMesuresForage")
+        '                'AdaptateurChantier.Update(MonChantier, "LesMesuresForage")
         '                'MsgBox("Update -LesMesuresForage- successful")
-        '                'MesureInitCount = MonConstructionSite.Tables("LesMesuresForage").Rows.Count
+        '                'MesureInitCount = MonChantier.Tables("LesMesuresForage").Rows.Count
 
 
-        '                'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesMesuresForage")
+        '                'AdaptateurChantier.Fill(MonChantier, "LesMesuresForage")
 
         '                ' 4. Optionnel : recharger la table après la mise à jour
-        '                MonConstructionSite.Tables("LesMesuresForage").Clear()
-        '                'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesMesuresForage")
+        '                MonChantier.Tables("LesMesuresForage").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "LesMesuresForage")
 
-        '                'AdaptateurConstructionSite.Update(MonConstructionSite, "LesMesuresForage")
+        '                'AdaptateurChantier.Update(MonChantier, "LesMesuresForage")
         '                'MsgBox("Update -LesMesuresForage- successful")
-        '                ' MesureInitCount = MonConstructionSite.Tables("LesMesuresForage").Rows.Count
+        '                ' MesureInitCount = MonChantier.Tables("LesMesuresForage").Rows.Count
 
-        '                ''MonConstructionSite.Tables(3).Clear()
-        '                ''AdaptateurConstructionSite.Fill(MonConstructionSite, "LesMesuresForage")
+        '                ''MonChantier.Tables(3).Clear()
+        '                ''AdaptateurChantier.Fill(MonChantier, "LesMesuresForage")
 
         '                '' On vide la Table et on la remplit à nouveau
-        '                'MonConstructionSite.Tables("LesMesuresForage").Clear()
-        '                'AdaptateurConstructionSite.Fill(MonConstructionSite, "LesMesuresForage")
+        '                'MonChantier.Tables("LesMesuresForage").Clear()
+        '                'AdaptateurChantier.Fill(MonChantier, "LesMesuresForage")
         '            End If
 
         '             IsSaved = True
-        '            EnregistreConstructionSite = True
+        '            EnregistreChantier = True
 
 
         '            RaiseEvent HasBeenModified()
@@ -1717,14 +1717,14 @@ Namespace GaiaPressCoreV17.Models
         'errFind:
 
         '            ' En cas d'erreur on édite la Table
-        '            EnregistreConstructionSite = False
+        '            EnregistreChantier = False
         '            MsgBox(Err.Description)
         '            'Dim Message As String
         '            'Debug.Print(Message)
         '            ''MsgBox(Erreur.Message)
         '            'Select Case iTable
-        '            '    'Case 0 : FrmTable = MyConstructionSite.
-        '            '    Case 1 : FrmTable = MyConstructionSite.  ListForages
+        '            '    'Case 0 : FrmTable = MyChantier.
+        '            '    Case 1 : FrmTable = MyChantier.  ListForages
         '            '    Case 2
         '            'End Select
         '            'FrmTable = New FrmTable
@@ -1732,27 +1732,27 @@ Namespace GaiaPressCoreV17.Models
         '        End Function
 
         'Public Sub New()
-        '    ' Enregistrement de la référence du ConstructionSite auprès de sa feuille
-        '    'Call MyFenetreConstructionSite.SetMyConstructionSite(Me)
-        '    ' MyConstructionSite = Me
+        '    ' Enregistrement de la référence du Chantier auprès de sa feuille
+        '    'Call MyFenetreChantier.SetMyChantier(Me)
+        '    ' MyChantier = Me
 
-        '     NomConstructionSite = "Nouveau ConstructionSite"
+        '     NomChantier = "Nouveau Chantier"
         '     RefChantier = "à remplir"
-        '     DescriptifConstructionSite = "à remplir"
+        '     DescriptifChantier = "à remplir"
         '     RefClient = "à remplir"
         '     Entreprise = "à remplir"
         '     Adresse = "à remplir"
         '     Telephone = "à remplir"
         '    IsSaved = True
         '    MyFile = ""
-        '    MyFileTitle = "ConstructionSite"
+        '    MyFileTitle = "Chantier"
 
         'End Sub
 
 
 
         'Public Sub SelectMyNode()
-        '    MyNodeConstructionSite.Checked = True
+        '    MyNodeChantier.Checked = True
         'End Sub
 
         'Public Function GiveMeANewRefForage()
@@ -1763,7 +1763,7 @@ Namespace GaiaPressCoreV17.Models
 
         '    k = 1
 
-        '    Do While Not MyConstructionSite.IsRefUnique(" refForage " & k)
+        '    Do While Not MyChantier.IsRefUnique(" refForage " & k)
         '        k = k + 1
         '    Loop
         '    GiveMeANewRefForage = " refForage " & k

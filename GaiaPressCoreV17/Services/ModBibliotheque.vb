@@ -93,7 +93,7 @@ Namespace GaiaPressCoreV17.Services
         End Structure
 
         Public Enum NoeudType
-            NoeudConstructionSite = 0
+            NoeudChantier = 0
             NoeudForage = 1
             NoeudEssai = 2
         End Enum
@@ -209,17 +209,17 @@ Namespace GaiaPressCoreV17.Services
         ' Variable de modification du DataAdaptateur
         Public DaVi As DataView
 
-        ' Variables de ConstructionSite
-        Public MonConstructionSite As New DataSet
-        Public MyConstructionSite As New ConstructionSite
-        Public MyListeConstructionSiteSession As List(Of ConstructionSite)
+        ' Variables de Chantier
+        Public MonChantier As New DataSet
+        Public MyChantier As New Chantier
+        Public MyListeChantierSession As List(Of Chantier)
         Public MesSondes As New DataSet
         Public ObjetDataConstructionsSitesDb As New System.Data.DataTable
         Public ObjetDataLesForages As New System.Data.DataTable
         Public ObjetDataEssai As New System.Data.DataTable
         Public ObjetDataMesures As New System.Data.DataTable
-        Public AncienConstructionSite As Boolean
-        'Public MyConstructionSiteLogic As New ConstructionSiteLogic
+        Public AncienChantier As Boolean
+        'Public MyChantierLogic As New ChantierLogic
 
         ' Variables de Sol
         Public MySol As Sol
@@ -294,11 +294,11 @@ Namespace GaiaPressCoreV17.Services
         ' Variables de Fichier et de Base de Donnée
         Public FichierSondes As String      ' Nom du fichier de sondes
         Public FichierSols As String      ' Nom du fichier de sols
-        Public FichierConstructionSite As String      ' Nom du fichier de ConstructionSite
-        Public ChargeConstructionSite, Chargeforage, ChargeEssai, ChargeMesure, ChargeListeSonde, ChargeListeSol As Boolean
+        Public FichierChantier As String      ' Nom du fichier de Chantier
+        Public ChargeChantier, Chargeforage, ChargeEssai, ChargeMesure, ChargeListeSonde, ChargeListeSol As Boolean
         Public Onglet() As String           ' Nom des Onglets des Fichiers Apageo
         Public iTable, Tab, NbTab As Integer
-        Public NouveauConstructionSite, NouveauForage, NouvelEssai, NouvelleMesure As Boolean
+        Public NouveauChantier, NouveauForage, NouvelEssai, NouvelleMesure As Boolean
         'Public GaiaPressDbConnection As String = "Server=localhost\\SQLEXPRESS;Database=GaiaPress;Trusted_Connection=True;TrustServerCertificate=True;","
         Public GaiaPressDbConnection As String = "Server= localhost \\ SQLEXPRESS;Database=GaiaPress;Trusted_Connection=True;TrustServerCertificate=True"
         Public Const HH_DISPLAY_TOPIC = &H0
@@ -560,26 +560,26 @@ fin:
 
         '
         ' Fonction de définition de nom de fichier
-        ' Transforme le nom du fichier d'essai en ajoutant un sousDossier, un NomConstructionSite et une extension
+        ' Transforme le nom du fichier d'essai en ajoutant un sousDossier, un NomChantier et une extension
         '
 
-        'Public Function FichierLesConstructionSiteousDossier(ByVal FichierConstructionSite As String, ByVal NomConstructionSite As String, ByVal SousDossier As String, ByVal TypeFichier As String) As String
-        '    ' FichierConstructionSite est le nom du fichier du ConstructionSite
-        '    ' NomConstructionSite est le nom du fichier à créer
+        'Public Function FichierLesChantierousDossier(ByVal FichierChantier As String, ByVal NomChantier As String, ByVal SousDossier As String, ByVal TypeFichier As String) As String
+        '    ' FichierChantier est le nom du fichier du Chantier
+        '    ' NomChantier est le nom du fichier à créer
         '    ' SousDossier est le nom du sous Dossier dans lequel on veut travailler
         '    ' TypeFichier est l'extension du fichier à créer
         '    Dim i, j As Integer
         '    Dim Ls As String
-        '    NomConstructionSite = NomConstructionSite & TypeFichier ' Ajoute l'extension choisie à NomConstructionSite
-        '    j = Len(FichierConstructionSite)                     ' Mesure la longueur de la chaine FichierConstructionSite qui est l'Adresse du fichier d 'essai actuel
-        '    '    i = InStr(FichierConstructionSite, NomConstructionSite) - 1
-        '    i = InStrRev(FichierConstructionSite, "\") - 1       ' Retourne la première occurence du caractère \ dans FichierConstructionSite
+        '    NomChantier = NomChantier & TypeFichier ' Ajoute l'extension choisie à NomChantier
+        '    j = Len(FichierChantier)                     ' Mesure la longueur de la chaine FichierChantier qui est l'Adresse du fichier d 'essai actuel
+        '    '    i = InStr(FichierChantier, NomChantier) - 1
+        '    i = InStrRev(FichierChantier, "\") - 1       ' Retourne la première occurence du caractère \ dans FichierChantier
         '    If i < 0 Then i = 0
-        '    Ls = Left(FichierConstructionSite, i)                ' prend la partie gauche avant le caractère \ dans FichierConstructionSite
+        '    Ls = Left(FichierChantier, i)                ' prend la partie gauche avant le caractère \ dans FichierChantier
         '    i = InStrRev(Ls, "\")                   ' Insère un caractère \ à droite de la chaine Ls
         '    If i < 0 Then i = 0
         '    Ls = Left(Ls, i)                ' sélectionne la partie à gauche de la chaine Ls
-        '    FichierLesConstructionSiteousDossier = Ls & SousDossier & "\" & NomConstructionSite    ' Ajoute à Ls le SousDossier et le NomConstructionSite"
+        '    FichierLesChantierousDossier = Ls & SousDossier & "\" & NomChantier    ' Ajoute à Ls le SousDossier et le NomChantier"
 
         'fin:
         '    Err.Raise(vbObjectError + 513)

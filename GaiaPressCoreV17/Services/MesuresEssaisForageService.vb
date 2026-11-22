@@ -11,8 +11,8 @@ Namespace GaiaPressCoreV17.Services
     ''' </summary>
     Public Class MesuresEssaiForageDbervice
 
-        ' ✅ Utiliser une instance de LesConstructionSite comme source de vérité
-        'Public _ConstructionSite As LesConstructionSite
+        ' ✅ Utiliser une instance de LesChantier comme source de vérité
+        'Public _Chantier As LesChantier
 
         ' ✅ Ajoutez ces déclarations en haut de la classe
         Public _EventsSuspendus As Boolean = False
@@ -23,7 +23,7 @@ Namespace GaiaPressCoreV17.Services
 
 
 
-        ' ✅ Constructeur pour injecter un ConstructionSite ET le DbContext
+        ' ✅ Constructeur pour injecter un Chantier ET le DbContext
         Public Sub New(dbContext As GaiaPressDbContext, EssaiForageService As EssaiForageService)
             _dbContext = dbContext
             _EssaiForageService = EssaiForageService
@@ -34,20 +34,20 @@ Namespace GaiaPressCoreV17.Services
         ' ===============================================================================
 
         ''' <summary>
-        ''' Add une mesure d'essai de forage au ConstructionSite
+        ''' Add une mesure d'essai de forage au Chantier
         ''' </summary>
         Public Sub AddMesuresEssaiForageDb(Mesure As MesureEssaiForage)
-            ' ✅ Utiliser la liste du ConstructionSite ( ListMesuresForage)
+            ' ✅ Utiliser la liste du Chantier ( ListMesuresForage)
             MyEssaiForage. Mesures.Add(Mesure)
-            ' Lier la mesure au ConstructionSite (si nécessaire)
-            ' Mesure. RefChantier = _ConstructionSite. RefChantier
+            ' Lier la mesure au Chantier (si nécessaire)
+            ' Mesure. RefChantier = _Chantier. RefChantier
         End Sub
 
         ''' <summary>
         ''' Get une mesure d'essai de forage par indice
         ''' </summary>
         Public Function GetMesuresForage(Indice As Integer) As MesureEssaiForage
-            ' ✅ Utiliser la liste du ConstructionSite ( ListMesuresForage)
+            ' ✅ Utiliser la liste du Chantier ( ListMesuresForage)
             Return MyEssaiForage. Mesures.FirstOrDefault(Function(m) m.IndiceMesure = Indice)
         End Function
 
@@ -57,7 +57,7 @@ Namespace GaiaPressCoreV17.Services
         Public Sub DeleteMesuresForage(Indice As Integer)
             Dim MesureADelete As MesureEssaiForage = GetMesuresForage(Indice)
             If MesureADelete IsNot Nothing Then
-                ' ✅ Utiliser la liste du ConstructionSite ( ListMesuresForage)
+                ' ✅ Utiliser la liste du Chantier ( ListMesuresForage)
                 MyEssaiForage. Mesures.Remove(MesureADelete)
                 _HasBeenModified = True
             End If
@@ -195,8 +195,8 @@ Namespace GaiaPressCoreV17.Services
         ''' Récupère le nombre total de mesures pour un essai
         ''' </summary>
         'Public Function GetMesuresCountByEssai(refEssai As String) As Integer
-        '    'Return _ConstructionSite. ListMesuresForage.Count(Function(m) m.RefEssai = refEssai)
-        '    Return _ConstructionSite. ListMesuresForage.Any(Function(m) m.RefEssai = refEssai AndAlso m.indiceMesure = indice)
+        '    'Return _Chantier. ListMesuresForage.Count(Function(m) m.RefEssai = refEssai)
+        '    Return _Chantier. ListMesuresForage.Any(Function(m) m.RefEssai = refEssai AndAlso m.indiceMesure = indice)
         'End Function
         Public Function GetMesuresCountByEssai(refEssai As String) As Integer
             ' ✅ Correction : Utiliser Where + Count()

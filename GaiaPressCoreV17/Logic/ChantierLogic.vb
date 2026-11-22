@@ -16,15 +16,15 @@ Imports QuestPDF.Infrastructure
 
 Namespace GaiaPressCoreV17.Logic
     ''' <summary>
-    ''' Classe de logique métier pour la gestion des ConstructionSites.
+    ''' Classe de logique métier pour la gestion des Chantiers.
     ''' </summary>
-    Public Class ConstructionSiteLogic
+    Public Class ChantierLogic
         Inherits ControllerBase
 
 
 
         Private ReadOnly _context As GaiaPressDbContext
-        Public Property MyConstructionSite As ConstructionSite
+        Public Property MyChantier As Chantier
 
         ''' <summary>
         ''' Constructeur pour injecter le contexte de base de données.
@@ -35,30 +35,30 @@ Namespace GaiaPressCoreV17.Logic
         End Sub
 
         ''' <summary>
-        ''' Définit le ConstructionSite courant.
+        ''' Définit le Chantier courant.
         ''' </summary>
-        ''' <param name="chant">ConstructionSite à définir comme courant.</param>
-        Public Sub SetMyConstructionSite(chant As ConstructionSite)
-            MyConstructionSite = chant
+        ''' <param name="chant">Chantier à définir comme courant.</param>
+        Public Sub SetMyChantier(chant As Chantier)
+            MyChantier = chant
         End Sub
 
         ''' <summary>
-        ''' Récupère la liste de tous les ConstructionSites.
+        ''' Récupère la liste de tous les Chantiers.
         ''' </summary>
-        ''' <returns>Liste des ConstructionSites.</returns>
-        'Public Function GetConstructionSites() As List(Of ConstructionSite)
-        '    Return _context.ConstructionSite.ToList()
+        ''' <returns>Liste des Chantiers.</returns>
+        'Public Function GetChantiers() As List(Of Chantier)
+        '    Return _context.Chantier.ToList()
         'End Function
 
         ''' <summary>
-        ''' Génère un rapport PDF pour un ConstructionSite donné.
+        ''' Génère un rapport PDF pour un Chantier donné.
         ''' </summary>
-        ''' <param name="ConstructionSiteId">ID du ConstructionSite.</param>
+        ''' <param name="ChantierId">ID du Chantier.</param>
         ''' <returns>Résultat d'action avec le PDF généré.</returns>
-        Public Async Function GenerateRapport(ConstructionSiteId As Integer) As Task(Of IActionResult)
-            ' Récupérer le ConstructionSite
-            Dim ConstructionSite = Await _context.ConstructionSitesDb.FindAsync(ConstructionSiteId)
-            If ConstructionSite Is Nothing Then
+        Public Async Function GenerateRapport(ChantierId As Integer) As Task(Of IActionResult)
+            ' Récupérer le Chantier
+            Dim Chantier = Await _context.ChantiersDb.FindAsync(ChantierId)
+            If Chantier Is Nothing Then
                 Return NotFound()
             End If
 
@@ -69,7 +69,7 @@ Namespace GaiaPressCoreV17.Logic
                 PaddingVertical(20).
                 Column(Sub(column)
                            ' Titre
-                           column.Item().Text("Rapport pour le ConstructionSite : " & ConstructionSite.NameConstructionSite).
+                           column.Item().Text("Rapport pour le Chantier : " & Chantier.NomChantier).
                         FontSize(20).
                         Bold()
 
@@ -84,47 +84,47 @@ Namespace GaiaPressCoreV17.Logic
                            column.Item().PaddingVertical(5)
 
                            ' Référence
-                           column.Item().Text("Référence : " & ConstructionSite.RefChantier).
+                           column.Item().Text("Référence : " & Chantier.RefChantier).
                         FontSize(12)
                        End Sub)
                                                         End Sub)
                                            End Sub).GeneratePdf()
 
             ' Retourner le PDF
-            Return File(pdfBytes, "application/pdf", "rapport_ConstructionSite.pdf")
+            Return File(pdfBytes, "application/pdf", "rapport_Chantier.pdf")
         End Function
-        ''' Récupère un ConstructionSite par son ID.
+        ''' Récupère un Chantier par son ID.
         ''' </summary>
-        ''' <param name="ConstructionSiteId">ID du ConstructionSite.</param>
-        ''' <returns>ConstructionSite correspondant ou NotFound.</returns>
-        Public Async Function GetConstructionSite(ConstructionSiteId As Integer) As Task(Of IActionResult)
-            Dim ConstructionSite = Await _context.ConstructionSitesDb.FindAsync(ConstructionSiteId)
-            If ConstructionSite Is Nothing Then
+        ''' <param name="ChantierId">ID du Chantier.</param>
+        ''' <returns>Chantier correspondant ou NotFound.</returns>
+        Public Async Function GetChantier(ChantierId As Integer) As Task(Of IActionResult)
+            Dim Chantier = Await _context.ChantiersDb.FindAsync(ChantierId)
+            If Chantier Is Nothing Then
                 Return NotFound()
             End If
-            Return Ok(ConstructionSite)
+            Return Ok(Chantier)
         End Function
 
         ''' <summary>
-        ''' Met à jour un ConstructionSite.
+        ''' Met à jour un Chantier.
         ''' </summary>
-        ''' <param name="ConstructionSiteId">ID du ConstructionSite à mettre à jour.</param>
-        ''' <param name="ConstructionSite">Données du ConstructionSite mises à jour.</param>
+        ''' <param name="ChantierId">ID du Chantier à mettre à jour.</param>
+        ''' <param name="Chantier">Données du Chantier mises à jour.</param>
         ''' <returns>Résultat de l'opération.</returns>
-        Public Async Function UpDateConstructionSite(ConstructionSiteId As Integer, ConstructionSite As ConstructionSite) As Task(Of IActionResult)
-            Dim existingConstructionSite = Await _context.ConstructionSitesDb.FindAsync(ConstructionSiteId)
-            If existingConstructionSite Is Nothing Then
+        Public Async Function UpDateChantier(ChantierId As Integer, Chantier As Chantier) As Task(Of IActionResult)
+            Dim existingChantier = Await _context.ChantiersDb.FindAsync(ChantierId)
+            If existingChantier Is Nothing Then
                 Return NotFound()
             End If
 
             ' Mise à jour des propriétés
-            existingConstructionSite.NameConstructionSite = ConstructionSite.NameConstructionSite
-            existingConstructionSite.DescriptionConstructionSite = ConstructionSite.DescriptionConstructionSite
-            existingConstructionSite.RefClient = ConstructionSite.RefClient
-            existingConstructionSite.Entreprise = ConstructionSite.Entreprise
-            existingConstructionSite.Adresse = ConstructionSite.Adresse
-            existingConstructionSite.Telephone = ConstructionSite.Telephone
-            existingConstructionSite.Reference = ConstructionSite.Reference
+            existingChantier.NomChantier = Chantier.NomChantier
+            existingChantier.DescriptifChantier = Chantier.DescriptifChantier
+            existingChantier.RefClient = Chantier.RefClient
+            existingChantier.Entreprise = Chantier.Entreprise
+            existingChantier.Adresse = Chantier.Adresse
+            existingChantier.Telephone = Chantier.Telephone
+            existingChantier.Reference = Chantier.Reference
 
             Try
                 Await _context.SaveChangesAsync()

@@ -4,26 +4,26 @@ Namespace GaiaPressCoreV17.Models.Dto
 
     Public Class ChantierDto
         Public Property RefChantier As String
-        Public Property NomConstructionSite As String
-        Public Property DescriptifConstructionSite As String
+        Public Property NomChantier As String
+        Public Property DescriptifChantier As String
         Public Property RefClient As String
         Public Property Entreprise As String
         Public Property Adresse As String
         Public Property Telephone As String
         Public Property Reference As String
 
-        ' Déclaration de ClasseConstructionSite
+        ' Déclaration de ClasseChantier
         'Public Property  RefChantier As String
-        'Public Property  NomConstructionSite As String
-        'Public Property  DescriptifConstructionSite As String
+        'Public Property  NomChantier As String
+        'Public Property  DescriptifChantier As String
         'Public Property  RefClient As Integer?
         'Public Property  Entreprise As String
         'Public Property  Adresse As String
         'Public Property  Telephone As String
         'Public Property  Reference As String
 
-        'Public  FichierConstructionSite As String
-        'Public  MyFenetreConstructionSite As ConstructionSiteLogic
+        'Public  FichierChantier As String
+        'Public  MyFenetreChantier As ChantierLogic
         'Public  MyFile As String
         'Public  MyFileTitle As String
         'Public  DataSetName As String

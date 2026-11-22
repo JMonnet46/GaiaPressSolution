@@ -1,10 +1,12 @@
-@page "/NewTest/{RefEssai}"
 @rendermode InteractiveServer
 @implements IDisposable
 @using GaiaPressBlazorWebAPP.Models
-@inject NavigationManager Navigation
 @using GaiaPressBlazorWebAPP.Services
+@using GaiaPressCoreV17.Data
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager Navigation
 @inject LocalizationService Loc
+@inject IDbContextFactory<GaiaPressDbContext> DbFactory
 
 <PageTitle>@Loc["PageTitle"] - @test.Reference</PageTitle>
 
@@ -68,27 +70,39 @@
                 <legend class="float-none w-auto px-2 fs-6">@Loc["ConditionsGeoLabel"]</legend>
                 <div class="row mb-2">
                     <label class="col-5 col-form-label">@Loc["P0Label"]</label>
-                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.P0" /></div>
+                    <div class="col-7">
+                        <input type="number" step="any" class="form-control bg-light" value="@test.P0" readonly />
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <label class="col-5 col-form-label">@Loc["ProfondeurNappeLabel"]</label>
-                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.ProfondeurNappe" /></div>
+                    <div class="col-7">
+                        <input type="number" step="any" class="form-control" @bind="test.ProfondeurNappe" @bind:after="Recalculer" />
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <label class="col-5 col-form-label">@Loc["ProfondeurSondeLabel"]</label>
-                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.ProfondeurSonde" /></div>
+                    <div class="col-7">
+                        <input type="number" step="any" class="form-control" @bind="test.ProfondeurSonde" @bind:after="Recalculer" />
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <label class="col-5 col-form-label">@Loc["PoidsVolumiqueLabel"]</label>
-                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PoidsVolumique" /></div>
+                    <div class="col-7">
+                        <input type="number" step="any" class="form-control" @bind="test.PoidsVolumique" @bind:after="Recalculer" />
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <label class="col-5 col-form-label">@Loc["PoidsVolumiqueDejaugeLabel"]</label>
-                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.PoidsVolumiqueDejauge" /></div>
+                    <div class="col-7">
+                        <input type="number" step="any" class="form-control" @bind="test.PoidsVolumiqueDejauge" @bind:after="Recalculer" />
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <label class="col-5 col-form-label">@Loc["CoefficientPoissonLabel"]</label>
-                    <div class="col-7"><input type="number" step="any" class="form-control" @bind="test.CoefficientPoisson" /></div>
+                    <div class="col-7">
+                        <input type="number" step="any" class="form-control" @bind="test.CoefficientPoisson" @bind:after="Recalculer" />
+                    </div>
                 </div>
             </fieldset>
         </div>
@@ -180,73 +194,214 @@
 </div>
 
 @code {
+    [Parameter] public string RefChantier { get; set; } = "";
+    [Parameter] public string RefForage { get; set; } = "";
     [Parameter] public string? RefEssai { get; set; }
-    [Parameter] public string? RefChantier { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
 
     private TestDetailModel test = new();
-    private string NomForage = "SP1";
+    private string NomForage => RefForage;
 
     private string? MessageErreur;
     private string? MessageSucces;
 
-    protected override void OnInitialized()
-    {
-        Loc.LanguageChanged += OnLanguageChanged;
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        if (query.TryGetValue("refChantier", out var rc))
-            RefChantier = rc.ToString();
-
-        // Valeurs proposées, entièrement modifiables
-        test.Reference = RefEssai ?? "RefSP1";
-        test.NomEssai = "SP1_1";
-        test.DateEssai = DateTime.Today;
-        test.HeureEssai = DateTime.Now;
-        test.ClassePrecision = "B";
-    }
+    private bool EstFrancais => Loc.CurrentLanguage == "fr-FR" || Loc.CurrentLanguage == "fr";
 
     private void OnLanguageChanged() => _ = InvokeAsync(StateHasChanged);
 
     public void Dispose() => Loc.LanguageChanged -= OnLanguageChanged;
 
-    private void Valider()
+    protected override void OnInitialized()
     {
-        Console.WriteLine($"[NewTest] Validation de {test.Reference}");
-        MessageErreur = null;
-        MessageSucces = null;
+        Loc.LanguageChanged += OnLanguageChanged;
 
-        try
+        test.NomEssai = "SP1_1";
+        test.DateEssai = DateTime.Today;
+        test.HeureEssai = DateTime.Now;
+        test.ClassePrecision = "B";
+
+        Recalculer();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrEmpty(RefEssai) && test.Reference != RefEssai)
         {
-            // 1. Contrôles de saisie
-            if (string.IsNullOrWhiteSpace(test.Reference))
-            {
-                MessageErreur = "La référence de l'essai est obligatoire.";
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(test.NomEssai))
-            {
-                MessageErreur = "Le nom de l'essai est obligatoire.";
-                return;
-            }
-
-            // 2. Synchronisation avec le paramètre de route
-            RefEssai = test.Reference;
-
-            // 3. Validation effectuée en mémoire, sans écriture en base
-            MessageSucces = $"Essai {test.Reference} validé en mémoire (non sauvegardé).";
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("ERREUR Valider : " + ex);
-            MessageErreur = "Erreur lors de la validation : " + ex.Message;
+            test.Reference = RefEssai;
         }
     }
 
-    private void Annuler() => Navigation.NavigateTo("/Borehole");
-    private void Modifier() => Console.WriteLine("[NewTest] Mode modification");
-    private void Supprimer() => Console.WriteLine("[NewTest] Suppression demandée");
-    private void Enregistrer() => Console.WriteLine("[NewTest] Enregistrement en BD");
-    private void Imprimer() => Console.WriteLine("[NewTest] Impression");
-    private void Fermer() => Navigation.NavigateTo("/Borehole");
+    // ================= CALCUL P0 =================
+    private void Recalculer()
+    {
+        Journal("Recalcul P0 - début");
+
+        double Z = test.ProfondeurSonde;
+        double Zw = test.ProfondeurNappe;
+        double Gamma = test.PoidsVolumique;
+        double GammaP = test.PoidsVolumiqueDejauge;
+        double Nu = test.CoefficientPoisson;
+
+        double sigmaz;
+        if (Zw >= Z)
+            sigmaz = Gamma * Z;
+        else
+            sigmaz = Gamma * Zw + GammaP * (Z - Zw);
+
+        Journal($"Sigmaz = {sigmaz:F2} kPa (Z={Z}, Zw={Zw}, Gamma={Gamma}, GammaP={GammaP})");
+
+        if (sigmaz <= 0)
+        {
+            MessageErreur = EstFrancais
+                ? "La contrainte verticale est négative ou nulle"
+                : "The vertical stress is null or negative";
+            Journal("Erreur : contrainte verticale <= 0 - P0 = 0");
+            test.P0 = 0;
+            return;
+        }
+
+        if (Nu >= 1)
+        {
+            MessageErreur = EstFrancais
+                ? "Le coefficient de Poisson doit être inférieur à 1"
+                : "Poisson's ratio must be less than 1";
+            Journal("Erreur : coefficient de Poisson >= 1 - P0 = 0");
+            test.P0 = 0;
+            return;
+        }
+
+        MessageErreur = null;
+        test.P0 = (float)Math.Round(Nu / (1 - Nu) * sigmaz, 0);
+        Journal($"P0 = {test.P0} kPa");
+        Journal("Recalcul P0 - fin");
+    }
+
+    // ================= JOURNAL =================
+    private void Journal(string message)
+    {
+        var ligne = $"[{DateTime.Now:HH:mm:ss.fff}] [NewTest] {message}";
+        Console.WriteLine(ligne);
+        System.Diagnostics.Debug.WriteLine(ligne);
+    }
+
+    // ================= ACTIONS =================
+    private Task Valider()
+    {
+        MessageErreur = null;
+        MessageSucces = null;
+
+        if (string.IsNullOrWhiteSpace(test.Reference))
+        {
+            MessageErreur = "La référence de l'essai est obligatoire.";
+            return Task.CompletedTask;
+        }
+
+        if (string.IsNullOrWhiteSpace(test.NomEssai))
+        {
+            MessageErreur = "Le nom de l'essai est obligatoire.";
+            return Task.CompletedTask;
+        }
+
+        RefEssai = test.Reference;
+        MessageSucces = $"Essai {test.Reference} validé en mémoire (non sauvegardé).";
+        return Task.CompletedTask;
+    }
+
+    private async Task Annuler() => await OnClose.InvokeAsync();
+    private async Task Fermer() => await OnClose.InvokeAsync();
+    private void Modifier() => Journal("Mode modification");
+    private void Supprimer() => Journal("Suppression demandée");
+    private void Imprimer() => Journal("Impression");
+
+    private async Task Enregistrer()
+    {
+        Journal("Enregistrement - début");
+        MessageErreur = null;
+        MessageSucces = null;
+
+        if (string.IsNullOrWhiteSpace(test.Reference))
+        {
+            MessageErreur = "La référence de l'essai est obligatoire.";
+            Journal("Arrêt : référence vide");
+            return;
+        }
+
+        try
+        {
+            Journal("Création du DbContext via factory");
+            await using var db = await DbFactory.CreateDbContextAsync();
+            Journal("DbContext créé");
+
+            Journal($"Recherche de l'essai existant RefEssai='{test.Reference}'");
+            var existant = await db.ListeEssaiForageDb
+                .FirstOrDefaultAsync(e => e.RefEssai == test.Reference);
+            Journal(existant is null ? "Aucun essai existant trouvé" : "Essai existant trouvé");
+
+            if (existant is null)
+            {
+                Journal("Construction de la nouvelle entité Essai_Forage");
+                var essai = new Essai_Forage
+                {
+                    RefEssai = test.Reference,
+                    RefChantier = RefChantier,
+                    RefForage = RefForage,
+                    nomEssai = test.NomEssai,
+                    dateEssai = test.DateEssai.ToString("yyyy-MM-dd"),
+                    heureEssai = test.HeureEssai.ToString("HH:mm:ss"),
+                    Enregistreur = test.Enregistreur,
+                    Operateur = test.Operateur,
+                    ClassPrecis = test.ClassePrecision switch
+                    {
+                        "A" => 1,
+                        "B" => 2,
+                        _ => 3
+                    },
+                    difPresEauAir = (float)test.DiffPression,
+                    hauteurCpv = (float)test.HauteurControleur,
+                    presP0 = (float)test.P0,
+                    profNappe = (float)test.ProfondeurNappe,
+                    profSonde = (float)test.ProfondeurSonde,
+                    poidsVol = (float)test.PoidsVolumique,
+                    poidsVolDejauge = (float)test.PoidsVolumiqueDejauge,
+                    coefPoisson = (float)test.CoefficientPoisson,
+                    PrecisVolume = (float)test.PrecisionVolume,
+                    PrecisPression = (float)test.PrecisionPression
+                };
+                Journal("Entité construite - Add");
+                db.ListeEssaiForageDb.Add(essai);
+            }
+            else
+            {
+                Journal("Mise à jour des champs de l'essai existant");
+                existant.nomEssai = test.NomEssai;
+                existant.dateEssai = test.DateEssai.ToString("yyyy-MM-dd");
+                existant.heureEssai = test.HeureEssai.ToString("HH:mm:ss");
+                existant.Enregistreur = test.Enregistreur;
+                existant.Operateur = test.Operateur;
+                existant.difPresEauAir = (float)test.DiffPression;
+                existant.hauteurCpv = (float)test.HauteurControleur;
+                existant.presP0 = (float)test.P0;
+                existant.profNappe = (float)test.ProfondeurNappe;
+                existant.profSonde = (float)test.ProfondeurSonde;
+                existant.poidsVol = (float)test.PoidsVolumique;
+                existant.poidsVolDejauge = (float)test.PoidsVolumiqueDejauge;
+                existant.coefPoisson = (float)test.CoefficientPoisson;
+            }
+
+            Journal("SaveChangesAsync - appel");
+            var nb = await db.SaveChangesAsync();
+            Journal($"SaveChangesAsync - {nb} ligne(s) écrite(s)");
+
+            MessageSucces = $"Essai {test.Reference} enregistré en base.";
+        }
+        catch (Exception ex)
+        {
+            MessageErreur = $"Échec de l'enregistrement : {ex.Message}";
+            Journal($"ERREUR : {ex.GetType().Name} - {ex.Message}");
+            if (ex.InnerException != null)
+                Journal($"  Interne : {ex.InnerException.Message}");
+        }
+
+        Journal("Enregistrement - fin");
+    }
 }

@@ -6,9 +6,9 @@ namespace GaiaPressBlazorWebAPP.Services
 {
     public class EssaiService : IEssaiService
     {
-        private readonly GaiaPressDbContext _db;   // adapter au nom de votre DbContext
+        private readonly ClasseGaiaPressDbContext _db;   // adapter au nom de votre DbContext
 
-        public EssaiService(GaiaPressDbContext db)
+        public EssaiService(ClasseGaiaPressDbContext db)
         {
             _db = db;
         }

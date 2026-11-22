@@ -33,7 +33,7 @@
         'Public  EventsSuspendus As Boolean
         'Public  IsSaved As Boolean
         'Public Event  HasBeenModified()
-        'Public  FichierConstructionSite As String
+        'Public  FichierChantier As String
 
     End Class
 

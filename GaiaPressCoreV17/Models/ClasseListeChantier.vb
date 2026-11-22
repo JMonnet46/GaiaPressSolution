@@ -1,14 +1,14 @@
 ﻿Imports GaiaPressCoreV17.Services
 Imports GaiaPressCoreV17.Logic
 
-Public Class ClasseListeConstructionSite
-    Public Property ListeConstructionSiteSession As New List(Of ConstructionSite)
+Public Class ClasseListeChantier
+    Public Property ListeChantierSession As New List(Of Chantier)
 
     ' =========================================================
     ' Constructeur
     '==========================================================
     Public Sub New()
-        '_items = New List(Of ConstructionSite)
+        '_items = New List(Of Chantier)
         ' ✅ Correction : Suppression de la référence à _items
         ' Initialisation déjà faite par la déclaration de la propriété
     End Sub
@@ -22,17 +22,17 @@ Public Class ClasseListeConstructionSite
         unique = True
 
         ' i est le Numéro du Forage à vérifier
-        Do While (i < ListeConstructionSiteSession.Count) And unique
-            unique = (ListeConstructionSiteSession(i).RefChantier <> ref)
+        Do While (i < ListeChantierSession.Count) And unique
+            unique = (ListeChantierSession(i).RefChantier <> ref)
             If unique Then Exit Do
             i = i + 1
         Loop
 
-        If MyConstructionSite Is Nothing Then
-            MyConstructionSite = New ConstructionSite
+        If MyChantier Is Nothing Then
+            MyChantier = New Chantier
         End If
 
-        If unique Then MyConstructionSite = ListeConstructionSiteSession(i)
+        If unique Then MyChantier = ListeChantierSession(i)
 
         IsRefChantierUnique = unique
     End Function
