@@ -4,6 +4,8 @@ Imports System.Linq
 Imports GaiaPressCoreV17.Models
 Imports GaiaPressCoreV17.Services
 Imports Microsoft.EntityFrameworkCore
+Imports GaiaPressCoreV17.Data
+
 
 Namespace GaiaPressCoreV17.Services
 
@@ -15,7 +17,7 @@ Namespace GaiaPressCoreV17.Services
 
         Private ReadOnly _dataService As DataService ' Injection de DataServices
 
-        Private _dbContext As GaiaPressDbContext
+        Private _dbContext As GaiaPress_Db_Context
 
         Public Property LesChantier As List(Of Chantier)
         Public Property FichierListeLesChantier As String
@@ -24,7 +26,7 @@ Namespace GaiaPressCoreV17.Services
 
         Public Event HasBeenModified()
 
-        Public Sub New(dataService As DataService, dbContext As GaiaPressDbContext)
+        Public Sub New(dataService As DataService, dbContext As GaiaPress_Db_Context)
             _dataService = dataService
             _dbContext = dbContext
             LesChantier = New List(Of Chantier)()
@@ -52,7 +54,7 @@ Namespace GaiaPressCoreV17.Services
         ''' Recherche un Chantier par sa référence.
         ''' </summary>
         Public Function GetChantier(RefChantier As String) As Chantier
-            Return _dbContext.ChantiersDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
+            Return _dbContext.ChantierDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
         End Function
 
         Public Function GetAllChantiers() As List(Of Chantier)
@@ -111,7 +113,7 @@ Namespace GaiaPressCoreV17.Services
         End Sub
 
         Public Sub SaveChantier(Chantier As Chantier)
-            _dbContext.ChantiersDb.Update(Chantier)
+            _dbContext.ChantierDb.Update(Chantier)
             _dbContext.SaveChanges()
         End Sub
 

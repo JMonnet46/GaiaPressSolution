@@ -3,6 +3,7 @@ Imports Microsoft.AspNetCore.Mvc
 Imports QuestPDF.Fluent
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Models
 Imports GaiaPressCoreV17.Logic
 Imports System.Threading
 
@@ -15,14 +16,14 @@ Namespace GaiaPressCoreV17.Logic
         Inherits Controller
 
         Private ReadOnly _EssaisResistanceDbService As EssaisResistanceDbService
-        Private ReadOnly _dbContext As GaiaPressDbContext
+        Private ReadOnly _dbContext As GaiaPress_Db_Context
 
         ''' <summary>
         ''' Initialise une nouvelle instance de EssaiResistanceLogic.
         ''' </summary>
         ''' <param name="EssaisResistanceDbService">Service pour les essais d'Resistance.</param>
         ''' <param name="dbContext">Contexte Debase de données.</param>
-        Public Sub New(EssaisResistanceDbService As EssaisResistanceDbService, dbContext As GaiaPressDbContext)
+        Public Sub New(EssaisResistanceDbService As EssaisResistanceDbService, dbContext As GaiaPress_Db_Context)
             _EssaisResistanceDbService = EssaisResistanceDbService
             _dbContext = dbContext
         End Sub

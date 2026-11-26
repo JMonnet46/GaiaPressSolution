@@ -15,7 +15,7 @@ Namespace GaiaPressCoreV17.Models
 
 
         ' Contexte de données fourni de l'extérieur (Core ne connaît pas le projet Blazor)
-        Private ReadOnly _context As GaiaPressDbContext
+        Private ReadOnly _context As GaiaPress_Db_Context
 
         ' ======= Propriétés de Liste ===========
         ' Collection en mémoire pour manipulation temporaire
@@ -28,7 +28,7 @@ Namespace GaiaPressCoreV17.Models
         Public Event HasBeenModified()
 
         ' Le contexte est obligatoire : la classe ne se crée plus sans base de données
-        Public Sub New(context As GaiaPressDbContext)
+        Public Sub New(context As GaiaPress_Db_Context)
             _context = context
             ListeEssaiForageSession = New List(Of Essai_Forage)()
         End Sub

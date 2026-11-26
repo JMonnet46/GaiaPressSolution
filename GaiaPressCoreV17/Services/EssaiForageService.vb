@@ -1,5 +1,6 @@
 ﻿Imports System.Linq
 Imports GaiaPressCoreV17.Models
+Imports GaiaPressCoreV17.Data
 Imports Microsoft.EntityFrameworkCore
 Imports System.Collections.Generic
 
@@ -7,7 +8,7 @@ Namespace GaiaPressCoreV17.Services
 
     Public Class EssaiForageService
 
-        Private _dbContext As GaiaPressDbContext
+        Private _dbContext As GaiaPress_Db_Context
 
         Private _listeEssaiForageSession As List(Of Essai_Forage)
 
@@ -20,7 +21,7 @@ Namespace GaiaPressCoreV17.Services
         '=========================================================================
         ' ✅ Constructeur qui injecte le DbContext
         '=========================================================================
-        Public Sub New(dbContext As GaiaPressDbContext)
+        Public Sub New(dbContext As GaiaPress_Db_Context)
             _dbContext = dbContext
             _listeEssaiForageSession = New List(Of Essai_Forage)()
         End Sub

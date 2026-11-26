@@ -1,6 +1,8 @@
 ﻿'Imports Microsoft.EntityFrameworkCore.ChangeTracking.Internal
 Imports GaiaPressCoreV17.Services
 Imports GaiaPressCoreV17.Logic
+Imports GaiaPressCoreV17.Models
+
 
 Module ModPresLanterne
 

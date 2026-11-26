@@ -1,6 +1,5 @@
 ﻿@page "/Borehole"
 @page "/Borehole/{RefChantier?}"
-
 @rendermode InteractiveServer
 
 @using GaiaPressCoreV17.Services
@@ -20,8 +19,10 @@
 <PageTitle>@Loc["Borehole"]</PageTitle>
 
 <div class="container-fluid mt-3">
-
-    <p>Chantier reçu : @RefChantier</p>
+    @if (!string.IsNullOrWhiteSpace(RefChantier))
+    {
+        <p>Chantier actif : @RefChantier</p>
+    }
 
     @if (isInitializing)
     {
@@ -32,7 +33,7 @@
         @if (string.IsNullOrWhiteSpace(RefChantier))
         {
             <div class="alert alert-warning" role="alert">
-                Sélectionnez d'abord un chantier pour créer ou modifier un forage.
+                @Loc["SelectChantierFirst"]
                 <div class="mt-3">
                     <a href="/ConstructionSite" class="btn btn-secondary">@Loc["GoToConstructionSite"]</a>
                 </div>
@@ -51,7 +52,7 @@
         @if (string.IsNullOrWhiteSpace(RefChantier))
         {
             <div class="alert alert-warning" role="alert">
-                <strong>Sélectionnez d'abord un chantier.</strong>
+                <strong>@Loc["SelectChantierFirst"]</strong>
                 <div class="mt-3">
                     <a href="/ConstructionSite" class="btn btn-secondary">@Loc["GoToConstructionSite"]</a>
                 </div>
@@ -124,35 +125,33 @@
             @if (activeTab == "Borehole")
             {
                 <div class="alert alert-info">
-                    <strong>Détails du forage :</strong> @selectedBorehole.RefForage - @selectedBorehole.NomForage
+                    <strong>@Loc["BoreholeDetails"]:</strong> @selectedBorehole.RefForage - @selectedBorehole.NomForage
                 </div>
             }
             else if (activeTab == "Test")
             {
-                @if (ouvrirNouvelEssai)  // ✅ Affiche NewTest quand ouvrirNouvelEssai = true
+                @if (ouvrirNouvelEssai)
                 {
                     <NewTest
                         RefChantier="@RefChantier"
                         RefForage="@selectedBorehole.RefForage"
                         OnClose="CloseNewTest" />
                 }
-                else  // ✅ Affiche le bouton quand ouvrirNouvelEssai = false
+                else
                 {
-                    <button type="button" class="btn btn-primary mb-3" @onclick="AddNewTest">@Loc["NewTest"]</button>
-                    <div class="alert alert-info">@Loc["TestListComing"] @selectedBorehole.RefForage</div>
+                    <button type="button" class="btn btn-primary mb-3"
+                            @onclick="@(e => Navigation.NavigateTo($"/NewTest/{selectedBorehole?.RefForage}"))">
+                        @Loc["NewTest"]
+                    </button>
                 }
-
-
-
-
             }
             else if (activeTab == "Probe")
             {
-                <div class="alert alert-info">Liste des sondes à venir (Ref: @selectedBorehole.RefForage)</div>
+                <div class="alert alert-info">@Loc["ProbesComing"] (Ref: @selectedBorehole.RefForage)</div>
             }
             else if (activeTab == "Soil")
             {
-                <div class="alert alert-info">Liste des sols à venir (Ref: @selectedBorehole.RefForage)</div>
+                <div class="alert alert-info">@Loc["SoilsComing"] (Ref: @selectedBorehole.RefForage)</div>
             }
         </div>
 
@@ -169,9 +168,6 @@
 
 @code {
     [Parameter] public string RefChantier { get; set; } = "";
-    private string RefForage { get; set; } = "";
-    private string? RefEssai { get; set; }
-
     private ForageModel? selectedBorehole;
     private List<ForageModel> forages = new();
     private string? refForage;
@@ -183,28 +179,14 @@
     private bool isError;
     private string message = "";
 
-    // Ouvre le formulaire NewTest dans l'onglet Test
-    private async Task AddNewTest()
-    {
-        ouvrirNouvelEssai = true;
-        Console.WriteLine("[Borehole] ouvrirNouvelEssai = true");
-        await InvokeAsync(StateHasChanged);
-        Console.WriteLine("[Borehole] StateHasChanged invoqué");
-        Console.WriteLine($"[Borehole] Paramètres passés à NewTest : RefChantier={RefChantier}, RefForage={selectedBorehole.RefForage}, RefEssai={RefEssai}");
-    }
-
-    // Appelé par NewTest (OnClose) pour revenir à la liste des essais
     private void CloseNewTest()
     {
-        Console.WriteLine("[Borehole] CloseNewTest appelé");
         ouvrirNouvelEssai = false;
         StateHasChanged();
     }
 
     private async Task LoadForages()
     {
-        Console.WriteLine($"[Borehole] RefChantier = '{RefChantier}'");
-        Console.WriteLine($"[Borehole] Nombre de forages = {forages?.Count ?? -1}");
         if (string.IsNullOrWhiteSpace(RefChantier)) return;
         isLoadingForages = true;
         try

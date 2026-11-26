@@ -9,27 +9,65 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Components\Account\IdentityComponentsEndpointRouteBuilderExtensions.cs" />
+    <Compile Remove="Migrations\GaiaPressDb\**" />
+    <Compile Remove="wwwroot\css\**" />
+    <Content Remove="Migrations\GaiaPressDb\**" />
+    <Content Remove="wwwroot\css\**" />
+    <EmbeddedResource Remove="Migrations\GaiaPressDb\**" />
+    <EmbeddedResource Remove="wwwroot\css\**" />
+    <None Remove="Migrations\GaiaPressDb\**" />
+    <None Remove="wwwroot\css\**" />
   </ItemGroup>
 
+  <!-- Suppression des fichiers inutiles -->
   <ItemGroup>
+    <Compile Remove="Components\Account\IdentityComponentsEndpointRouteBuilderExtensions.cs" />
+    <Compile Remove="Data\GaiaPressDbContext.cs" />
+    <Compile Remove="Data\GaiaPressDbContextV0.cs" />
+    <Compile Remove="Models\Forage.cs" />
     <Content Remove="Components\Account\Pages\ExternalLogin.razor" />
     <Content Remove="Components\Pages\Auth.razor" />
+    <Content Remove="Components\Test\NewTest - Bakup.razor" />
+    <Content Remove="wwwroot\WebChantier.vb" />
   </ItemGroup>
 
+  <!-- Configuration correcte du DbContext -->
+  <ItemGroup>
+    <None Remove="Data\GaiaPressDbContext.cs" />
+  </ItemGroup>
+
+  <!-- Références aux packages CORRECTES -->
+  <ItemGroup>
+    <!-- Core Identity & EF Core -->
+    <PackageReference Include="ChartJs.Blazor" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
+
+    <!-- EF Core -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <!-- Azure (si utilisé) -->
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.2" />
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+
+    <!-- Blazor -->
+    <PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
+
+    <!-- JS Interop pour .NET 8 -->
+    <PackageReference Include="Microsoft.JSInterop" Version="8.0.11" />
+  </ItemGroup>
+
+  <!-- Référence au projet VB.NET (à vérifier) -->
   <ItemGroup>
     <ProjectReference Include="..\GaiaPressCoreV17\GaiaPressCoreV17.vbproj" />
   </ItemGroup>
-
   <ItemGroup>
-	<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.2" />
-	<PackageReference Include="Azure.Identity" Version="1.21.0" />
-	<PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
-    <PackageReference Include="Microsoft.JSInterop" Version="3.1.8" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

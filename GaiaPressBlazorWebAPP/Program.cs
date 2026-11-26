@@ -1,102 +1,126 @@
-﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using Azure.Identity;
+﻿using Azure.Identity;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using GaiaPressBlazorWebAPP.Components;
-using GaiaPressBlazorWebAPP.Data;
 using GaiaPressBlazorWebAPP.Services;
 using GaiaPressCoreV17.Data;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Logging;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ajout du support pour Azure Key Vault
-if (builder.Environment.IsDevelopment())
+// ---------------------------------------------------------------
+// Services Blazor (Server interactif)
+// ---------------------------------------------------------------
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents(options =>
+    {
+        options.DetailedErrors = builder.Environment.IsDevelopment();
+        options.DisconnectedCircuitMaxRetained = 100;
+        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(5);
+        options.JSInteropDefaultCallTimeout = TimeSpan.FromSeconds(60);
+    });
+
+// SignalR (utilisé par Blazor Server)
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+    options.MaximumReceiveMessageSize = 1024 * 1024; // 1 Mo
+});
+
+// ---------------------------------------------------------------
+// Azure Key Vault (production uniquement)
+// ---------------------------------------------------------------
+if (!builder.Environment.IsDevelopment())
 {
     try
     {
-        builder.Configuration.AddAzureKeyVault(new Uri("https://gaiatech-keyvault.vault.azure.net/"), new AzureCliCredential());
+        builder.Configuration.AddAzureKeyVault(
+            new Uri("https://gaiatech-keyvault.vault.azure.net/"),
+            new AzureCliCredential());
     }
     catch (Exception ex)
     {
-        Console.WriteLine("Erreur KeyVault (dev) : " + ex);
+        Console.WriteLine($"Erreur KeyVault (prod) : {ex.Message}");
     }
 }
 
-// Ajout des services au conteneur
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-// Ajout des services personnalisés
+// ---------------------------------------------------------------
+// Services applicatifs
+// ---------------------------------------------------------------
 builder.Services.AddScoped<ConnectionService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<LocalizationService>();
-builder.Services.AddLocalization();
 builder.Services.AddScoped<ChantierState>();
 builder.Services.AddScoped<IEssaiService, EssaiService>();
+builder.Services.AddScoped<IForageService, ForageService>();
+builder.Services.AddLocalization();
 
-// Au démarrage de l'app - réchauffe la connexion Azure SQL
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (!string.IsNullOrEmpty(connectionString))
+// ---------------------------------------------------------------
+// Base de données
+// ---------------------------------------------------------------
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "La chaîne de connexion 'DefaultConnection' est manquante dans appsettings.json.");
+
+Console.WriteLine($"Chaîne de connexion utilisée : {connectionString[..Math.Min(20, connectionString.Length)]}...");
+
+Action<DbContextOptionsBuilder> configureDb = options =>
 {
-    try
-    {
-        using (var warmup = new SqlConnection(connectionString))
-        {
-            warmup.Open(); // force le réveil Azure
-            Console.WriteLine("Connexion Azure SQL établie (warmup).");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Warmup échoué (sera retenté par EF) : " + ex.Message);
-    }
-}
+    options.UseSqlServer(connectionString, sqlOptions =>
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null));
 
-// Ajout du contexte de base de données (avec logs EF)
-Action<DbContextOptionsBuilder> gaiaPressOptions = options =>
-{
-    options
-        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
-        .EnableSensitiveDataLogging();
-
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sqlOptions =>
-        {
-            sqlOptions.MigrationsAssembly("GaiaPressBlazorWebAPP");
-            sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null); // retry sur timeout aussi
-        });
+    if (builder.Environment.IsDevelopment())
+    {
+        options.EnableSensitiveDataLogging();
+        options.LogTo(Console.WriteLine, LogLevel.Information);
+    }
 };
 
-builder.Services.AddDbContextFactory<ClasseGaiaPressDbContext>(gaiaPressOptions);
-
-builder.Services.AddScoped<IForageService, ForageService>();
+builder.Services.AddDbContextFactory<GaiaPress_Db_Context>(configureDb);
 
 var app = builder.Build();
 
-// Configuration du pipeline HTTP
-if (!app.Environment.IsDevelopment())
+// ---------------------------------------------------------------
+// Pipeline HTTP
+// ---------------------------------------------------------------
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
 
+app.UseHttpsRedirection();
+
+// Fichiers statiques (une seule fois)
+app.UseStaticFiles();
+
+// Localisation
 var supportedCultures = new[] { "fr-FR", "en-GB" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture("fr-FR")
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRequestLocalization(localizationOptions);   // ← ici
+app.UseRequestLocalization(localizationOptions);
+
 app.UseAntiforgery();
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+
+// ---------------------------------------------------------------
+// Mapping Blazor : UNE SEULE fois
+// ---------------------------------------------------------------
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.Run();

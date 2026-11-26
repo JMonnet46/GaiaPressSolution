@@ -1,6 +1,8 @@
 ﻿Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17
+Imports GaiaPressCoreV17.Models
+Imports GaiaPressCoreV17.Services
 Imports System.Threading
 
 Namespace GaiaPressCoreV17.Services
@@ -38,7 +40,8 @@ Namespace GaiaPressCoreV17.Services
             NormePh = Ph
 
             'Prendre les coeffcients d'inertie
-            With essai.GetEssaiResistanceParRef(essai.refEssai, EssaiCalib.Resistance)
+            Dim EssaiCalibResist As EssaiResistance = MySonde.MaResistance
+            With EssaiCalibResist
                 Coef1 = .GetA0
                 Coef2 = .GetA1
                 Coef3 = .GetA2
@@ -55,7 +58,9 @@ Namespace GaiaPressCoreV17.Services
                 Exit Sub
             End If
 
-            A = essai.GetEssaiExpansionParRef(essai.refEssai, EssaiCalib.Expansion).GetCoefficientA
+            Dim EssaiCalibExpans As EssaiExpansion = MySonde.MaExpansion
+            'A = essai.GetEssaiExpansionParRef(essai.RefEssai, EssaiCalib.Expansion).GetCoefficientA
+            A = EssaiCalibExpans.coefficientA
 
             If A = 0 Then
                 Select Case Lang

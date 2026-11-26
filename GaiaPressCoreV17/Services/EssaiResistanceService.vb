@@ -2,6 +2,7 @@
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17
+Imports GaiaPressCoreV17.Models
 Imports System.Threading.Tasks
 Imports System.Linq
 Imports System.Collections.Generic
@@ -14,13 +15,13 @@ Namespace GaiaPressCoreV17.Services
     ''' </summary>
     Public Class EssaisResistanceDbService
 
-        Private ReadOnly _dbContext As GaiaPressDbContext
+        Private ReadOnly _dbContext As GaiaPress_Db_Context
 
         ''' <summary>
         ''' Initialise une nouvelle instance de EssaisResistanceDbService.
         ''' </summary>
         ''' <param name="dbContext">Contexte Debase de données.</param>
-        Public Sub New(dbContext As GaiaPressDbContext)
+        Public Sub New(dbContext As GaiaPress_Db_Context)
             _dbContext = dbContext
         End Sub
 

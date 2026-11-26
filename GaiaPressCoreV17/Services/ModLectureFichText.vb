@@ -1,8 +1,12 @@
 ﻿Imports System.IO
+Imports System.Linq
 Imports System.Threading
+Imports GaiaPressCoreV17.Logic
+Imports GaiaPressCoreV17.Models
 Imports iText.Kernel.Geom
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
+
 
 Namespace GaiaPressCoreV17.Services
     Module ModLectureFichText
@@ -259,7 +263,7 @@ errorFind:
 
                             ' Mémorisation du nom du Forage
                             NomForage = RecupAvantTab(Chaine)
-                            Call MyForage.SetNomForage(NomForage)
+                            MyForage.NomForage = NomForage
 
                             ' Mémorisation de la Référence de la sonde
                             RefSonde = "Ref" & NomForage
@@ -615,8 +619,16 @@ errorFind:
 
                                 Index = 0
                                 ' Déclaration d'un nouvel essai sur MonForage
+
                                 If MonChantier.Tables("LesEssaiForage") Is Nothing Then
-                                    Call MyForage.NouveauEssai(True)
+
+                                    ' Call MyForage.NouveauEssai(True)
+                                    Dim nouvelEssai As New Essai_Forage()
+                                    nouvelEssai.RefEssai = EssaiForageLogic.GiveMeANewRefEssai(MyForage.ListEssais)
+                                    nouvelEssai.nomEssai = EssaiForageLogic.GiveMeANewNomEssai(MyForage.ListEssais)
+                                    nouvelEssai.RefForage = MyForage.RefForage
+                                    MyForage.ListEssais.Add(nouvelEssai)
+
                                 Else
                                     Call MyForage.NouveauEssai(False)
                                 End If

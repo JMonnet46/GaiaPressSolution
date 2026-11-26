@@ -1,6 +1,8 @@
 ﻿Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Data
+Imports GaiaPressCoreV17.Models
 Imports System.Threading
 
 
@@ -13,14 +15,14 @@ Namespace GaiaPressCoreV17.Logic
         Inherits ControllerBase
 
         Private ReadOnly _solService As SolsService
-        Private ReadOnly _dbContext As GaiaPressDbContext
+        Private ReadOnly _dbContext As GaiaPress_Db_Context
 
         ''' <summary>
         ''' Initialise une nouvelle instance de SolLogic.
         ''' </summary>
         ''' <param name="solService">Service pour les sols.</param>
         ''' <param name="dbContext">Contexte Debase de données.</param>
-        Public Sub New(solService As SolsService, dbContext As GaiaPressDbContext)
+        Public Sub New(solService As SolsService, dbContext As GaiaPress_Db_Context)
             _solService = solService
             _dbContext = dbContext
         End Sub

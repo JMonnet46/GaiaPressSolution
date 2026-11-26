@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
 {
-    [DbContext(typeof(ClasseGaiaPressDbContext))]
+    [DbContext(typeof(GaiaPress_Db_Context))]
     partial class GaiaPressDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -4,7 +4,6 @@ Imports System.Data.OleDb
 Imports System.Data.SqlClient
 Imports GaiaPressCoreV17.Services
 Imports GaiaPressCoreV17.Logic
-Imports GaiaPressSolution.GaiaPressCoreV17.Services
 Imports Microsoft.VisualBasic
 
 Namespace GaiaPressCoreV17.Models

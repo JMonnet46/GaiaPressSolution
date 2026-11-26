@@ -5,9 +5,10 @@
 Imports System.Collections.Generic
 Imports System.Linq
 Imports GaiaPressCoreV17.Models
+Imports GaiaPressCoreV17.Data
 Imports GaiaPressCoreV17.Services
 Imports GaiaPressCoreV17.Logic
-Imports ContexteForages = GaiaPressCoreV17.Data.GaiaPressDbContext
+Imports ContexteForages = GaiaPressCoreV17.Data.GaiaPress_Db_Context
 Public Class ClasseListeForageDb
 
 
@@ -51,7 +52,7 @@ Public Class ClasseListeForageDb
     ''' <summary>
     ''' Met à jour un forage existant dans la liste et en base de données
     ''' </summary>
-    Public Sub UpdateForage(forageToUpdate As Forage, context As GaiaPressDbContext)
+    Public Sub UpdateForage(forageToUpdate As Forage, context As GaiaPress_Db_Context)
         Dim existingForage = Me.ListeForageDbSession.FirstOrDefault(
             Function(f) f.RefForage = forageToUpdate.RefForage
         )
@@ -67,7 +68,7 @@ Public Class ClasseListeForageDb
     ''' <summary>
     ''' Supprime un forage de la liste et de la base de données
     ''' </summary>
-    Public Sub DeleteForage(refForage As String, context As GaiaPressDbContext)
+    Public Sub DeleteForage(refForage As String, context As GaiaPress_Db_Context)
         Dim forageToDelete = Me.ListeForageDbSession.FirstOrDefault(
             Function(f) f.RefForage = refForage
         )

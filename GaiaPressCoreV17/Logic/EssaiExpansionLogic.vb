@@ -2,6 +2,7 @@
 Imports GaiaPressCoreV17
 Imports GaiaPressCoreV17.Data
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Models
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports QuestPDF.Fluent
@@ -15,16 +16,14 @@ Namespace GaiaPressCoreV17.Logic
         Inherits ControllerBase
 
         Private ReadOnly _essaisExpansionService As EssaiExpansionService
-        Private ReadOnly _dbContext As GaiaPressDbContext
+        Private ReadOnly _dbContext As GaiaPress_Db_Context
 
         ''' <summary>
         ''' Initialise une nouvelle instance de EssaiExpansionLogic.
         ''' </summary>
         ''' <param name="essaisExpansionService">Service pour les essais d'expansion.</param>
         ''' <param name="dbContext">Contexte Debase de données.</param>
-        Public Sub New(essaisExpansionService As EssaiExpansionService,
-               dbContext As GaiaPressDbContext)
-
+        Public Sub New(essaisExpansionService As EssaiExpansionService, dbContext As GaiaPress_Db_Context)
             _essaisExpansionService = essaisExpansionService
             _dbContext = dbContext
         End Sub

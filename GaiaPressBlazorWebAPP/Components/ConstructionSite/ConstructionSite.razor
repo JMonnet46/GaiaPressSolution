@@ -6,14 +6,13 @@
 @using GaiaPressCoreV17.Models
 @using GaiaPressBlazorWebAPP.Services
 @using Microsoft.EntityFrameworkCore
-@inject GaiaPressDbContext Db
 @inject FileService FileService
 @inject ConnectionService ConnectionService
 @inject LocalizationService Loc
 @inject NavigationManager Navigation
 @inject ChantierState ChantierState
+@inject GaiaPress_Db_Context DbContext  
 @implements IDisposable
-
 
 <div class="ConstructionSite-container">
     <div class="ConstructionsSite-header">
@@ -179,7 +178,6 @@
     }
 </div>
 
-
 @code {
     [Parameter]
     public string? ConstructionSiteReference { get; set; }
@@ -197,6 +195,9 @@
     private Chantier? currentChantier;
     private Chantier? editingConstructionSite;
     private string? lastProcessedUri;
+
+    // ✅ Suppression de la déclaration de _dbContext ici
+    // Le DbContext est maintenant injecté via @inject
 
     protected override async Task OnInitializedAsync()
     {
@@ -238,7 +239,7 @@
         if (!ConnectionService.IsConnected || string.IsNullOrWhiteSpace(ConnectionService.ConnectionString))
             throw new InvalidOperationException("Aucune connexion SQL validée pour cette session. Connectez-vous d'abord.");
 
-        Db.Database.SetConnectionString(ConnectionService.ConnectionString);
+        DbContext.Database.SetConnectionString(ConnectionService.ConnectionString); // ✅ Utilisation du DbContext injecté
     }
 
     private async Task LoadConstructionSitesAsync()
@@ -251,12 +252,12 @@
         {
             ConfigureDatabaseConnection();
 
-            var connexion = Db.Database.GetDbConnection();
+            var connexion = DbContext.Database.GetDbConnection(); // ✅ Utilisation du DbContext injecté
             Console.WriteLine($"Serveur SQL : {connexion.DataSource}");
             Console.WriteLine($"Base SQL : {connexion.Database}");
             Console.WriteLine($"Délai de connexion : {connexion.ConnectionTimeout} secondes");
 
-            ConstructionSites = await Db.ChantiersDb.OrderBy(c => c.RefChantier).ToListAsync();
+            ConstructionSites = await DbContext.ChantierDb.OrderBy(c => c.RefChantier).ToListAsync(); // ✅ Utilisation du DbContext injecté
         }
         catch (Exception ex)
         {
@@ -274,7 +275,7 @@
         try
         {
             ConfigureDatabaseConnection();
-            currentChantier = await Db.ChantiersDb.FirstOrDefaultAsync(c => c.RefChantier == Reference.Trim());
+            currentChantier = await DbContext.ChantierDb.FirstOrDefaultAsync(c => c.RefChantier == Reference.Trim()); // ✅ Utilisation du DbContext injecté
             if (currentChantier == null)
                 errorMessage = "Le ConstructionSite demandé est introuvable dans la base de données.";
             else
@@ -318,7 +319,7 @@
             else
             {
                 // Rechercher d'abord le ConstructionSite pour éviter d'insérer une clé primaire déjà existante.
-                currentChantier = await Db.ChantiersDb
+                currentChantier = await DbContext.ChantierDb // ✅ Utilisation du DbContext injecté
                     .FirstOrDefaultAsync(c => c.RefChantier == newConstructionSite.RefConstructionSite);
 
                 if (currentChantier == null)
@@ -335,7 +336,7 @@
                         Telephone = newConstructionSite.Telephone,
                         Reference = newConstructionSite.Reference
                     };
-                    Db.ChantiersDb.Add(currentChantier);
+                    DbContext.ChantierDb.Add(currentChantier); // ✅ Utilisation du DbContext injecté
                 }
                 else
                 {
@@ -350,7 +351,7 @@
                 }
             }
 
-            await Db.SaveChangesAsync();
+            await DbContext.SaveChangesAsync(); // ✅ Utilisation du DbContext injecté
             await FileService.MarkAsModifiedAsync();
             isEditing = false;
             isNewFile = wasNew;

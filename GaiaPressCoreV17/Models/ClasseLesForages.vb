@@ -1,36 +1,16 @@
-﻿' =============================================================================
-' ClasseListeForages.vb
-' Projet : GaiaPress.Core.V17
-'
-' Classe en mémoire de gestion de la liste des Forages.
-' Version VB.NET propre, compilable, sans héritage DbContext.
-'
-' S'appuie sur DataService :
-'   - DataService.ObjetDataForage (DataTable) : persistance des Forages.
-'
-' Property PascalCase utilisées sur la classe Forage :
-'   RefForage, NomForage, ZoneGeo, Famille, ClasseForage, SousClasse,
-'   ClasseInferieure, SousClasseInferieure, NomForageNormalise,
-'   Dmax, Tamisat50mm, Tamisat2mm, Tamisat80microns,
-'   VBS, IP, Es, PhiMu
-'
-' NOTE : Tout le code VB6 commenté en bas de la version originale a été
-' supprimé volontairement pour produire un fichier propre et compilable.
-' =============================================================================
-
-Imports System.Data
+﻿Imports System.Data
 Imports System.Linq
-Imports GaiaPress.Core.V17.Models
-Imports GaiaPress.Core.V17.Services
+Imports GaiaPressCoreV17.Models
+Imports GaiaPressCoreV17.Services
 
-Namespace GaiaPressSolution.GaiaPressCoreV17.Models
+Namespace GaiaPressCoreV17.Models
 
     Public Class LesForages
 
         ' ---------------------------------------------------------------------
         ' Liste interne des Forages
         ' ---------------------------------------------------------------------
-        Public F_ListeForages As List(Of Forage)
+        Public ListeForages As List(Of Forage)
 
         ' ---------------------------------------------------------------------
         ' Référence vers le DataService
@@ -58,7 +38,7 @@ Namespace GaiaPressSolution.GaiaPressCoreV17.Models
             End If
 
             _dataService = dataService
-            F_ListeForages = New List(Of Forage)()
+            ListeForages = New List(Of Forage)()
             _isModified = False
             _fichierName = "Forages"
             _nextRefForageCounter = 0
@@ -69,7 +49,7 @@ Namespace GaiaPressSolution.GaiaPressCoreV17.Models
         ' ---------------------------------------------------------------------
         Public ReadOnly Property C_LesForages As List(Of Forage)
             Get
-                Return F_ListeForages
+                Return ListeForages
             End Get
         End Property
 
@@ -90,41 +70,41 @@ Namespace GaiaPressSolution.GaiaPressCoreV17.Models
         ' =====================================================================
 
         Public Sub AjouterForage(forage As Forage)
-            F_ListeForages.Add(forage)
+            ListeForages.Add(forage)
             C_IsSaved = False
             If Not C_EventsSuspendus Then RaiseEvent HasBeenModified()
         End Sub
         Public Function TrouverForage(refForage As String) As Forage
-            For Each f As Forage In F_ListeForages
-                If f.F_RefForage = refForage Then Return f
+            For Each f As Forage In ListeForages
+                If f.RefForage = refForage Then Return f
             Next
             Return Nothing
         End Function
         Public Function DeleteForage(refForage As String) As Boolean
             Dim Forage As Forage = TrouverForage(refForage)
             If Forage Is Nothing Then Return False
-            F_ListeForages.Remove(Forage)
+            ListeForages.Remove(Forage)
             _isModified = True
             Return True
         End Function
 
         Public Function MettreAJourForage(Forage As Forage) As Boolean
             If Forage Is Nothing Then Return False
-            If String.IsNullOrEmpty(Forage.F_RefForage) Then Return False
+            If String.IsNullOrEmpty(Forage.RefForage) Then Return False
 
-            Dim index As Integer = GetIndexForage(Forage.F_RefForage)
+            Dim index As Integer = GetIndexForage(Forage.RefForage)
             If index < 0 Then Return False
 
-            F_ListeForages(index) = Forage
+            ListeForages(index) = Forage
             _isModified = True
             Return True
         End Function
 
         Public Function GetIndexForage(refForage As String) As Integer
             If String.IsNullOrEmpty(refForage) Then Return -1
-            For i As Integer = 0 To F_ListeForages.Count - 1
-                Dim s As Forage = F_ListeForages(i)
-                If s IsNot Nothing AndAlso s.F_RefForage = refForage Then
+            For i As Integer = 0 To ListeForages.Count - 1
+                Dim s As Forage = ListeForages(i)
+                If s IsNot Nothing AndAlso s.RefForage = refForage Then
                     Return i
                 End If
             Next
@@ -139,12 +119,12 @@ Namespace GaiaPressSolution.GaiaPressCoreV17.Models
                                        excludeExisting As Forage) As Boolean
             If String.IsNullOrEmpty(refForage) Then Return False
 
-            For Each s As Forage In F_ListeForages
+            For Each s As Forage In ListeForages
                 If s Is Nothing Then Continue For
                 If excludeExisting IsNot Nothing AndAlso ReferenceEquals(s, excludeExisting) Then
                     Continue For
                 End If
-                If s.F_RefForage = refForage Then
+                If s.RefForage = refForage Then
                     Return False
                 End If
             Next
@@ -166,63 +146,63 @@ Namespace GaiaPressSolution.GaiaPressCoreV17.Models
         ' =====================================================================
 
         Public Sub ChargerDepuisBase()
-            F_ListeForages.Clear()
+            ListeForages.Clear()
             _isModified = False
 
-            Dim dt As DataTable = _dataService.ObjetDataForage
+            Dim dt As DataTable = _dataService.ObjetDataLesForages
             If dt Is Nothing Then Return
 
             For Each row As DataRow In dt.Rows
                 Dim Forage As New Forage()
 
                 If dt.Columns.Contains("refChantier") AndAlso Not row.IsNull("refChantier") Then
-                    Forage.F_RefChantier = CStr(row("refChantier"))
+                    Forage.RefChantier = CStr(row("refChantier"))
                 End If
                 If dt.Columns.Contains("refForage") AndAlso Not row.IsNull("refForage") Then
-                    Forage.F_RefForage = CStr(row("refForage"))
+                    Forage.RefForage = CStr(row("refForage"))
                 End If
                 If dt.Columns.Contains("numeroForage") AndAlso Not row.IsNull("numeroForage") Then
-                    Forage.F_numeroForage = CStr(row("numeroForage"))
+                    Forage.numeroForage = CStr(row("numeroForage"))
                 End If
                 If dt.Columns.Contains("nomForage") AndAlso Not row.IsNull("nomForage") Then
-                    Forage.F_NomForage = CStr(row("nomForage"))
+                    Forage.NomForage = CStr(row("nomForage"))
                 End If
                 If dt.Columns.Contains("DateForage") AndAlso Not row.IsNull("DateForage") Then
-                    Forage.F_dateForage = CStr(row("DateForage"))
+                    Forage.dateForage = CStr(row("DateForage"))
                 End If
                 If dt.Columns.Contains("materiel") AndAlso Not row.IsNull("materiel") Then
-                    Forage.F_materiel = CStr(row("materiel"))
+                    Forage.materiel = CStr(row("materiel"))
                 End If
                 If dt.Columns.Contains("outil") AndAlso Not row.IsNull("outil") Then
-                    Forage.F_outil = CStr(row("outil"))
+                    Forage.outil = CStr(row("outil"))
                 End If
                 If dt.Columns.Contains("abscisseX") AndAlso Not row.IsNull("abscisseX") Then
-                    Forage.F_abscisseX = CStr(row("abscisseX"))
+                    Forage.abscisseX = CStr(row("abscisseX"))
                 End If
                 If dt.Columns.Contains("ordonneeY") AndAlso Not row.IsNull("ordonneeY") Then
-                    Forage.F_ordonneeY = CStr(row("ordonneeY"))
+                    Forage.ordonneeY = CStr(row("ordonneeY"))
                 End If
                 If dt.Columns.Contains("altitudeZ") AndAlso Not row.IsNull("altitudeZ") Then
-                    Forage.F_altitudeZ = CStr(row("altitudeZ"))
+                    Forage.altitudeZ = CStr(row("altitudeZ"))
                 End If
                 If dt.Columns.Contains("coteInit") AndAlso Not row.IsNull("coteInit") Then
-                    Forage.F_coteInit = CStr(row("coteInit"))
+                    Forage.coteInit = CStr(row("coteInit"))
                 End If
                 If dt.Columns.Contains("coteFinale") AndAlso Not row.IsNull("coteFinale") Then
-                    Forage.F_coteFinale = CSng(row("coteFinale"))
+                    Forage.coteFinale = CSng(row("coteFinale"))
                 End If
 
-                F_ListeForages.Add(Forage)
+                ListeForages.Add(Forage)
             Next
 
             ' Mise à jour du compteur pour GiveMeANewRefForage.
             Dim maxCounter As Integer = 0
-            For Each s As Forage In F_ListeForages
-                If s Is Nothing OrElse String.IsNullOrEmpty(s.F_RefForage) Then Continue For
+            For Each s As Forage In ListeForages
+                If s Is Nothing OrElse String.IsNullOrEmpty(s.RefForage) Then Continue For
                 Dim prefix As String = "Forage-"
-                If s.F_RefForage.StartsWith(prefix) Then
+                If s.RefForage.StartsWith(prefix) Then
                     Dim n As Integer
-                    If Integer.TryParse(s.F_RefForage.Substring(prefix.Length), n) Then
+                    If Integer.TryParse(s.RefForage.Substring(prefix.Length), n) Then
                         If n > maxCounter Then maxCounter = n
                     End If
                 End If
@@ -232,28 +212,28 @@ Namespace GaiaPressSolution.GaiaPressCoreV17.Models
 
         ' ✅ BON : ne copier que les propriétés de Forage
         Public Sub SaveForagesToDataTable()
-            Dim dt As DataTable = _dataService.ObjetDataForage
+            Dim dt As DataTable = _dataService.ObjetDataLesForages
             If dt Is Nothing Then Return
 
             ' Effacer les anciennes lignes
             dt.Rows.Clear()
 
-            For Each Forage As Forage In F_ListeForages
+            For Each Forage As Forage In ListeForages
                 If Forage Is Nothing Then Continue For
 
                 Dim row As DataRow = dt.NewRow()
-                row("RefChantier") = Forage.F_RefChantier
-                row("RefForage") = Forage.F_RefForage
-                row("NumeroForage") = Forage.F_numeroForage
-                row("NomForage") = Forage.F_NomForage
-                row("DateForage") = Forage.F_dateForage
-                row("Materiel") = Forage.F_materiel
-                row("Outil") = Forage.F_outil
-                row("AbscisseX") = Forage.F_abscisseX
-                row("OrdonneeY") = Forage.F_ordonneeY
-                row("AltitudeZ") = Forage.F_altitudeZ
-                row("CoteInit") = Forage.F_coteInit
-                row("CoteFinale") = Forage.F_coteFinale
+                row("RefChantier") = Forage.RefChantier
+                row("RefForage") = Forage.RefForage
+                row("NumeroForage") = Forage.numeroForage
+                row("NomForage") = Forage.NomForage
+                row("DateForage") = Forage.dateForage
+                row("Materiel") = Forage.materiel
+                row("Outil") = Forage.outil
+                row("AbscisseX") = Forage.abscisseX
+                row("OrdonneeY") = Forage.ordonneeY
+                row("AltitudeZ") = Forage.altitudeZ
+                row("CoteInit") = Forage.coteInit
+                row("CoteFinale") = Forage.coteFinale
 
                 dt.Rows.Add(row)
             Next

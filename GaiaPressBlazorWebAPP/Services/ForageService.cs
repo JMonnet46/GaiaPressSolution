@@ -14,7 +14,7 @@ namespace GaiaPressBlazorWebAPP.Services
         }
 
         // Crée un nouveau DbContext avec la chaîne de connexion de l'utilisateur connecté
-        private ClasseGaiaPressDbContext CreateContext()
+        private GaiaPress_Db_Context CreateContext()
         {
             if (!_connectionService.IsConnected || string.IsNullOrEmpty(_connectionService.ConnectionString))
             {
@@ -23,10 +23,10 @@ namespace GaiaPressBlazorWebAPP.Services
                     "Veuillez vous connecter via le menu ConstructionSite > Se connecter à la Bd.");
             }
 
-            var optionsBuilder = new DbContextOptionsBuilder<ClasseGaiaPressDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<GaiaPress_Db_Context>();
             optionsBuilder.UseSqlServer(_connectionService.ConnectionString);
 
-            return new ClasseGaiaPressDbContext(optionsBuilder.Options);
+            return new GaiaPress_Db_Context(optionsBuilder.Options);
         }
 
         public async Task<ForageModel?> GetForageAsync(string refForage)

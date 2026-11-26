@@ -193,108 +193,6 @@ Namespace GaiaPressCoreV17.Models
             MesureCount = MesuresResistanceDb.Count
         End Sub
 
-        ' ============================================================
-        ' Méthode obsolète
-        ' ============================================================
-        '' ********************************************************************************************
-        '' Crée un Nouvel EssaiResistance
-        '' ********************************************************************************************
-        'Public Sub NouvelEssai(ByVal Table As Boolean)
-        '    Dim ObjetDataRow As DataRow
-
-        '     RefEssai = MySonde.GiveMeANewRefEssai(EssaiCalib.Resistance)
-        '     RefSonde = ""
-        '     nomEssai = "à définir"
-        '     dateEssai = DateValue(Now)
-        '     difPresEauAir = 0
-        '     hauteurCpv = 0
-        '     A0 = 0
-        '     A1 = 0
-        '     A2 = 0
-        '     A3 = 0
-        '    setResistanceNouvelleMesure(0, 0, 0)
-
-        '    If Table Then ' On ajoute un essai à MonFichier.Tables("LesEssaisResistanceDbPropre") seulement si Table est vrai
-        '        If MonChantier.Tables("LesEssaisResistanceDbPropre") Is Nothing Then
-        '            MonChantier.Tables.Add("LesEssaisResistanceDbPropre")
-        '            With MonChantier.Tables("LesEssaisResistanceDbPropre")
-        '                .Columns.Add("refEssai", GetType(String))
-        '                .Columns.Add("refSonde", GetType(String))
-        '                .Columns.Add("nomEssai", GetType(String))
-        '                .Columns.Add("dateEssai", GetType(String))
-        '                .Columns.Add("difPresEauAir", GetType(String))
-        '                .Columns.Add("hauteurCpv", GetType(String))
-        '                .Columns.Add("MesureCount", GetType(String))
-        '                .Columns.Add("a0", GetType(String))
-        '                .Columns.Add("a1", GetType(String))
-        '                .Columns.Add("a2", GetType(String))
-        '                .Columns.Add("a3", GetType(String))
-        '            End With
-        '        Else
-        '            ' Ajout d'une ligne à la Table "LesEssaiForage"
-        '            ObjetDataRow = MaListeSonde.Tables("LesEssaisResistanceDbPropre").NewRow()
-
-        '            ObjetDataRow("refEssai") = MySonde.GiveMeANewRefEssai(EssaiCalib.Resistance)
-        '            ObjetDataRow("refSonde") = MySonde.refSonde
-        '            MyResistance. RefEssai = ObjetDataRow("refEssai").ToString
-
-        '            MaListeSonde.Tables("LesEssaisResistanceDbPropre").Rows.Add(ObjetDataRow)
-
-
-        '            'MonChantier.Tables("LesEssaisResistanceDbPropre").Rows.Add()
-        '        End If
-        '    End If
-
-        'End Sub
-
-        ' ========================================================
-        ' Méthode Obsolète
-        ' =========================================================
-
-        '' **********************************************************************************
-        '' Affiche les MesuresResistanceDbs dans DgridResistance de FrmSonde
-        '' **********************************************************************************
-        'Public Sub AfficheMesuresDansTab(ByRef Table As DataGridView, ByVal RefEssaiResistance As String)
-        '    Dim i As Integer
-        '    Dim pression, volume As Single
-
-        '    ' Remplissage du Tableau
-
-        '    Table.Rows.Clear()
-        '    If MesuresResistanceDb.Count = 0 Then
-        '        ' Création du nouveau tableau si mesurecount est nul
-        '        Me.MyResistanceNouvelleMesure(0, 0, 0)
-        '    End If
-        '    For i = 0 To MesuresResistanceDb.Count - 1
-        '        With Table
-        '            .Rows.Add()
-        '            pression = MesuresResistanceDb(0).Pression
-        '            volume = MesuresResistanceDb(0).Volume60
-        '            'Me.MyResistanceNouvelleMesure(i, pression, volume)
-        '            .Rows(i).Cells(0).Value = pression
-        '            .Rows(i).Cells(1).Value = volume
-        '        End With
-        '    Next
-        'End Sub
-
-        ' ********************************************************************************
-        ' Enregistre les MesuresResistanceDb depuis Table
-        ' ********************************************************************************
-        'Public Sub AfficheMesuresDepuisTab(ByRef Table As DataGridView)
-        '    Dim i, NbRow As Integer
-
-
-        '    NbRow = Table.Rows.Count
-        '     MesureCount = MesuresResistanceDb.Count - 1
-
-        '    ' Remplissage du Tableau
-        '    For i = 0 To NbRow - 1
-        '        With Table
-        '            MesuresResistanceDb(i).Pression = .Rows(i).Cells(0).Value
-        '            MesuresResistanceDb(i).Volume60 = .Rows(i).Cells(1).Value
-        '        End With
-        '    Next
-        'End Sub
 
         ' *************************************************************************************************************************
         ' Ajour d'une nouvelle mesure à la Table "LesMesuresResistanceDbPropre"
@@ -589,15 +487,6 @@ Namespace GaiaPressCoreV17.Models
             End If
 
             MySonde.MaResistance = MyResistance
-
-            '' Mise à jour de MySonde.Resistance(ind)
-            'With MySonde
-            '    For i = 0 To MyResistance.MesuresResistanceDb.Count - 1
-            '        If .Resistance(i).RefEssai = MyResistance.RefEssai Then
-            '            .Resistance(i) = MyResistance.MesureResistance(i)
-            '        End If
-            '    Next i
-            'End With
 
             Call IHaveBeenModified()
         End Sub

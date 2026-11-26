@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GaiaPressBlazorWebAPP.Migrations.GaiaPressDb
 {
-    [DbContext(typeof(ClasseGaiaPressDbContext))]
+    [DbContext(typeof(GaiaPress_Db_Context))]
     [Migration("20261105035128_InitialCreate")]
     partial class InitialCreate
     {

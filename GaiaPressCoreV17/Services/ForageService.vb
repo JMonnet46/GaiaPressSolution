@@ -2,6 +2,7 @@
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17
+Imports GaiaPressCoreV17.Models
 Imports System.Threading
 Imports System.Collections.Generic
 
@@ -12,12 +13,12 @@ Namespace GaiaPressCoreV17.Services
     ''' Service pour la gestion des forages et de leurs essais.
     ''' </summary>
     Public Class ForageService
-        Public ReadOnly _dbContext As GaiaPressDbContext
+        Public ReadOnly _dbContext As GaiaPress_Db_Context
 
         ''' <summary>
         ''' Constructeur avec injection de dépendances.
         ''' </summary>
-        Public Sub New(dbContext As GaiaPressDbContext)
+        Public Sub New(dbContext As GaiaPress_Db_Context)
             _dbContext = dbContext
         End Sub
 

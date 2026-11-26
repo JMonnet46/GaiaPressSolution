@@ -1,3 +1,4 @@
+@page "/NewTest/{RefForage}"
 @rendermode InteractiveServer
 @implements IDisposable
 @using GaiaPressBlazorWebAPP.Models
@@ -6,14 +7,13 @@
 @using Microsoft.EntityFrameworkCore
 @inject NavigationManager Navigation
 @inject LocalizationService Loc
-@inject IDbContextFactory<GaiaPressDbContext> DbFactory
+@inject IDbContextFactory<GaiaPress_Db_Context> DbFactory
 
 <PageTitle>@Loc["PageTitle"] - @test.Reference</PageTitle>
 
 <div class="container-fluid mt-3">
     <h4>@Loc["DetailEssai"] : @test.Reference</h4>
 
-    <!-- ================= MESSAGES ================= -->
     @if (!string.IsNullOrEmpty(MessageErreur))
     {
         <div class="alert alert-danger">@MessageErreur</div>
@@ -24,10 +24,9 @@
     }
 
     <div class="row">
-        <!-- ================= COLONNE GAUCHE ================= -->
+        <!-- COLONNE GAUCHE -->
         <div class="col-md-6">
 
-            <!-- Identification -->
             <fieldset class="border p-3 mb-3">
                 <legend class="float-none w-auto px-2 fs-6">@Loc["IdentificationEssai"]</legend>
                 <div class="row mb-2">
@@ -44,7 +43,6 @@
                 </div>
             </fieldset>
 
-            <!-- Réalisation -->
             <fieldset class="border p-3 mb-3">
                 <legend class="float-none w-auto px-2 fs-6">@Loc["RealisationEssai"]</legend>
                 <div class="row mb-2">
@@ -65,7 +63,6 @@
                 </div>
             </fieldset>
 
-            <!-- Conditions géotechniques -->
             <fieldset class="border p-3 mb-3">
                 <legend class="float-none w-auto px-2 fs-6">@Loc["ConditionsGeoLabel"]</legend>
                 <div class="row mb-2">
@@ -107,10 +104,9 @@
             </fieldset>
         </div>
 
-        <!-- ================= COLONNE DROITE ================= -->
+        <!-- COLONNE DROITE -->
         <div class="col-md-6">
 
-            <!-- Enregistreur / Opérateur -->
             <fieldset class="border p-3 mb-3">
                 <legend class="float-none w-auto px-2 fs-6">@Loc["EnregistreurOperateurLabel"]</legend>
                 <div class="row mb-2">
@@ -123,7 +119,6 @@
                 </div>
             </fieldset>
 
-            <!-- Précision -->
             <fieldset class="border p-3 mb-3">
                 <legend class="float-none w-auto px-2 fs-6">@Loc["PrecisionLabel"]</legend>
                 <div class="row mb-2">
@@ -172,7 +167,6 @@
         </div>
     </div>
 
-    <!-- ================= BOUTONS ================= -->
     <div class="mb-3">
         <button class="btn btn-danger me-2" @onclick="Supprimer">@Loc["SupprimerButton"]</button>
         <button class="btn btn-primary me-2" @onclick="Modifier">@Loc["ModifierButton"]</button>
@@ -180,10 +174,9 @@
         <button class="btn btn-secondary" @onclick="Annuler">@Loc["AnnulerButton"]</button>
     </div>
 
-    <!-- ================= PIED DE PAGE ================= -->
     <hr />
     <div class="row">
-        <div class="col-4">@Loc["NomChantierLabel"] : <strong>@RefChantier</strong></div>
+        <div class="col-4">@Loc["NomChantierLabel"] : <strong>@ChantierAssocie</strong></div>
         <div class="col-4">@Loc["NomForageLabel"] : <strong>@NomForage</strong></div>
         <div class="col-4 text-end">
             <button class="btn btn-outline-primary me-2" @onclick="Enregistrer">@Loc["EnregistrerButton"]</button>
@@ -194,10 +187,11 @@
 </div>
 
 @code {
-    [Parameter] public string RefChantier { get; set; } = "";
     [Parameter] public string RefForage { get; set; } = "";
     [Parameter] public string? RefEssai { get; set; }
-    [Parameter] public EventCallback OnClose { get; set; }
+
+    // Chantier associé : à alimenter (paramètre, service ou session) selon votre logique existante
+    private string ChantierAssocie { get; set; } = "";
 
     private TestDetailModel test = new();
     private string NomForage => RefForage;
@@ -242,11 +236,9 @@
         double GammaP = test.PoidsVolumiqueDejauge;
         double Nu = test.CoefficientPoisson;
 
-        double sigmaz;
-        if (Zw >= Z)
-            sigmaz = Gamma * Z;
-        else
-            sigmaz = Gamma * Zw + GammaP * (Z - Zw);
+        double sigmaz = Zw >= Z
+            ? Gamma * Z
+            : Gamma * Zw + GammaP * (Z - Zw);
 
         Journal($"Sigmaz = {sigmaz:F2} kPa (Z={Z}, Zw={Zw}, Gamma={Gamma}, GammaP={GammaP})");
 
@@ -255,7 +247,6 @@
             MessageErreur = EstFrancais
                 ? "La contrainte verticale est négative ou nulle"
                 : "The vertical stress is null or negative";
-            Journal("Erreur : contrainte verticale <= 0 - P0 = 0");
             test.P0 = 0;
             return;
         }
@@ -265,7 +256,6 @@
             MessageErreur = EstFrancais
                 ? "Le coefficient de Poisson doit être inférieur à 1"
                 : "Poisson's ratio must be less than 1";
-            Journal("Erreur : coefficient de Poisson >= 1 - P0 = 0");
             test.P0 = 0;
             return;
         }
@@ -273,7 +263,6 @@
         MessageErreur = null;
         test.P0 = (float)Math.Round(Nu / (1 - Nu) * sigmaz, 0);
         Journal($"P0 = {test.P0} kPa");
-        Journal("Recalcul P0 - fin");
     }
 
     // ================= JOURNAL =================
@@ -307,8 +296,8 @@
         return Task.CompletedTask;
     }
 
-    private async Task Annuler() => await OnClose.InvokeAsync();
-    private async Task Fermer() => await OnClose.InvokeAsync();
+    private void Annuler() => Navigation.NavigateTo("/");
+    private void Fermer() => Navigation.NavigateTo("/");
     private void Modifier() => Journal("Mode modification");
     private void Supprimer() => Journal("Suppression demandée");
     private void Imprimer() => Journal("Impression");
@@ -322,28 +311,22 @@
         if (string.IsNullOrWhiteSpace(test.Reference))
         {
             MessageErreur = "La référence de l'essai est obligatoire.";
-            Journal("Arrêt : référence vide");
             return;
         }
 
         try
         {
-            Journal("Création du DbContext via factory");
             await using var db = await DbFactory.CreateDbContextAsync();
-            Journal("DbContext créé");
 
-            Journal($"Recherche de l'essai existant RefEssai='{test.Reference}'");
             var existant = await db.ListeEssaiForageDb
                 .FirstOrDefaultAsync(e => e.RefEssai == test.Reference);
-            Journal(existant is null ? "Aucun essai existant trouvé" : "Essai existant trouvé");
 
             if (existant is null)
             {
-                Journal("Construction de la nouvelle entité Essai_Forage");
                 var essai = new Essai_Forage
                 {
                     RefEssai = test.Reference,
-                    RefChantier = RefChantier,
+                    RefChantier = ChantierAssocie,
                     RefForage = RefForage,
                     nomEssai = test.NomEssai,
                     dateEssai = test.DateEssai.ToString("yyyy-MM-dd"),
@@ -367,12 +350,10 @@
                     PrecisVolume = (float)test.PrecisionVolume,
                     PrecisPression = (float)test.PrecisionPression
                 };
-                Journal("Entité construite - Add");
                 db.ListeEssaiForageDb.Add(essai);
             }
             else
             {
-                Journal("Mise à jour des champs de l'essai existant");
                 existant.nomEssai = test.NomEssai;
                 existant.dateEssai = test.DateEssai.ToString("yyyy-MM-dd");
                 existant.heureEssai = test.HeureEssai.ToString("HH:mm:ss");
@@ -388,7 +369,6 @@
                 existant.coefPoisson = (float)test.CoefficientPoisson;
             }
 
-            Journal("SaveChangesAsync - appel");
             var nb = await db.SaveChangesAsync();
             Journal($"SaveChangesAsync - {nb} ligne(s) écrite(s)");
 

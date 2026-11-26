@@ -4,8 +4,8 @@
 ' Namespace : GaiaPressCoreV17.Models
 ' =============================================
 Imports GaiaPressCoreV17.Data
-Imports GaiaPressCoreV17.Models.Dto ' ← IMPORT CRUCIAL POUR Dto.PrecisionElastDto
 Imports GaiaPressCoreV17.Models
+Imports GaiaPressCoreV17.Models.Dto ' ← IMPORT CRUCIAL POUR Dto.PrecisionElastDto
 Imports GaiaPressCoreV17.Services
 Imports GaiaPressCoreV17.Logic
 Imports Microsoft.EntityFrameworkCore
@@ -22,7 +22,7 @@ Namespace GaiaPressCoreV17.Models
         ' 🔹 DÉPENDANCES (À CONSERVER)
         ' =============================================
 
-        Private ReadOnly _context As GaiaPressDbContext
+        Private ReadOnly _context As GaiaPress_Db_Context
         Private ReadOnly _mesureForageService As ClasseListeMesureEssaiForage
 
         ''' <summary>
@@ -56,7 +56,7 @@ Namespace GaiaPressCoreV17.Models
         ''' </summary>
         ''' <param name="context">Contexte Entity Framework</param>
         ''' <param name="mesureForageService">Service pour les mesures de forage</param>
-        Public Sub New(context As GaiaPressDbContext, mesureForageService As ClasseListeMesureEssaiForage)
+        Public Sub New(context As GaiaPress_Db_Context, mesureForageService As ClasseListeMesureEssaiForage)
             If context Is Nothing Then Throw New ArgumentNullException(NameOf(context))
             If mesureForageService Is Nothing Then Throw New ArgumentNullException(NameOf(mesureForageService))
 

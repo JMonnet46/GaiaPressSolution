@@ -1,292 +1,99 @@
-﻿' Imports pour ASP.NET Core MVC
-Imports System.IO
-' Imports pour GaiaPress
-Imports Microsoft.AspNetCore.Mvc
-' Imports pour Entity Framework Core
-Imports Microsoft.EntityFrameworkCore
-' Imports pour QuestPDF
-Imports QuestPDF.Fluent
-Imports GaiaPressCoreV17.Data
+﻿Imports System
+Imports System.Collections.Generic
+Imports System.Linq
 Imports GaiaPressCoreV17.Models
-Imports System.Threading
 
 Namespace GaiaPressCoreV17.Logic
+    ''' <summary>Extraits métier autonomes, avec dépendances passées explicitement.</summary>
+    Public Module EssaiForageLogicExtraits
 
-    ''' <summary>
-    ''' Classe de logique métier pour la gestion des essais de forage.
-    ''' </summary>
-    Public Class EssaiForageLogic
-        Inherits ControllerBase
+        Public Function IsRefUnique(ByVal ref As String, ByVal essais As IEnumerable(Of Essai_Forage)) As Boolean
+            If essais Is Nothing Then Return True
+            Return Not essais.Any(Function(e) e IsNot Nothing AndAlso String.Equals(e.RefEssai, ref, StringComparison.OrdinalIgnoreCase))
+        End Function
 
-        ' ✅ Déclarer _dbContext avec le bon type
-        Public _dbContext As GaiaPressDbContext
-        Public _context As GaiaPressDbContext
+        Public Function IsNomUnique(ByVal nom As String, ByVal essais As IEnumerable(Of Essai_Forage)) As Boolean
+            If essais Is Nothing Then Return True
+            Return Not essais.Any(Function(e) e IsNot Nothing AndAlso String.Equals(e.nomEssai, nom, StringComparison.OrdinalIgnoreCase))
+        End Function
 
-        ' Propriété pour stocker l'essai de forage actuel
-        Public Property MonEssaiForage As Essai_Forage
-        Public Property MyEssaiForage As Essai_Forage
+        Public Function GetIndexEssai(ByVal ref As String, ByVal essais As IList(Of Essai_Forage)) As Integer
+            If essais Is Nothing Then Return -1
+            For i As Integer = 0 To essais.Count - 1
+                If essais(i) IsNot Nothing AndAlso String.Equals(essais(i).RefEssai, ref, StringComparison.OrdinalIgnoreCase) Then Return i
+            Next
+            Return -1
+        End Function
 
-        ' Propriété pour stocker le Chantier associé
-        'Public Property MonChantier As LesChantier
+        Public Function GetEssaiParRef(ByVal ref As String, ByVal essais As IEnumerable(Of Essai_Forage)) As Essai_Forage
+            If essais Is Nothing Then Return Nothing
+            Return essais.FirstOrDefault(Function(e) e IsNot Nothing AndAlso String.Equals(e.RefEssai, ref, StringComparison.OrdinalIgnoreCase))
+        End Function
 
-        ''' <summary>
-        ''' Définit l'essai de forage actuel.
-        ''' </summary>
-        Public Sub SetMyEssaiForage(essai As Essai_Forage)
-            MyEssaiForage = essai
+        Public Function GetEssaiCount(ByVal essais As IEnumerable(Of Essai_Forage)) As Integer
+            If essais Is Nothing Then Return 0
+            Return essais.Count(Function(e) e IsNot Nothing)
+        End Function
+
+        Public Sub SupEssaiDansListe(ByVal ref As String, ByVal essais As IList(Of Essai_Forage))
+            Dim index As Integer = GetIndexEssai(ref, essais)
+            If index >= 0 Then essais.RemoveAt(index)
         End Sub
 
-        ''' <summary>
-        ''' Définit le Chantier associé.
-        ''' </summary>
-        'Public Sub SetMonChantier(Chantier As LesChantier)
-        '    MonChantier = Chantier
-        'End Sub
-
-        ''' <summary>
-        ''' Constructeur par défaut.
-        ''' </summary>
-        Public Sub New()
-            ' Créer une instance de DbContextOptionsBuilder
-            Dim optionsBuilder As New DbContextOptionsBuilder()
-            ' Configurer la connexion (exemple avec SQL Server)
-            optionsBuilder.UseSqlServer("GaiaPress")
-
-            ' Instancier _dbContext avec les options
-            _dbContext = New GaiaPressDbContext(optionsBuilder.Options)
-            _context = _dbContext
+        Public Sub SetEssai(ByVal essai As Essai_Forage, ByVal essais As IList(Of Essai_Forage), ByVal index As Integer)
+            If essai Is Nothing Then Throw New ArgumentNullException(NameOf(essai))
+            If essais Is Nothing Then Throw New ArgumentNullException(NameOf(essais))
+            If index < 0 OrElse index >= essais.Count Then Throw New ArgumentOutOfRangeException(NameOf(index))
+            essais(index) = essai
         End Sub
 
-        ' ======================
-        ' Gestion des Essais de Forage
-        ' ======================
+        Public Sub AjouterNouvelEssai(ByVal essai As Essai_Forage, ByVal essais As IList(Of Essai_Forage))
+            If essai Is Nothing Then Throw New ArgumentNullException(NameOf(essai))
+            If essais Is Nothing Then Throw New ArgumentNullException(NameOf(essais))
+            essais.Add(essai)
+        End Sub
 
-        ''' <summary>
-        ''' Récupère un essai de forage par sa référence.
-        ''' </summary>
-        ''' <param name="refEssai">Référence de l'essai.</param>
-        ''' <returns>Essai de forage correspondant ou NotFound.</returns>
-        Public Async Function GetEssaiForageByRef(refEssai As String) As Task(Of IActionResult)
-            Try
-                Dim essai = Await _context.ListeEssaiForageDb.FirstOrDefaultAsync(Function(e) e.refEssai = refEssai)
-
-                If essai Is Nothing Then
-                    Return NotFound(New With {Key .Message = $"Essai avec la référence {refEssai} introuvable."})
-                End If
-
-                Return Ok(essai)
-            Catch ex As Exception
-                Return BadRequest(New With {Key .Message = $"Erreur : {ex.Message}"})
-            End Try
+        Public Function GiveMeANewRefEssai(ByVal prefixe As String, ByVal referencesExistantes As IEnumerable(Of String)) As String
+            Return ProchaineValeur(prefixe, referencesExistantes, 1)
         End Function
 
-        ''' <summary>
-        ''' Met à jour un essai de forage.
-        ''' </summary>
-        ''' <param name="refEssai">Référence de l'essai à mettre à jour.</param>
-        ''' <param name="essai">Données de l'essai mises à jour.</param>
-        ''' <returns>Résultat de l'opération.</returns>
-        Public Async Function UpdateEssaiForage(refEssai As String, essai As Essai_Forage) As Task(Of IActionResult)
-            Dim existingEssai = Await _context.ListeEssaiForageDb.FirstOrDefaultAsync(Function(e) e.refEssai = refEssai)
-            If existingEssai Is Nothing Then
-                Return NotFound()
+        Public Function GiveMeANewNomEssai(ByVal prefixe As String, ByVal nomsExistants As IEnumerable(Of String)) As String
+            Return ProchaineValeur(prefixe, nomsExistants, 0)
+        End Function
+
+        Public Function GetIndexSondeEssai(ByVal ref As String, ByVal essais As IEnumerable(Of Essai_Forage)) As Integer
+            If essais Is Nothing Then Return -1
+            Dim index As Integer = 0
+            For Each essai As Essai_Forage In essais
+                If essai IsNot Nothing AndAlso String.Equals(essai.RefEssai, ref, StringComparison.OrdinalIgnoreCase) Then Return index
+                index += 1
+            Next
+            Return -1
+        End Function
+
+        Public Sub SupSondeEssai(ByVal index As Integer, ByVal essais As IList(Of Essai_Forage))
+            If essais IsNot Nothing AndAlso index >= 0 AndAlso index < essais.Count Then essais.RemoveAt(index)
+        End Sub
+
+        Private Function ProchaineValeur(ByVal prefixe As String, ByVal valeursExistantes As IEnumerable(Of String), ByVal depart As Integer) As String
+            If String.IsNullOrWhiteSpace(prefixe) Then Throw New ArgumentException("Le préfixe est requis.", NameOf(prefixe))
+            Dim existants As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+            If valeursExistantes IsNot Nothing Then
+                For Each valeur As String In valeursExistantes
+                    If valeur IsNot Nothing Then existants.Add(valeur)
+                Next
             End If
-
-            ' Mise à jour des propriétés
-            existingEssai = essai
-
-            Try
-                Await _context.SaveChangesAsync()
-                Return NoContent()
-            Catch ex As DbUpdateConcurrencyException
-                Return Conflict()
-            End Try
+            Dim suffixe As Integer = depart
+            Do
+                Dim candidate As String = prefixe & " " & suffixe.ToString()
+                If Not existants.Contains(candidate) Then Return candidate
+                suffixe += 1
+            Loop
         End Function
 
-        ' ======================
-        ' Gestion des Mesures d'Essais de Forage
-        ' ======================
-
-        ''' <summary>
-        ''' Récupère les mesures associées à un essai de forage.
-        ''' </summary>
-        ''' <param name="refEssai">Référence de l'essai.</param>
-        ''' <returns>Liste des mesures de l'essai.</returns>
-        Public Async Function GetMesuresByEssai(refEssai As String) As Task(Of IActionResult)
-
-            Dim mesures = Await _context.ListeMesureEssaiForageDb _
-                .Where(Function(m) m.RefEssai = refEssai) _
-                .ToListAsync()
-
-            If mesures Is Nothing OrElse mesures.Count = 0 Then
-                Return NotFound()
-            End If
-
-            Return Ok(mesures)
-
+        Public Function CalculeVolNF(ByVal longueurSonde As Single, ByVal diametreInterieur As Single, ByVal volumeCalibre As Single) As Single
+            Return CSng(Math.Round(0.001R * Math.PI * CDbl(longueurSonde) * Math.Pow(CDbl(diametreInterieur) / 2.0R, 2), 1) - volumeCalibre)
         End Function
 
-        Public Async Function AddEssaiForage(essai As Essai_Forage) As Task(Of IActionResult)
-            Try
-                If essai Is Nothing Then
-                    Return BadRequest(New With {Key .Message = "L'essai de forage ne peut pas être vide."})
-                End If
-                _context.ListeEssaiForageDb.Add(essai)
-                Await _context.SaveChangesAsync()
-                Return CreatedAtAction(NameOf(GetEssaiForageByRef), New With {Key .refEssai = essai. RefEssai}, essai)
-            Catch ex As Exception
-                Return BadRequest(New With {Key .Message = $"Erreur : {ex.Message}"})
-            End Try
-        End Function
-
-
-
-        ''' <summary>
-        Public Async Function DeleteEssaiForage(refEssai As String) As Task(Of IActionResult)
-            Try
-                If String.IsNullOrEmpty(refEssai) Then
-                    Return BadRequest(New With {Key .Message = "La référence de l'essai ne peut pas être vide."})
-                End If
-
-                Dim essaiToDelete = Await _context.ListeEssaiForageDb.FirstOrDefaultAsync(Function(e) e.refEssai = refEssai)
-
-                If essaiToDelete Is Nothing Then
-                    Return NotFound(New With {Key .Message = $"Essai avec la référence {refEssai} introuvable."})
-                End If
-
-                _context.ListeEssaiForageDb.Remove(essaiToDelete)
-                Await _context.SaveChangesAsync()
-                Return Ok(New With {Key .Message = $"Essai {refEssai} supprimé avec succès."})
-            Catch ex As Exception
-                Return BadRequest(New With {Key .Message = $"Erreur : {ex.Message}"})
-            End Try
-        End Function
-
-
-        ' ======================
-        ' Génération de Rapports PDF
-        ' ======================
-
-        ''' <summary>
-        ''' Génère un rapport PDF pour un essai de forage.
-        ''' </summary>
-        ''' <param name="refEssai">Référence de l'essai.</param>
-        ''' <returns>Résultat d'action avec le PDF généré.</returns>
-        Public Async Function GenerateRapportEssai(refEssai As String) As Task(Of IActionResult)
-            ' Récupérer l'essai
-            Dim essai = Await _context.ListeEssaiForageDb.FirstOrDefaultAsync(Function(e) e.refEssai = refEssai)
-            If essai Is Nothing Then
-                Return NotFound()
-            End If
-
-            ' Récupérer les mesures associées
-            'Dim mesures = Await _context.MesureEssaiForage
-            '.Where(Function(m) m. RefEssai = refEssai)
-            '.ToListAsync()
-            Dim mesures = Await _context.ListeMesureEssaiForageDb.Where(Function(m) m.RefEssai = refEssai).ToListAsync()
-
-            ' Générer le PDF avec QuestPDF
-            Dim pdfBytes = Document.Create(Sub(doc)
-                                               doc.Page(Sub(page)
-                                                            page.Content().
-                                                                PaddingVertical(20).
-                                                                Column(Sub(column)
-                                                                           ' Titre
-                                                                           column.Item().Text("Rapport pour l'essai : " & essai.nomEssai).
-                                                                               FontSize(20).
-                                                                               Bold()
-
-                                                                           ' Espacement
-                                                                           column.Item().PaddingVertical(10)
-
-                                                                           ' Référence
-                                                                           column.Item().Text("Référence : " & essai.RefEssai).
-                                                                               FontSize(14)
-
-                                                                           ' Espacement
-                                                                           column.Item().PaddingVertical(5)
-
-                                                                           ' Forage associé
-                                                                           column.Item().Text("Forage : " & essai.RefForage).
-                                                                               FontSize(12)
-
-                                                                           ' Espacement
-                                                                           column.Item().PaddingVertical(5)
-
-                                                                           ' Chantier associé
-                                                                           column.Item().Text("Chantier : " & essai.RefChantier).
-                                                                               FontSize(12)
-
-                                                                           ' Espacement
-                                                                           column.Item().PaddingVertical(5)
-
-                                                                           ' Date
-                                                                           column.Item().Text("Date : " & essai.dateEssai.ToString("dd/MM/yyyy")).
-                                                                               FontSize(12)
-
-                                                                           ' Espacement
-                                                                           column.Item().PaddingVertical(10)
-
-                                                                           ' Titre pour les mesures
-                                                                           column.Item().Text("Mesures associées :").
-                                                                               FontSize(16).
-                                                                               Bold()
-
-                                                                           ' Liste des mesures
-                                                                           For Each mesure In mesures
-                                                                               column.Item().Text($"- Indice {mesure.IndiceMesure}: {mesure.ToString()}").
-                                                                                   FontSize(12)
-                                                                           Next
-                                                                       End Sub)
-                                                        End Sub)
-                                           End Sub).GeneratePdf()
-
-            ' Retourner le PDF
-            Return File(pdfBytes, "application/pdf", $"rapport_essai_{refEssai}.pdf")
-        End Function
-
-        ''' <summary>
-        ''' Génère un rapport PDF pour toutes les mesures d'un essai.
-        ''' </summary>
-        ''' <param name="refEssai">Référence de l'essai.</param>
-        ''' <returns>Résultat d'action avec le PDF généré.</returns>
-        Public Async Function GenerateRapportMesures(refEssai As String) As Task(Of IActionResult)
-            ' Récupérer les mesures associées à l'essai
-            'Dim mesures = Await _context.MesureEssaiForage
-            '.Where(Function(m) m. RefEssai = refEssai)
-            '.ToListAsync()
-            Dim mesures = Await _context.ListeMesureEssaiForageDb.Where(Function(m) m.RefEssai = refEssai).ToListAsync()
-
-
-            If mesures Is Nothing OrElse mesures.Count = 0 Then
-                Return NotFound()
-            End If
-
-            ' Générer le PDF avec QuestPDF
-            Dim pdfBytes = Document.Create(Sub(doc)
-                                               doc.Page(Sub(page)
-                                                            page.Content().
-                                                                PaddingVertical(20).
-                                                                Column(Sub(column)
-                                                                           ' Titre
-                                                                           column.Item().Text("Rapport des mesures pour l'essai : " & refEssai).
-                                                                               FontSize(20).
-                                                                               Bold()
-
-                                                                           ' Espacement
-                                                                           column.Item().PaddingVertical(10)
-
-                                                                           ' Liste des mesures
-                                                                           For Each mesure In mesures
-                                                                               column.Item().Text($"- Indice {mesure.IndiceMesure}: {mesure.ToString()}").
-                                                                                   FontSize(12)
-                                                                           Next
-                                                                       End Sub)
-                                                        End Sub)
-                                           End Sub).GeneratePdf()
-
-            ' Retourner le PDF
-            Return File(pdfBytes, "application/pdf", $"rapport_mesure{refEssai}.pdf")
-        End Function
-    End Class
+    End Module
 End Namespace

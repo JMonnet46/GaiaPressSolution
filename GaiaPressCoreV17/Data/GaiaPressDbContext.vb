@@ -1,17 +1,16 @@
 ﻿Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17.Models
-Imports GaiaPressBlazorWebAPP.Models
 
 Namespace GaiaPressCoreV17.Data
 
-    Public Class GaiaPressDbContext
+    Public Class GaiaPress_Db_Context
         Inherits DbContext
 
-        Public Sub New(options As DbContextOptions(Of GaiaPressDbContext))
+        Public Sub New(options As DbContextOptions(Of GaiaPress_Db_Context))
             MyBase.New(options)
         End Sub
 
-        Public Property ChantiersDb As DbSet(Of Chantier)
+        Public Property ChantierDb As DbSet(Of Chantier)
 
         Public Property ListeForageDb As DbSet(Of GaiaPressCoreV17.Models.Forage)
         Public Property ListeEssaiForageDb As DbSet(Of Essai_Forage)
@@ -25,7 +24,6 @@ Namespace GaiaPressCoreV17.Data
 
         Protected Overrides Sub OnModelCreating(modelBuilder As ModelBuilder)
             MyBase.OnModelCreating(modelBuilder)
-
 
             modelBuilder.Entity(Of Chantier)(Sub(entity)
                                                  entity.ToTable("LesChantiersDb", "dbo")
@@ -73,7 +71,7 @@ Namespace GaiaPressCoreV17.Data
                                                     HasColumnName("refForage")
 
                                                ' CORRECTION : mapper la propriété VB vers la vraie colonne SQL
-                                               ' Clé étrangère vers Chantier
+                                               ' Clé étrangère vers ConstructionSite
                                                entity.Property(Function(f) f.RefChantier).
                                                     HasColumnName("refChantier").IsRequired()
 
@@ -100,7 +98,7 @@ Namespace GaiaPressCoreV17.Data
                                                     HasColumnName("coteFinale")
 
                                                ' Relation de navigation
-                                               entity.HasOne(Function(f) f.Chantier).
+                                               entity.HasOne(Function(f) f.ChantierAssocie).
                                                       WithMany(Function(c) c.ListForages).
                                                       HasForeignKey(Function(f) f.RefChantier)
 
@@ -110,22 +108,8 @@ Namespace GaiaPressCoreV17.Data
 
                                            End Sub)
 
-            modelBuilder.Entity(Of Essai_Forage)(Sub(entity)
-                                                     entity.ToTable("ListeListeEssaiForageDb", "dbo")
-                                                     entity.HasKey(Function(e) e.RefEssai)
-
-                                                     entity.HasOne(Of Forage)().
-                                                    WithMany(Function(f) f.ListEssais).
-                                                    HasForeignKey(Function(e) e.RefForage).
-                                                    OnDelete(DeleteBehavior.Restrict)
-
-                                                     entity.Ignore(Function(e) e.EventsSuspendus)
-                                                     entity.Ignore(Function(e) e.IsSaved)
-                                                 End Sub)
-
-            modelBuilder.Entity(Of MesureEssaiForage)(Sub(entity)
-                                                          entity.ToTable("ListeMesureEssaiForageDb", "dbo")
-                                                      End Sub)
+            modelBuilder.Entity(Of Essai_Forage)().
+                HasKey(Function(e) e.RefEssai)
 
             modelBuilder.Entity(Of EssaiResistance)().
                 HasKey(Function(e) e.RefEssai)
@@ -140,6 +124,8 @@ Namespace GaiaPressCoreV17.Data
             modelBuilder.Entity(Of Sol)().
                 HasKey(Function(s) s.RefSol)
 
+            ' CORRECTION : définir explicitement la clé étrangère Essai_Forage → Forage
+            modelBuilder.Entity(Of Essai_Forage)().HasOne(Of Forage)().WithMany(Function(f) f.ListEssais).HasForeignKey(Function(e) e.RefForage)
         End Sub
 
     End Class

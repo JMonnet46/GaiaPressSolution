@@ -6,6 +6,8 @@ Imports System.Data
 Imports System.Math
 Imports GaiaPressCoreV17.Services
 Imports GaiaPressCoreV17.Logic
+Imports GaiaPressCoreV17.Models
+Imports GaiaPressCoreV17.Data
 Imports Microsoft.EntityFrameworkCore.Metadata.Internal
 ' Ajoutez d'autres namespaces si nécessaire
 
@@ -1366,71 +1368,6 @@ Namespace GaiaPressCoreV17.Models
                 Next j
             End With
         End Sub
-
-
-        'Public Function EnregistreEssai(ByVal RefEssai As String, ByVal CountEssai As Integer) As Boolean
-        '    Dim i, index As Integer
-        '    Dim Requete As String
-        '    'Dim Commande As OleDb.OleDbCommand
-
-        '    ' On crée une commanDebuilder pour renvoyer les données à la BD
-        '    Dim CmdSondeBuild As OleDbCommandBuilder
-
-        '    On Error GoTo errFind
-
-        '    ' Mise à jour du DataSet MaListeSonde
-        '    With MaListeSonde.Tables("LesMesureExpansionPropre")
-
-        '        ' Recherche du rang des mesures de résistance dans la Table "LesMesureExpansionPropre"
-        '        For index = 0 To .Rows.Count - 1
-        '            If .Rows(index).Item("refEssai") = RefEssai Then Exit For
-        '        Next index
-
-        '        ' Rangement des mesures dans la table "LesMesureExpansionPropre"
-        '        For i = 0 To CountEssai - 1
-        '            .Rows(index + i).Item("refEssai") = Me.RefEssai
-        '            .Rows(index + i).Item("indiceMesure") = i
-        '            .Rows(index + i).Item("pression") = Mesures(0, i)
-        '            .Rows(index + i).Item("volume") = Mesures(1, i)
-        '        Next (i)
-
-        '    End With
-
-        ' *********************************************************************
-        ' Modification de la Table "LesMesureExpansionPropre"
-        ' *********************************************************************
-        '            'ma requete
-        '            Requete = "SELECT Ind, indiceMesure, refEssai, pression, volume FROM LesMesureExpansionPropre "
-
-        '            ' Définition de la Commande
-        '            Commande = New OleDb.OleDbCommand(Requete, ConnSonde)
-
-        '            ' Définition de la Commande de l'AdaptateurSondes
-        '            AdaptateurSondes.SelectCommand = Commande
-
-        '            '' rempli le dataset depuis la BD vers la Table "LesSondes" de MaListeSonde
-        '            'AdaptateurSondes.Fill(MaListeSonde, "LesEssaisExpansionPropre")
-
-        '            ' Création de l'objetCommand nécessaire à l'enregistrement
-        '            CmdSondeBuild = New OleDb.OleDbCommandBuilder(AdaptateurSondes)
-
-        '            ' Sélectionne la Table "LesSondes"
-        '            i = MaListeSonde.Tables("LesMesureExpansionPropre").Select.Length
-
-        '            '' Effacement des commandes précédentes
-        '            'If AdaptateurSondes.SelectCommand IsNot Nothing Then
-        '            '    AdaptateurSondes.DeleteCommand = CmdSondeBuild.GetDeleteCommand()
-        '            'End If
-
-        '            ' Mise à jour de la Base de données Access 
-        '            AdaptateurSondes.Update(MaListeSonde, "LesMesureExpansionPropre")
-
-        '            EnregistreEssai = True
-        '            Exit Function
-        'errFind:
-        '            EnregistreEssai = False
-        '            MsgBox(Err.Description)
-        '        End Function
 
 
         Private Sub IHaveBeenModified()

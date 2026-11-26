@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
+Imports GaiaPressCoreV17.Models
 
 Namespace GaiaPressCoreV17.Services
     'Imports System.Windows.Forms

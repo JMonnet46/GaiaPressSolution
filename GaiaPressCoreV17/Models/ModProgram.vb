@@ -3,6 +3,7 @@ Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.EntityFrameworkCore
 Imports Microsoft.Extensions.Configuration
 Imports Microsoft.Extensions.Hosting
+Imports GaiaPressCoreV17.Data
 
 Module Program
     Sub Main(args As String())
@@ -11,9 +12,9 @@ Module Program
         Dim builder = WebApplication.CreateBuilder(args)
 
         ' ✅ Ajoutez vos services (DbContext, etc.)
-        builder.Services.AddDbContext(Of GaiaPressDbContext)(Function(options)
-                                                                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                                                             End Function)
+        builder.Services.AddDbContext(Of GaiaPress_Db_Context)(Function(options)
+                                                                   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                                                               End Function)
 
         ' ✅ Ajoutez vos contrôleurs et services
         builder.Services.AddControllers()

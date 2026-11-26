@@ -12,7 +12,7 @@ Namespace GaiaPressCoreV17.Services
     ''' </summary>
     Public Class DataService
 
-        Private ReadOnly _dbContext As GaiaPressDbContext
+        Private ReadOnly _dbContext As GaiaPress_Db_Context
 
         ' Déclaration des DataTables (optionnel, pour compatibilité legacy)
         Public ObjetDataConstructionsSitesDb As New DataTable()
@@ -31,7 +31,7 @@ Namespace GaiaPressCoreV17.Services
         ' ================================================================
 
         ' Constructeur : injecter le DbContext
-        Public Sub New(dbContext As GaiaPressDbContext)
+        Public Sub New(dbContext As GaiaPress_Db_Context)
             _dbContext = dbContext
         End Sub
 
@@ -44,14 +44,14 @@ Namespace GaiaPressCoreV17.Services
         ''' Récupère tous les Chantiers depuis la base de données.
         ''' </summary>
         Public Function GetAllChantier() As List(Of Chantier)
-            Return _dbContext.ChantiersDb.ToList()
+            Return _dbContext.ChantierDb.ToList()
         End Function
 
         ''' <summary>
         ''' Récupère un Chantier par sa référence.
         ''' </summary>
         Public Function GetChantierByRef(RefChantier As String) As Chantier
-            Return _dbContext.ChantiersDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
+            Return _dbContext.ChantierDb.FirstOrDefault(Function(c) c.RefChantier = RefChantier)
         End Function
 
         ''' <summary>
@@ -59,7 +59,7 @@ Namespace GaiaPressCoreV17.Services
         ''' </summary>
         Public Sub AddChantier(Chantier As Chantier)
             If Chantier Is Nothing Then Return
-            _dbContext.ChantiersDb.Add(Chantier)
+            _dbContext.ChantierDb.Add(Chantier)
             _dbContext.SaveChanges()
         End Sub
 
@@ -68,7 +68,7 @@ Namespace GaiaPressCoreV17.Services
         ''' </summary>
         Public Sub UpDateChantier(Chantier As Chantier)
             If Chantier Is Nothing Then Return
-            _dbContext.ChantiersDb.Update(Chantier)
+            _dbContext.ChantierDb.Update(Chantier)
             _dbContext.SaveChanges()
         End Sub
 
@@ -78,7 +78,7 @@ Namespace GaiaPressCoreV17.Services
         Public Sub DeleteChantier(RefChantier As String)
             Dim Chantier = GetChantierByRef(RefChantier)
             If Chantier IsNot Nothing Then
-                _dbContext.ChantiersDb.Remove(Chantier)
+                _dbContext.ChantierDb.Remove(Chantier)
                 _dbContext.SaveChanges()
             End If
         End Sub

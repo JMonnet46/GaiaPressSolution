@@ -1,6 +1,8 @@
 ﻿Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17.Services
+Imports GaiaPressCoreV17.Data
+Imports GaiaPressCoreV17.Models
 Imports System.Threading
 
 Namespace GaiaPressCoreV17.Logic
@@ -11,7 +13,7 @@ Namespace GaiaPressCoreV17.Logic
     Public Class SondeLogic
         Inherits ControllerBase
 
-        Private ReadOnly _dbContext As GaiaPressDbContext
+        Private ReadOnly _dbContext As GaiaPress_Db_Context
         Private ReadOnly _SondeService As SondeService
 
         ''' <summary>
@@ -19,7 +21,7 @@ Namespace GaiaPressCoreV17.Logic
         ''' </summary>
         ''' <param name="SondeService">Service pour les sondes.</param>
         ''' <param name="dbContext">Contexte Debase de données.</param>
-        Public Sub New(SondeService As SondeService, dbContext As GaiaPressDbContext)
+        Public Sub New(SondeService As SondeService, dbContext As GaiaPress_Db_Context)
             _SondeService = SondeService
             _dbContext = dbContext
         End Sub

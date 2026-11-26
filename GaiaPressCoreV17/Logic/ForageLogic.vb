@@ -3,6 +3,7 @@
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports GaiaPressCoreV17.Data
+Imports GaiaPressCoreV17.Models
 Imports System.Threading.Tasks
 Imports System.Linq
 Imports QuestPDF.Fluent
@@ -16,8 +17,8 @@ Namespace GaiaPressCoreV17.Logic
         Inherits ControllerBase
 
         ' ✅ Déclarer _dbContext avec le bon type
-        Public _dbContext As GaiaPressDbContext
-        Public _context As GaiaPressDbContext
+        Public _dbContext As GaiaPress_Db_Context
+        Public _context As GaiaPress_Db_Context
 
         ' Propriété pour stocker le forage actuel
         Public Property MonForage As Forage
@@ -40,7 +41,7 @@ Namespace GaiaPressCoreV17.Logic
             optionsBuilder.UseSqlServer("GaiaPress")
 
             ' Instancier _dbContext avec les options
-            _dbContext = New GaiaPressDbContext(optionsBuilder.Options)
+            _dbContext = New GaiaPress_Db_Context(optionsBuilder.Options)
             _context = _dbContext
         End Sub
 

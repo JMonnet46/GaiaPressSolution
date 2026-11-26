@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Threading
 Imports GaiaPressCoreV17.Data
+Imports GaiaPressCoreV17.Models
 Imports Microsoft.AspNetCore.Mvc
 Imports Microsoft.EntityFrameworkCore
 Imports QuestPDF.Fluent
@@ -17,13 +18,13 @@ Namespace GaiaPressCoreV17.Logic
     Public Class MesureEssaiForageLogic
         Inherits ControllerBase
 
-        Public ReadOnly _context As GaiaPressDbContext
+        Public ReadOnly _context As GaiaPress_Db_Context
 
         ''' <summary>
         ''' Initialise une nouvelle instance de MesuresEssaiForageDbLogic.
         ''' </summary>
         ''' <param name="context">Contexte Debase de données.</param>
-        Public Sub New(context As GaiaPressDbContext)
+        Public Sub New(context As GaiaPress_Db_Context)
             _context = context
         End Sub
 

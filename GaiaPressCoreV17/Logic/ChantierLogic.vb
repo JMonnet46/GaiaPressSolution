@@ -23,14 +23,14 @@ Namespace GaiaPressCoreV17.Logic
 
 
 
-        Private ReadOnly _context As GaiaPressDbContext
+        Private ReadOnly _context As GaiaPress_Db_Context
         Public Property MyChantier As Chantier
 
         ''' <summary>
         ''' Constructeur pour injecter le contexte de base de données.
         ''' </summary>
         ''' <param name="context">Contexte de base de données GaiaPress.</param>
-        Public Sub New(context As GaiaPressDbContext)
+        Public Sub New(context As GaiaPress_Db_Context)
             _context = context
         End Sub
 
@@ -57,7 +57,7 @@ Namespace GaiaPressCoreV17.Logic
         ''' <returns>Résultat d'action avec le PDF généré.</returns>
         Public Async Function GenerateRapport(ChantierId As Integer) As Task(Of IActionResult)
             ' Récupérer le Chantier
-            Dim Chantier = Await _context.ChantiersDb.FindAsync(ChantierId)
+            Dim Chantier = Await _context.ChantierDb.FindAsync(ChantierId)
             If Chantier Is Nothing Then
                 Return NotFound()
             End If
@@ -98,7 +98,7 @@ Namespace GaiaPressCoreV17.Logic
         ''' <param name="ChantierId">ID du Chantier.</param>
         ''' <returns>Chantier correspondant ou NotFound.</returns>
         Public Async Function GetChantier(ChantierId As Integer) As Task(Of IActionResult)
-            Dim Chantier = Await _context.ChantiersDb.FindAsync(ChantierId)
+            Dim Chantier = Await _context.ChantierDb.FindAsync(ChantierId)
             If Chantier Is Nothing Then
                 Return NotFound()
             End If
@@ -112,7 +112,7 @@ Namespace GaiaPressCoreV17.Logic
         ''' <param name="Chantier">Données du Chantier mises à jour.</param>
         ''' <returns>Résultat de l'opération.</returns>
         Public Async Function UpDateChantier(ChantierId As Integer, Chantier As Chantier) As Task(Of IActionResult)
-            Dim existingChantier = Await _context.ChantiersDb.FindAsync(ChantierId)
+            Dim existingChantier = Await _context.ChantierDb.FindAsync(ChantierId)
             If existingChantier Is Nothing Then
                 Return NotFound()
             End If
